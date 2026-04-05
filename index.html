@@ -769,6 +769,121 @@
       #scroll-bar,#cursor-glow,.tilt-card{transition:none;}
       .tilt-card{transform:none!important;}
     }
+
+    /* ─── Hero Logo Combo ────────────────────────────── */
+    .hero-logo-combo{
+      display:flex;align-items:center;gap:16px;margin-bottom:28px;
+    }
+    .hero-logo-combo .hero-logo{
+      width:72px;height:72px;margin-bottom:0;
+    }
+    .hero-logo-wordmark{
+      text-align:left;
+      font-size:0.62rem;font-weight:800;letter-spacing:0.18em;
+      text-transform:uppercase;color:rgba(255,255,255,0.85);
+      line-height:1.5;
+    }
+
+    /* ─── Big Countdown ──────────────────────────────── */
+    .cd-big-wrap{
+      display:flex;align-items:center;justify-content:center;
+      gap:24px;margin-bottom:14px;
+    }
+    .cd-big-label{
+      font-size:0.6rem;font-weight:700;letter-spacing:0.2em;
+      text-transform:uppercase;color:var(--text-muted);
+      writing-mode:vertical-rl;text-orientation:mixed;
+      transform:rotate(180deg);white-space:nowrap;
+    }
+    .cd-big-nums{display:flex;align-items:center;gap:6px;}
+    .cd-big-unit{display:flex;flex-direction:column;align-items:center;}
+    .cd-big-num{
+      font-size:clamp(3rem,8vw,6rem);font-weight:800;line-height:1;
+      color:#fff;letter-spacing:-0.04em;
+      min-width:1.6ch;text-align:center;
+    }
+    .cd-big-sublabel{
+      font-size:0.58rem;font-weight:700;letter-spacing:0.18em;
+      text-transform:uppercase;color:var(--text-muted);margin-top:5px;
+    }
+    .cd-big-sep{
+      font-size:clamp(2rem,5vw,4rem);font-weight:800;
+      color:rgba(255,255,255,0.15);line-height:1;
+      padding-bottom:18px;
+    }
+
+    /* ─── Countdown Progress Bar ─────────────────────── */
+    .cd-progress-outer{
+      width:100%;max-width:440px;margin:0 auto 40px;
+      height:3px;background:rgba(255,255,255,0.08);
+      border-radius:2px;overflow:hidden;
+    }
+    .cd-progress-inner{
+      height:100%;
+      background:linear-gradient(90deg,var(--cyan),var(--magenta));
+      border-radius:2px;transition:width 1s ease;
+      width:0%;
+    }
+
+    /* ─── Speaker Accordion ──────────────────────────── */
+    .speakers-accordion{
+      display:flex;gap:10px;height:460px;margin-bottom:32px;
+    }
+    .sa-panel{
+      flex:0 0 76px;border-radius:20px;overflow:hidden;
+      position:relative;cursor:pointer;
+      transition:flex 0.5s var(--ease-spring);
+      background:var(--card-bg);border:1px solid var(--card-border);
+    }
+    .sa-panel.sa-active{flex:1;}
+    .sa-panel-bg{
+      position:absolute;inset:0;
+    }
+    .sa-panel-initial{
+      position:absolute;top:50%;left:50%;
+      transform:translate(-50%,-50%);
+      font-size:1.8rem;font-weight:800;
+      color:rgba(255,255,255,0.35);
+      transition:opacity 0.3s;pointer-events:none;
+    }
+    .sa-panel.sa-active .sa-panel-initial{opacity:0;}
+    .sa-panel-vlabel{
+      position:absolute;top:50%;left:50%;
+      transform:translate(-50%,-50%) rotate(-90deg);
+      white-space:nowrap;
+      font-size:0.68rem;font-weight:700;letter-spacing:0.1em;
+      text-transform:uppercase;color:rgba(255,255,255,0.3);
+      transition:opacity 0.3s;pointer-events:none;
+    }
+    .sa-panel.sa-active .sa-panel-vlabel{opacity:0;}
+    .sa-panel-content{
+      position:absolute;bottom:0;left:0;right:0;
+      padding:24px 24px 28px;
+      background:linear-gradient(0deg,rgba(0,0,0,0.88) 0%,rgba(0,0,0,0.4) 60%,transparent 100%);
+      opacity:0;transform:translateY(14px);
+      transition:opacity 0.4s 0.1s,transform 0.4s 0.1s;
+    }
+    .sa-panel.sa-active .sa-panel-content{opacity:1;transform:translateY(0);}
+    .sa-panel-role{
+      font-size:0.62rem;font-weight:700;letter-spacing:0.12em;
+      text-transform:uppercase;color:var(--cyan);margin-bottom:6px;
+    }
+    .sa-panel-name{
+      font-size:1.25rem;font-weight:800;color:#fff;
+      line-height:1.2;margin-bottom:10px;
+    }
+    .sa-panel-bio{
+      font-size:0.8rem;color:rgba(255,255,255,0.62);
+      line-height:1.55;
+      display:-webkit-box;-webkit-line-clamp:3;
+      -webkit-box-orient:vertical;overflow:hidden;
+    }
+    @media(max-width:600px){
+      .speakers-accordion{height:360px;}
+      .sa-panel{flex:0 0 44px;}
+      .sa-panel-name{font-size:1rem;}
+      .cd-big-label{display:none;}
+    }
   </style>
 </head>
 <body>
@@ -810,7 +925,13 @@
   <div id="hero-stars"></div>
   <span class="ghost-wm" style="bottom:-2rem;left:50%;transform:translateX(-50%);">2026</span>
 
-  <img src="logo.png" alt="Welcome 2 The Future" class="hero-logo hero-el"/>
+  <div class="hero-logo-combo hero-el">
+    <img src="logo.png" alt="W2TF" class="hero-logo"/>
+    <div class="hero-logo-wordmark">
+      <div>WELCOME</div>
+      <div>2 THE FUTURE</div>
+    </div>
+  </div>
 
   <p class="hero-eyebrow hero-el">
     <span></span>
@@ -844,23 +965,32 @@
     Lugares muy limitados — $200 MXN
   </div>
 
-  <div class="countdown hero-el" id="countdown-hero">
-    <div class="cd-unit">
-      <div class="cd-num-wrap"><span class="cd-num" id="cd1-d">40</span></div>
-      <span class="cd-label">días</span>
+  <div class="cd-big-wrap hero-el">
+    <div class="cd-big-label">Nos vemos en</div>
+    <div class="cd-big-nums">
+      <div class="cd-big-unit">
+        <span class="cd-big-num" id="cd1-d">40</span>
+        <span class="cd-big-sublabel">Días</span>
+      </div>
+      <div class="cd-big-sep">:</div>
+      <div class="cd-big-unit">
+        <span class="cd-big-num" id="cd1-h">00</span>
+        <span class="cd-big-sublabel">Horas</span>
+      </div>
+      <div class="cd-big-sep">:</div>
+      <div class="cd-big-unit">
+        <span class="cd-big-num" id="cd1-m">00</span>
+        <span class="cd-big-sublabel">Min</span>
+      </div>
+      <div class="cd-big-sep">:</div>
+      <div class="cd-big-unit">
+        <span class="cd-big-num" id="cd1-s">00</span>
+        <span class="cd-big-sublabel">Seg</span>
+      </div>
     </div>
-    <div class="cd-unit">
-      <div class="cd-num-wrap"><span class="cd-num" id="cd1-h">00</span></div>
-      <span class="cd-label">horas</span>
-    </div>
-    <div class="cd-unit">
-      <div class="cd-num-wrap"><span class="cd-num" id="cd1-m">00</span></div>
-      <span class="cd-label">min</span>
-    </div>
-    <div class="cd-unit">
-      <div class="cd-num-wrap"><span class="cd-num" id="cd1-s">00</span></div>
-      <span class="cd-label">seg</span>
-    </div>
+  </div>
+  <div class="cd-progress-outer hero-el">
+    <div class="cd-progress-inner" id="cd-progress-bar"></div>
   </div>
 
   <div class="hero-ctas hero-el">
@@ -1127,63 +1257,56 @@
       <p class="section-sub" style="margin-bottom:0;">Líderes que han fundado, escalado y fondeado compañías que transforman industrias.</p>
     </div>
 
-    <div class="speakers-grid">
+    <div class="speakers-accordion fade-section" id="speakers-accordion">
 
-      <!-- Speaker 1 -->
-      <div class="speaker-card fade-card tilt-card">
-        <div class="speaker-card-inner">
-          <div class="speaker-header">
-            <div class="speaker-avatar">
-              <div class="speaker-avatar-inner">LA</div>
-            </div>
-            <div class="speaker-info">
-              <div class="speaker-name">Luis Andrés Enriquez Arias</div>
-              <div class="speaker-role">General Partner · Nazca VC</div>
-              <img src="logos/nazca.svg" alt="Nazca VC" class="speaker-company-logo" onerror="this.style.display='none'"/>
-            </div>
-          </div>
-          <p class="speaker-bio">Co-fundador de Cultura Colectiva — 30M usuarios únicos y 60M seguidores en redes. Hoy lidera Nazca, el venture capital early-stage más activo de Latinoamérica hispanohablante, con 4 fondos y más de $300M bajo gestión. Matemático aplicado por el ITAM.</p>
-          <div class="speaker-video" data-youtube="">
-            <div class="play-btn">
-              <div class="play-icon"></div>
-            </div>
-            <span class="video-label">Video próximamente</span>
-          </div>
+      <!-- Panel 1 — Luis Andrés -->
+      <div class="sa-panel sa-active">
+        <div class="sa-panel-bg" style="background:linear-gradient(160deg,rgba(0,207,255,0.25) 0%,rgba(122,0,255,0.35) 100%);"></div>
+        <div class="sa-panel-initial">LA</div>
+        <div class="sa-panel-vlabel">Luis Andrés</div>
+        <div class="sa-panel-content">
+          <div class="sa-panel-role">General Partner · Nazca VC</div>
+          <div class="sa-panel-name">Luis Andrés<br>Enriquez Arias</div>
+          <div class="sa-panel-bio">Co-fundador de Cultura Colectiva — 30M usuarios únicos. Lidera Nazca VC, el fondo early-stage más activo de LATAM, con 4 fondos y +$300M bajo gestión.</div>
         </div>
       </div>
 
-      <!-- Speaker 2 -->
-      <div class="speaker-card fade-card tilt-card">
-        <div class="speaker-card-inner">
-          <div class="speaker-header">
-            <div class="speaker-avatar" style="background:linear-gradient(135deg,var(--magenta),var(--purple));">
-              <div class="speaker-avatar-inner" style="color:var(--magenta);">SG</div>
-            </div>
-            <div class="speaker-info">
-              <div class="speaker-name">Sergio Daniel Gutiérrez Méndez</div>
-              <div class="speaker-role">Speaker confirmado</div>
-              <a href="https://linkedin.com/in/sergio-daniel-gutierrez-mendez" target="_blank" style="font-size:0.75rem;color:var(--text-muted);text-decoration:none;display:block;margin-top:2px;">linkedin.com/in/sergio-daniel-gutierrez-mendez</a>
-            </div>
-          </div>
-          <p class="speaker-bio">Perfil de referencia: linkedin.com/in/sergio-daniel-gutierrez-mendez — Bio próximamente disponible.</p>
-          <div class="speaker-video" data-youtube="">
-            <div class="play-btn">
-              <div class="play-icon"></div>
-            </div>
-            <span class="video-label">Video próximamente</span>
-          </div>
+      <!-- Panel 2 — Sergio Daniel -->
+      <div class="sa-panel">
+        <div class="sa-panel-bg" style="background:linear-gradient(160deg,rgba(255,0,200,0.25) 0%,rgba(122,0,255,0.35) 100%);"></div>
+        <div class="sa-panel-initial">SG</div>
+        <div class="sa-panel-vlabel">Sergio Daniel</div>
+        <div class="sa-panel-content">
+          <div class="sa-panel-role">Speaker confirmado</div>
+          <div class="sa-panel-name">Sergio Daniel<br>Gutiérrez Méndez</div>
+          <div class="sa-panel-bio">Bio próximamente disponible. Perfil: linkedin.com/in/sergio-daniel-gutierrez-mendez</div>
         </div>
       </div>
 
-    </div>
-
-    <!-- TBA -->
-    <div class="speaker-tba fade-section">
-      <div class="tba-icon">🔮</div>
-      <div class="tba-text">
-        <h4>Más ponentes por anunciar</h4>
-        <p>Estamos confirmando speakers adicionales de IA, venture capital y tecnología. Mantente al tanto en nuestras redes.</p>
+      <!-- Panel 3 — TBA -->
+      <div class="sa-panel">
+        <div class="sa-panel-bg" style="background:linear-gradient(160deg,rgba(0,207,255,0.06) 0%,rgba(255,255,255,0.02) 100%);"></div>
+        <div class="sa-panel-initial" style="font-size:2rem;opacity:0.2;">?</div>
+        <div class="sa-panel-vlabel">Por anunciar</div>
+        <div class="sa-panel-content">
+          <div class="sa-panel-role">Próximamente</div>
+          <div class="sa-panel-name">Por anunciar</div>
+          <div class="sa-panel-bio">Estamos confirmando speakers de IA, venture capital y tecnología emergente.</div>
+        </div>
       </div>
+
+      <!-- Panel 4 — TBA -->
+      <div class="sa-panel">
+        <div class="sa-panel-bg" style="background:linear-gradient(160deg,rgba(122,0,255,0.06) 0%,rgba(255,255,255,0.02) 100%);"></div>
+        <div class="sa-panel-initial" style="font-size:2rem;opacity:0.2;">?</div>
+        <div class="sa-panel-vlabel">Por anunciar</div>
+        <div class="sa-panel-content">
+          <div class="sa-panel-role">Próximamente</div>
+          <div class="sa-panel-name">Por anunciar</div>
+          <div class="sa-panel-bio">Más speakers por confirmar. Mantente al tanto en nuestras redes sociales.</div>
+        </div>
+      </div>
+
     </div>
 
     <!-- Marquee -->
@@ -1924,6 +2047,38 @@ function handleFile(file){
     zone.classList.remove('drag-over');
     const file = e.dataTransfer.files[0];
     if(file){ document.getElementById('file-input').files = e.dataTransfer.files; handleFile(file); }
+  });
+})();
+
+/* ═══════════════════════════════════════════════════════
+   COUNTDOWN PROGRESS BAR
+═══════════════════════════════════════════════════════ */
+(function initCdProgress(){
+  const bar = document.getElementById('cd-progress-bar');
+  if(!bar) return;
+  const start = new Date('2026-03-06T00:00:00-06:00'); // ~70 días antes
+  const end   = new Date('2026-05-15T14:30:00-06:00');
+  function update(){
+    const now = new Date();
+    const total = end - start;
+    const elapsed = Math.min(Math.max(now - start, 0), total);
+    bar.style.width = (elapsed / total * 100).toFixed(2) + '%';
+  }
+  update();
+  setInterval(update, 30000);
+})();
+
+/* ═══════════════════════════════════════════════════════
+   SPEAKER ACCORDION
+═══════════════════════════════════════════════════════ */
+(function initSpeakerAccordion(){
+  const panels = document.querySelectorAll('.sa-panel');
+  if(!panels.length) return;
+  panels.forEach(panel=>{
+    panel.addEventListener('click', function(){
+      panels.forEach(p=>p.classList.remove('sa-active'));
+      this.classList.add('sa-active');
+    });
   });
 })();
 
