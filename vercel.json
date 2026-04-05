@@ -1,0 +1,9 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "functions": {
+    "api/registro.js": {
+      "maxDuration": 30
+    }
+  }
+}

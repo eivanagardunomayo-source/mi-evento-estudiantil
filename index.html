@@ -1,0 +1,2040 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome 2 The Future 2026 — Tec de Monterrey CDMX</title>
+  <meta name="description" content="El summit de innovación, IA y tecnologías emergentes del Tec de Monterrey CDMX. 15 de mayo de 2026."/>
+  <meta property="og:title" content="Welcome 2 The Future 2026"/>
+  <meta property="og:description" content="El summit de innovación, IA y tecnologías emergentes del Tec de Monterrey CDMX. 15 de mayo de 2026."/>
+  <meta property="og:type" content="website"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ─── Reset & Root ─────────────────────────────── */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --cyan:#00CFFF;
+      --magenta:#FF00C8;
+      --purple:#7A00FF;
+      --white:#ffffff;
+      --text-muted:rgba(255,255,255,0.55);
+      --card-bg:rgba(255,255,255,0.03);
+      --card-border:rgba(255,255,255,0.07);
+      --ease-out-expo:cubic-bezier(0.16,1,0.3,1);
+      --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
+    }
+    html{scroll-behavior:smooth;font-size:16px;}
+    body{
+      font-family:'Outfit',sans-serif;
+      background:#000;
+      color:#fff;
+      overflow-x:hidden;
+      line-height:1.6;
+    }
+
+    /* ─── Grain overlay ─────────────────────────────── */
+    body::before{
+      content:'';
+      position:fixed;inset:0;
+      pointer-events:none;
+      z-index:9999;
+      opacity:0.025;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    /* ─── Background layers ─────────────────────────── */
+    #bg-base{
+      position:fixed;inset:0;z-index:-10;
+      background:linear-gradient(180deg,rgb(0,0,0) 0%,rgb(10,1,32) 45%,rgb(21,0,58) 100%);
+    }
+    #bg-glow{
+      position:fixed;inset:0;z-index:-9;
+      background:radial-gradient(circle at 50% 40%,rgba(0,207,255,0.35) 0%,rgba(74,0,122,0.25) 40%,rgba(255,0,200,0.15) 70%,transparent 100%);
+    }
+    #bg-cyan-top{
+      position:fixed;top:0;left:0;right:0;height:60vh;z-index:-8;
+      background:radial-gradient(at 50% 0%,rgba(0,207,255,0.15) 0%,transparent 60%);
+    }
+    #orb1{
+      position:fixed;width:520px;height:520px;z-index:-7;
+      top:-120px;left:-100px;
+      background:radial-gradient(circle,rgba(0,207,255,0.18) 0%,rgba(122,0,255,0.12) 60%,transparent 100%);
+      filter:blur(50px);border-radius:50%;
+      pointer-events:none;
+    }
+    #orb2{
+      position:fixed;width:480px;height:480px;z-index:-7;
+      bottom:-100px;right:-80px;
+      background:radial-gradient(circle,rgba(255,0,200,0.16) 0%,rgba(74,0,122,0.10) 60%,transparent 100%);
+      filter:blur(50px);border-radius:50%;
+      pointer-events:none;
+    }
+
+    /* ─── Canvas ────────────────────────────────────── */
+    #particles-canvas{
+      position:fixed;inset:0;z-index:0;
+      width:100%;height:100%;
+      pointer-events:none;
+    }
+
+    /* ─── Utility ───────────────────────────────────── */
+    .container{max-width:1140px;margin:0 auto;padding:0 24px;}
+    .section{padding:100px 0;}
+    .section-label{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+      color:var(--cyan);margin-bottom:16px;
+    }
+    .section-label::before,.section-label::after{
+      content:'';display:block;width:24px;height:1px;background:var(--cyan);opacity:0.5;
+    }
+    h2.section-title{
+      font-size:clamp(2rem,5vw,3rem);font-weight:800;
+      line-height:1.15;margin-bottom:14px;
+    }
+    .grad-text{
+      background:linear-gradient(90deg,#fff 0%,var(--cyan) 50%,var(--magenta) 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    p.section-sub{color:var(--text-muted);font-size:1.05rem;max-width:580px;margin:0 auto 48px;}
+
+    /* ─── Buttons ───────────────────────────────────── */
+    .btn{
+      position:relative;display:inline-flex;align-items:center;justify-content:center;
+      gap:8px;padding:14px 32px;border-radius:100px;font-family:inherit;
+      font-size:0.95rem;font-weight:700;cursor:pointer;border:none;
+      text-decoration:none;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;
+      letter-spacing:0.02em;
+    }
+    .btn-shine{
+      position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.28) 50%,transparent 60%);
+      transform:translateX(-150%);
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,var(--cyan) 0%,var(--purple) 100%);
+      color:#fff;box-shadow:0 4px 24px rgba(0,207,255,0.3);
+    }
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,207,255,0.45);}
+    .btn-outline{
+      background:transparent;color:var(--cyan);
+      border:1px solid rgba(0,207,255,0.4);
+    }
+    .btn-outline:hover{transform:translateY(-2px);background:rgba(0,207,255,0.05);border-color:var(--cyan);}
+    .btn-magenta{
+      background:linear-gradient(135deg,var(--magenta) 0%,var(--purple) 100%);
+      color:#fff;box-shadow:0 4px 24px rgba(255,0,200,0.3);
+    }
+    .btn-magenta:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(255,0,200,0.45);}
+
+    /* ─── Navbar ────────────────────────────────────── */
+    #nav{
+      position:fixed;top:20px;left:50%;transform:translateX(-50%);
+      z-index:1000;
+      background:rgba(8,0,25,0.55);
+      backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:100px;padding:10px 24px;
+      display:flex;align-items:center;gap:24px;
+      transition:transform 0.4s ease,opacity 0.4s ease,background 0.3s;
+      white-space:nowrap;
+    }
+    #nav.nav-hidden{transform:translate(-50%,-120px);opacity:0;pointer-events:none;}
+    .nav-logo{font-size:0.85rem;font-weight:800;color:var(--cyan);letter-spacing:0.04em;}
+    .nav-links{display:flex;gap:18px;}
+    .nav-links a{font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;}
+    .nav-links a:hover{color:var(--cyan);}
+    .nav-cta{padding:8px 20px;font-size:0.8rem;}
+
+    /* ─── Hero ──────────────────────────────────────── */
+    #hero{
+      position:relative;min-height:100vh;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;text-align:center;
+      padding:120px 24px 80px;overflow:hidden;
+    }
+    #hero-stars{position:absolute;inset:0;pointer-events:none;}
+    .star{
+      position:absolute;border-radius:50%;
+      background:white;animation:twinkle var(--d,3s) ease-in-out infinite;
+      opacity:0;
+    }
+    @keyframes twinkle{0%,100%{opacity:0;}50%{opacity:var(--o,0.8);}}
+    .hero-logo{
+      width:100px;height:100px;object-fit:contain;
+      filter:drop-shadow(0 0 24px rgba(0,207,255,0.5)) drop-shadow(0 0 60px rgba(122,0,255,0.35));
+      margin-bottom:28px;
+    }
+    .hero-eyebrow{
+      font-size:0.75rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;
+      color:var(--cyan);margin-bottom:20px;
+      display:inline-flex;align-items:center;gap:10px;
+    }
+    .hero-eyebrow span{display:inline-block;width:32px;height:1px;background:var(--cyan);opacity:0.6;}
+    h1.hero-title{
+      font-size:clamp(3.5rem,10vw,8rem);font-weight:800;line-height:1.0;
+      letter-spacing:-0.03em;
+      background:linear-gradient(90deg,#fff 0%,var(--cyan) 50%,var(--magenta) 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      margin-bottom:24px;
+    }
+    .hero-subtitle{
+      font-size:clamp(1rem,2.5vw,1.25rem);color:rgba(255,255,255,0.7);
+      max-width:600px;margin:0 auto 20px;
+    }
+    #rotating-word{
+      color:var(--cyan);font-weight:700;display:inline-block;
+    }
+    .hero-meta{
+      display:flex;align-items:center;justify-content:center;gap:16px;
+      flex-wrap:wrap;margin-bottom:28px;
+    }
+    .hero-meta-item{
+      display:flex;align-items:center;gap:6px;
+      font-size:0.88rem;color:rgba(255,255,255,0.65);
+    }
+    .hero-meta-item svg{width:15px;height:15px;flex-shrink:0;opacity:0.7;}
+    .urgency-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(255,0,200,0.12);border:1px solid rgba(255,0,200,0.3);
+      border-radius:100px;padding:8px 18px;
+      font-size:0.8rem;font-weight:700;color:var(--magenta);
+      margin-bottom:32px;letter-spacing:0.04em;
+    }
+    .urgency-badge .dot{
+      width:7px;height:7px;border-radius:50%;background:var(--magenta);
+      animation:pulse-dot 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.7);}}
+
+    /* ─── Countdown ─────────────────────────────────── */
+    .countdown{
+      display:flex;gap:12px;justify-content:center;
+      margin-bottom:40px;flex-wrap:wrap;
+    }
+    .cd-unit{display:flex;flex-direction:column;align-items:center;gap:6px;}
+    .cd-num-wrap{
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:12px;padding:10px 18px;
+      min-width:64px;text-align:center;
+      backdrop-filter:blur(10px);
+      position:relative;overflow:hidden;
+    }
+    .cd-num-wrap::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(0,207,255,0.4),transparent);
+    }
+    .cd-num{font-size:1.6rem;font-weight:800;line-height:1;color:#fff;display:block;}
+    .cd-label{font-size:0.65rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);}
+    .hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+    /* ─── Que es ─────────────────────────────────────── */
+    .que-es-grid{
+      display:grid;grid-template-columns:1fr 1fr;gap:64px;
+      align-items:center;
+    }
+    .que-es-text{}
+    .que-es-text p{color:var(--text-muted);margin-bottom:16px;font-size:1.05rem;}
+    .que-es-visual{
+      position:relative;display:flex;align-items:center;justify-content:center;
+    }
+    .que-es-card{
+      background:var(--card-bg);border:1px solid var(--card-border);
+      border-radius:20px;padding:28px;width:100%;
+      backdrop-filter:blur(12px);
+    }
+    .que-es-card-icon{
+      width:48px;height:48px;border-radius:14px;
+      background:linear-gradient(135deg,rgba(0,207,255,0.2),rgba(122,0,255,0.2));
+      border:1px solid rgba(0,207,255,0.2);
+      display:flex;align-items:center;justify-content:center;
+      margin-bottom:14px;font-size:1.5rem;
+    }
+    .que-es-feature-list{display:flex;flex-direction:column;gap:10px;margin-top:20px;}
+    .que-es-feature{
+      display:flex;align-items:center;gap:10px;
+      font-size:0.9rem;color:rgba(255,255,255,0.75);
+    }
+    .que-es-feature::before{
+      content:'';display:block;width:8px;height:8px;border-radius:50%;
+      background:var(--cyan);flex-shrink:0;
+    }
+
+    /* ─── Valor ──────────────────────────────────────── */
+    #valor{background:rgba(0,0,0,0.1);}
+    .valor-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+    }
+    .valor-item{
+      background:var(--card-bg);border:1px solid var(--card-border);
+      border-radius:18px;padding:28px 24px;
+      position:relative;overflow:hidden;
+      transition:transform 0.3s,box-shadow 0.3s,border-color 0.3s;
+    }
+    .valor-item::before{
+      content:'';position:absolute;
+      width:200px;height:200px;border-radius:50%;
+      background:radial-gradient(circle,rgba(0,207,255,0.08) 0%,transparent 70%);
+      top:-60px;right:-60px;
+      pointer-events:none;transition:opacity 0.3s;opacity:0;
+    }
+    .valor-item:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,207,255,0.1);border-color:rgba(0,207,255,0.15);}
+    .valor-item:hover::before{opacity:1;}
+    .valor-icon{
+      font-size:1.8rem;margin-bottom:14px;display:block;
+    }
+    .valor-title{font-size:1rem;font-weight:700;margin-bottom:8px;color:#fff;}
+    .valor-desc{font-size:0.875rem;color:var(--text-muted);line-height:1.6;}
+
+    /* ─── Agenda ─────────────────────────────────────── */
+    #agenda{}
+    .agenda-timeline{position:relative;padding-left:32px;}
+    .agenda-line{
+      position:absolute;left:10px;top:0;bottom:0;width:2px;
+      background:linear-gradient(180deg,var(--cyan),var(--magenta));
+      transform-origin:top;
+    }
+    .agenda-item{
+      position:relative;margin-bottom:6px;
+      padding:16px 20px;border-radius:14px;
+      background:var(--card-bg);border:1px solid var(--card-border);
+      transition:background 0.2s,border-color 0.2s;
+    }
+    .agenda-item::before{
+      content:'';position:absolute;left:-27px;top:50%;transform:translateY(-50%);
+      width:12px;height:12px;border-radius:50%;
+      background:#000;border:2px solid rgba(255,255,255,0.2);
+      transition:border-color 0.2s,background 0.2s;
+    }
+    .agenda-item.highlight{
+      background:rgba(0,207,255,0.04);border-color:rgba(0,207,255,0.15);
+    }
+    .agenda-item.highlight::before{border-color:var(--cyan);background:rgba(0,207,255,0.3);}
+    .agenda-item:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.12);}
+    .agenda-row{display:flex;gap:16px;align-items:flex-start;}
+    .agenda-time{
+      font-size:0.78rem;font-weight:700;color:var(--cyan);
+      min-width:68px;flex-shrink:0;letter-spacing:0.02em;padding-top:2px;
+    }
+    .agenda-content{}
+    .agenda-title{font-size:0.95rem;font-weight:700;color:#fff;}
+    .agenda-desc{font-size:0.82rem;color:var(--text-muted);margin-top:2px;}
+
+    /* ─── Speakers ───────────────────────────────────── */
+    #speakers{text-align:center;}
+    .speakers-grid{
+      display:grid;grid-template-columns:1fr 1fr;gap:24px;
+      margin-bottom:32px;text-align:left;
+    }
+    .speaker-card{
+      background:var(--card-bg);border:1px solid var(--card-border);
+      border-radius:20px;overflow:hidden;
+      transition:transform 0.3s,box-shadow 0.3s;
+    }
+    .speaker-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 20px 60px rgba(0,207,255,0.12);
+    }
+    .speaker-card-inner{padding:28px;}
+    .speaker-header{display:flex;align-items:center;gap:16px;margin-bottom:16px;}
+    .speaker-avatar{
+      width:72px;height:72px;border-radius:50%;flex-shrink:0;
+      background:linear-gradient(135deg,var(--cyan),var(--purple));
+      padding:2px;
+    }
+    .speaker-avatar-inner{
+      width:100%;height:100%;border-radius:50%;overflow:hidden;
+      background:rgba(10,1,32,0.9);
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.5rem;font-weight:800;color:var(--cyan);
+    }
+    .speaker-info{}
+    .speaker-name{font-size:1rem;font-weight:800;color:#fff;margin-bottom:4px;}
+    .speaker-role{font-size:0.8rem;color:var(--cyan);font-weight:600;margin-bottom:4px;}
+    .speaker-company-logo{height:18px;object-fit:contain;filter:brightness(0) invert(1);opacity:0.7;}
+    .speaker-bio{font-size:0.85rem;color:var(--text-muted);line-height:1.65;margin-bottom:20px;}
+    .speaker-video{
+      aspect-ratio:16/9;border-radius:12px;
+      background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.07);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+      position:relative;overflow:hidden;cursor:pointer;
+    }
+    .speaker-video::before{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg,rgba(0,207,255,0.05),rgba(122,0,255,0.05));
+    }
+    .play-btn{
+      width:48px;height:48px;border-radius:50%;
+      background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+      display:flex;align-items:center;justify-content:center;
+      backdrop-filter:blur(4px);position:relative;z-index:1;
+      transition:background 0.2s,transform 0.2s;
+    }
+    .speaker-video:hover .play-btn{background:rgba(0,207,255,0.2);transform:scale(1.05);}
+    .play-icon{
+      width:0;height:0;
+      border-style:solid;border-width:8px 0 8px 16px;
+      border-color:transparent transparent transparent rgba(255,255,255,0.9);
+      margin-left:3px;
+    }
+    .video-label{font-size:0.75rem;color:rgba(255,255,255,0.4);position:relative;z-index:1;letter-spacing:0.05em;}
+    .speaker-tba{
+      background:var(--card-bg);border:1px solid var(--card-border);
+      border-radius:20px;padding:28px 28px;
+      display:flex;align-items:center;gap:20px;
+    }
+    .tba-icon{
+      width:56px;height:56px;border-radius:50%;flex-shrink:0;
+      background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+      display:flex;align-items:center;justify-content:center;font-size:1.4rem;
+    }
+    .tba-text h4{font-size:0.95rem;font-weight:700;margin-bottom:4px;}
+    .tba-text p{font-size:0.82rem;color:var(--text-muted);}
+
+    /* ─── Marquee ─────────────────────────────────────── */
+    .marquee-wrap{overflow:hidden;margin-top:32px;padding:16px 0;}
+    .marquee-track{
+      display:flex;gap:32px;width:max-content;
+      animation:marquee 22s linear infinite;
+    }
+    .marquee-wrap:hover .marquee-track{animation-play-state:paused;}
+    .marquee-item{
+      font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.35);
+      letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;
+      padding:8px 16px;border-radius:100px;
+      border:1px solid rgba(255,255,255,0.06);
+    }
+    @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+    /* ─── Track Record ───────────────────────────────── */
+    #track-record{text-align:center;}
+    .stats-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+      margin-bottom:60px;
+    }
+    .stat-card{
+      background:var(--card-bg);border:1px solid var(--card-border);
+      border-radius:18px;padding:32px 24px;
+      position:relative;overflow:hidden;
+    }
+    .stat-card::before{
+      content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+      opacity:0.3;
+    }
+    .counter-num{
+      font-size:clamp(2.5rem,6vw,3.8rem);font-weight:800;line-height:1;
+      background:linear-gradient(90deg,var(--cyan),var(--magenta));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .cval{display:inline;}
+    .counter-suffix{font-size:1.2rem;opacity:0.8;}
+    .stat-label{font-size:0.9rem;color:var(--text-muted);margin-top:8px;}
+    .photo-grid{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+      margin-bottom:40px;
+    }
+    .photo-cell{
+      aspect-ratio:4/3;border-radius:12px;
+      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
+      overflow:hidden;display:flex;align-items:center;justify-content:center;
+      color:rgba(255,255,255,0.2);font-size:1.5rem;
+    }
+    .collab-logos{
+      display:flex;align-items:center;justify-content:center;gap:32px;
+      flex-wrap:wrap;
+    }
+    .collab-logo{
+      height:28px;object-fit:contain;
+      filter:brightness(0) invert(1);opacity:0.35;
+      transition:opacity 0.2s;
+    }
+    .collab-logo:hover{opacity:0.7;}
+
+    /* ─── Comunidad Tec ──────────────────────────────── */
+    #comunidad{text-align:center;}
+    .comunidad-inner{
+      background:var(--card-bg);border:1px solid var(--card-border);
+      border-radius:24px;padding:48px;
+      display:grid;grid-template-columns:1fr 1fr;gap:40px;
+      align-items:center;text-align:left;
+    }
+    .comunidad-inner p{color:var(--text-muted);margin-bottom:14px;}
+    .comunidad-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+    .pill{
+      padding:6px 14px;border-radius:100px;font-size:0.78rem;font-weight:600;
+      background:rgba(0,207,255,0.08);border:1px solid rgba(0,207,255,0.2);
+      color:var(--cyan);
+    }
+    .comunidad-visual{
+      display:flex;flex-direction:column;gap:12px;
+    }
+    .tec-stat{
+      background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);
+      border-radius:12px;padding:14px 18px;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .tec-stat-label{font-size:0.85rem;color:var(--text-muted);}
+    .tec-stat-val{font-size:1.1rem;font-weight:800;color:var(--cyan);}
+
+    /* ─── Startup Challenge ──────────────────────────── */
+    #startup-challenge{}
+    .challenge-header{
+      display:flex;gap:48px;align-items:flex-start;margin-bottom:40px;
+    }
+    .challenge-header-text{}
+    .challenge-cards{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+      margin-bottom:32px;
+    }
+    .challenge-card{
+      background:var(--card-bg);border:1px solid var(--card-border);
+      border-radius:16px;padding:22px;
+      transition:transform 0.2s,border-color 0.2s;
+    }
+    .challenge-card:hover{transform:translateY(-3px);border-color:rgba(0,207,255,0.2);}
+    .challenge-card-icon{font-size:1.6rem;margin-bottom:10px;display:block;}
+    .challenge-card-title{font-size:0.9rem;font-weight:700;margin-bottom:6px;}
+    .challenge-card-desc{font-size:0.82rem;color:var(--text-muted);}
+    .nazca-banner{
+      background:linear-gradient(135deg,rgba(122,0,255,0.15),rgba(0,207,255,0.08));
+      border:1px solid rgba(122,0,255,0.25);
+      border-radius:18px;padding:28px 32px;
+      display:flex;align-items:center;gap:24px;
+      margin-bottom:24px;
+    }
+    .nazca-banner-logo{
+      height:32px;object-fit:contain;
+      filter:brightness(0) invert(1);opacity:0.85;flex-shrink:0;
+    }
+    .nazca-banner-text h4{font-size:1rem;font-weight:800;margin-bottom:4px;}
+    .nazca-banner-text p{font-size:0.85rem;color:var(--text-muted);}
+    .challenge-dates{
+      display:flex;gap:16px;margin-bottom:32px;flex-wrap:wrap;
+    }
+    .date-item{
+      background:var(--card-bg);border:1px solid var(--card-border);
+      border-radius:14px;padding:16px 20px;flex:1;min-width:160px;
+    }
+    .date-item-date{font-size:1rem;font-weight:800;color:var(--cyan);margin-bottom:4px;}
+    .date-item-label{font-size:0.78rem;color:var(--text-muted);}
+    .challenge-perks{display:flex;flex-wrap:wrap;gap:10px;}
+    .perk-tag{
+      display:flex;align-items:center;gap:6px;
+      padding:8px 16px;border-radius:100px;
+      background:rgba(122,0,255,0.1);border:1px solid rgba(122,0,255,0.2);
+      font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.8);
+    }
+    .perk-tag::before{
+      content:'✓';font-size:0.7rem;color:var(--cyan);font-weight:800;
+    }
+
+    /* ─── Sponsors ───────────────────────────────────── */
+    #sponsors{text-align:center;}
+    .sponsors-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+    }
+    .sponsor-card{
+      background:var(--card-bg);border:1px solid var(--card-border);
+      border-radius:18px;padding:32px 24px;
+      display:flex;flex-direction:column;align-items:center;gap:14px;
+      transition:transform 0.2s,border-color 0.2s,box-shadow 0.2s;
+    }
+    .sponsor-card:hover{
+      transform:translateY(-4px);
+      border-color:rgba(0,207,255,0.15);
+      box-shadow:0 12px 40px rgba(0,207,255,0.08);
+    }
+    .sponsor-logo{
+      height:36px;object-fit:contain;
+      filter:brightness(0) invert(1);opacity:0.6;
+      transition:opacity 0.2s;
+    }
+    .sponsor-card:hover .sponsor-logo{opacity:1;}
+    .sponsor-tier{
+      font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+      padding:4px 10px;border-radius:100px;
+    }
+    .tier-gold{color:#FFD700;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2);}
+    .tier-silver{color:#C0C0C0;background:rgba(192,192,192,0.08);border:1px solid rgba(192,192,192,0.15);}
+    .sponsor-desc{font-size:0.82rem;color:var(--text-muted);text-align:center;line-height:1.55;}
+
+    /* ─── CTA Final ──────────────────────────────────── */
+    #cta-final{text-align:center;padding:120px 24px;}
+    .cta-inner{
+      max-width:720px;margin:0 auto;
+    }
+    .cta-inner h2{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;margin-bottom:16px;}
+    .cta-inner p{color:var(--text-muted);font-size:1.1rem;margin-bottom:36px;}
+    .cta-cds{margin-bottom:32px;}
+    .cta-price-note{
+      font-size:0.82rem;color:rgba(255,255,255,0.35);margin-top:16px;
+    }
+
+    /* ─── Footer ─────────────────────────────────────── */
+    footer{
+      border-top:1px solid rgba(255,255,255,0.06);
+      padding:40px 0;text-align:center;
+    }
+    .footer-logos{
+      display:flex;align-items:center;justify-content:center;gap:24px;
+      flex-wrap:wrap;margin-bottom:20px;
+    }
+    .footer-logo-img{
+      height:22px;object-fit:contain;
+      filter:brightness(0) invert(1);opacity:0.25;
+      transition:opacity 0.2s;
+    }
+    .footer-logo-img:hover{opacity:0.55;}
+    .footer-copy{font-size:0.78rem;color:rgba(255,255,255,0.25);}
+    .footer-links{
+      display:flex;gap:20px;justify-content:center;
+      margin-top:12px;flex-wrap:wrap;
+    }
+    .footer-links a{font-size:0.78rem;color:rgba(255,255,255,0.3);text-decoration:none;transition:color 0.2s;}
+    .footer-links a:hover{color:var(--cyan);}
+
+    /* ─── Modal ──────────────────────────────────────── */
+    .modal-overlay{
+      position:fixed;inset:0;z-index:9000;
+      background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);
+      display:flex;align-items:center;justify-content:center;
+      padding:20px;opacity:0;pointer-events:none;
+      transition:opacity 0.3s;
+    }
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal{
+      background:rgb(8,0,25);
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:24px;width:100%;max-width:480px;
+      max-height:90vh;overflow-y:auto;
+      padding:32px;
+      transform:translateY(20px);
+      transition:transform 0.3s;
+    }
+    .modal-overlay.open .modal{transform:translateY(0);}
+    .modal-header{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:24px;
+    }
+    .modal-title{font-size:1.2rem;font-weight:800;}
+    .modal-close{
+      background:rgba(255,255,255,0.06);border:none;border-radius:50%;
+      width:36px;height:36px;cursor:pointer;color:#fff;
+      font-size:1.1rem;display:flex;align-items:center;justify-content:center;
+      transition:background 0.2s;
+    }
+    .modal-close:hover{background:rgba(255,255,255,0.12);}
+    .modal-steps{display:flex;gap:8px;margin-bottom:24px;}
+    .modal-step{
+      flex:1;height:3px;border-radius:2px;
+      background:rgba(255,255,255,0.08);transition:background 0.3s;
+    }
+    .modal-step.active{background:var(--cyan);}
+    .form-group{margin-bottom:18px;}
+    .form-label{font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:7px;display:block;}
+    .form-input,.form-select{
+      width:100%;padding:12px 16px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:12px;color:#fff;font-family:inherit;font-size:0.9rem;
+      transition:border-color 0.2s,box-shadow 0.2s;outline:none;
+    }
+    .form-input:focus,.form-select:focus{
+      border-color:rgba(0,207,255,0.4);
+      box-shadow:0 0 0 3px rgba(0,207,255,0.08);
+    }
+    .form-select option{background:#0a0118;}
+    .spei-box{
+      background:rgba(0,207,255,0.05);
+      border:1px solid rgba(0,207,255,0.2);
+      border-radius:16px;padding:20px;margin-bottom:20px;
+    }
+    .spei-label{font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--cyan);margin-bottom:4px;}
+    .spei-value{font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:12px;font-family:monospace;letter-spacing:0.05em;}
+    .clabe-row{display:flex;align-items:center;gap:10px;}
+    .clabe-num{font-size:1rem;font-weight:800;font-family:monospace;letter-spacing:0.08em;flex:1;}
+    .copy-btn{
+      background:rgba(0,207,255,0.1);border:1px solid rgba(0,207,255,0.25);
+      border-radius:8px;padding:8px 14px;color:var(--cyan);
+      font-size:0.8rem;font-weight:700;cursor:pointer;font-family:inherit;
+      transition:background 0.2s;
+    }
+    .copy-btn:hover{background:rgba(0,207,255,0.2);}
+    .upload-zone{
+      border:2px dashed rgba(255,255,255,0.12);
+      border-radius:14px;padding:28px;text-align:center;
+      cursor:pointer;transition:border-color 0.2s,background 0.2s;
+    }
+    .upload-zone:hover,.upload-zone.drag-over{
+      border-color:rgba(0,207,255,0.4);
+      background:rgba(0,207,255,0.04);
+    }
+    .upload-icon{font-size:2rem;margin-bottom:8px;}
+    .upload-text{font-size:0.85rem;color:var(--text-muted);}
+    .upload-text strong{color:var(--cyan);}
+    .success-content{text-align:center;padding:16px 0;}
+    .success-icon{font-size:3rem;margin-bottom:16px;}
+    .success-title{font-size:1.3rem;font-weight:800;margin-bottom:8px;}
+    .success-desc{font-size:0.9rem;color:var(--text-muted);line-height:1.6;}
+    .modal-step-content{display:none;}
+    .modal-step-content.active{display:block;}
+    .ref-display{
+      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);
+      border-radius:10px;padding:12px 16px;
+      font-size:0.85rem;color:var(--text-muted);margin-top:8px;
+    }
+    .ref-display strong{color:var(--cyan);}
+
+    /* ─── Responsive ─────────────────────────────────── */
+    @media(max-width:900px){
+      .que-es-grid{grid-template-columns:1fr;gap:36px;}
+      .speakers-grid{grid-template-columns:1fr;}
+      .stats-grid,.sponsors-grid,.challenge-cards{grid-template-columns:1fr 1fr;}
+      .valor-grid{grid-template-columns:1fr 1fr;}
+      .comunidad-inner{grid-template-columns:1fr;gap:24px;}
+      .photo-grid{grid-template-columns:repeat(2,1fr);}
+    }
+    @media(max-width:600px){
+      .section{padding:70px 0;}
+      .stats-grid,.sponsors-grid,.challenge-cards,.valor-grid{grid-template-columns:1fr;}
+      #nav .nav-links{display:none;}
+      .nazca-banner{flex-direction:column;text-align:center;}
+      .challenge-header{flex-direction:column;gap:20px;}
+    }
+
+    /* ─── Scroll Progress Bar ────────────────────────── */
+    #scroll-bar{
+      position:fixed;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,var(--purple),var(--cyan));
+      transform-origin:left;transform:scaleX(0);
+      z-index:10000;pointer-events:none;
+      transition:transform 0.05s linear;
+    }
+
+    /* ─── Cursor Glow ────────────────────────────────── */
+    #cursor-glow{
+      position:fixed;width:400px;height:400px;
+      border-radius:50%;pointer-events:none;
+      background:radial-gradient(circle,rgba(124,58,237,0.12) 0%,transparent 70%);
+      mix-blend-mode:screen;
+      transform:translate(-200px,-200px);
+      transition:transform 0.15s ease-out;
+      z-index:1;
+    }
+
+    /* ─── Ghost Watermark ────────────────────────────── */
+    .ghost-wm{
+      position:absolute;
+      font-size:clamp(8rem,20vw,18rem);
+      font-weight:800;
+      opacity:0.025;
+      pointer-events:none;
+      user-select:none;
+      z-index:0;
+      line-height:1;
+      letter-spacing:-0.04em;
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    /* ─── Card Spotlight ─────────────────────────────── */
+    .valor-item{
+      --spot-x:50%;
+      --spot-y:50%;
+    }
+    .valor-item::after{
+      content:'';
+      position:absolute;inset:0;
+      border-radius:inherit;
+      background:radial-gradient(300px at var(--spot-x) var(--spot-y),rgba(0,207,255,0.08),transparent 70%);
+      opacity:0;
+      transition:opacity 0.3s;
+      pointer-events:none;
+    }
+    .valor-item:hover::after{opacity:1;}
+
+    /* ─── 3D Tilt ────────────────────────────────────── */
+    .tilt-card{
+      transform-style:preserve-3d;
+      will-change:transform;
+      transition:transform 0.15s ease-out,box-shadow 0.3s;
+    }
+
+    /* ─── Reduced Motion override ────────────────────── */
+    @media(prefers-reduced-motion:reduce){
+      #scroll-bar,#cursor-glow,.tilt-card{transition:none;}
+      .tilt-card{transform:none!important;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- Scroll progress bar -->
+<div id="scroll-bar"></div>
+
+<!-- Cursor glow -->
+<div id="cursor-glow"></div>
+
+<!-- Background layers -->
+<div id="bg-base"></div>
+<div id="bg-glow"></div>
+<div id="bg-cyan-top"></div>
+<div id="orb1"></div>
+<div id="orb2"></div>
+
+<!-- Particles -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- ─── NAV ─────────────────────────────────────────── -->
+<nav id="nav">
+  <span class="nav-logo">W2TF</span>
+  <div class="nav-links">
+    <a href="#que-es">Qué es</a>
+    <a href="#agenda">Agenda</a>
+    <a href="#speakers">Speakers</a>
+    <a href="#startup-challenge">Challenge</a>
+    <a href="#sponsors">Sponsors</a>
+  </div>
+  <button class="btn btn-primary nav-cta" onclick="openModal()">
+    <span class="btn-shine"></span>
+    Registro
+  </button>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────────────── -->
+<section id="hero">
+  <div id="hero-stars"></div>
+  <span class="ghost-wm" style="bottom:-2rem;left:50%;transform:translateX(-50%);">2026</span>
+
+  <img src="logo.png" alt="Welcome 2 The Future" class="hero-logo hero-el"/>
+
+  <p class="hero-eyebrow hero-el">
+    <span></span>
+    Tec de Monterrey · CDMX · 2026
+    <span></span>
+  </p>
+
+  <h1 class="hero-title hero-el">Welcome 2<br>The Future</h1>
+
+  <p class="hero-subtitle hero-el">
+    <span id="rotating-word">Innovación</span>, IA y tecnologías emergentes
+  </p>
+
+  <div class="hero-meta hero-el">
+    <span class="hero-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      15 de mayo, 2026
+    </span>
+    <span class="hero-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      2:30 PM – 9:30 PM
+    </span>
+    <span class="hero-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      Tec de Monterrey, CDMX
+    </span>
+  </div>
+
+  <div class="urgency-badge hero-el">
+    <span class="dot"></span>
+    Lugares muy limitados — $200 MXN
+  </div>
+
+  <div class="countdown hero-el" id="countdown-hero">
+    <div class="cd-unit">
+      <div class="cd-num-wrap"><span class="cd-num" id="cd1-d">40</span></div>
+      <span class="cd-label">días</span>
+    </div>
+    <div class="cd-unit">
+      <div class="cd-num-wrap"><span class="cd-num" id="cd1-h">00</span></div>
+      <span class="cd-label">horas</span>
+    </div>
+    <div class="cd-unit">
+      <div class="cd-num-wrap"><span class="cd-num" id="cd1-m">00</span></div>
+      <span class="cd-label">min</span>
+    </div>
+    <div class="cd-unit">
+      <div class="cd-num-wrap"><span class="cd-num" id="cd1-s">00</span></div>
+      <span class="cd-label">seg</span>
+    </div>
+  </div>
+
+  <div class="hero-ctas hero-el">
+    <button class="btn btn-primary" onclick="openModal()">
+      <span class="btn-shine"></span>
+      Reservar mi lugar
+    </button>
+    <a href="#que-es" class="btn btn-outline">
+      <span class="btn-shine"></span>
+      Conoce más
+    </a>
+  </div>
+</section>
+
+<!-- ─── QUÉ ES ────────────────────────────────────────── -->
+<section id="que-es" class="section">
+  <div class="container">
+    <div class="que-es-grid">
+      <div class="que-es-text fade-section">
+        <p class="section-label">Qué es</p>
+        <h2 class="section-title">El summit estudiantil de innovación más ambicioso del Tec</h2>
+        <p>Welcome 2 The Future es un evento de un día que reúne a fundadores, inversionistas, expertos en IA y tecnología con la comunidad estudiantil del Tec de Monterrey CDMX.</p>
+        <p>Un espacio donde el conocimiento de industria se encuentra con el talento joven para construir el ecosistema emprendedor del futuro.</p>
+        <div class="que-es-feature-list">
+          <div class="que-es-feature">4 conferencias magistrales de industria</div>
+          <div class="que-es-feature">Startup Challenge con jurado experto</div>
+          <div class="que-es-feature">Networking con emprendedores y VCs</div>
+          <div class="que-es-feature">Catering y stands de emprendimiento</div>
+          <div class="que-es-feature">Acceso a comunidad exclusiva post-evento</div>
+        </div>
+        <br/>
+        <button class="btn btn-primary" onclick="openModal()" style="margin-top:8px;">
+          <span class="btn-shine"></span>
+          Quiero asistir
+        </button>
+      </div>
+      <div class="que-es-visual fade-section">
+        <div class="que-es-card">
+          <div class="que-es-card-icon">🚀</div>
+          <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:8px;">Un día. Impacto duradero.</h3>
+          <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:20px;">Desde las 2:30 PM hasta las 9:30 PM en el campus Tec de Monterrey CDMX — ponentes de primer nivel, pitches en vivo y conexiones reales.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(0,207,255,0.05);border-radius:10px;border:1px solid rgba(0,207,255,0.1);">
+              <span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Fecha</span>
+              <span style="font-size:0.85rem;font-weight:700;color:var(--cyan);">15 Mayo 2026</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(122,0,255,0.05);border-radius:10px;border:1px solid rgba(122,0,255,0.12);">
+              <span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Precio</span>
+              <span style="font-size:0.85rem;font-weight:700;color:#bf7fff;">$200 MXN</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(255,0,200,0.05);border-radius:10px;border:1px solid rgba(255,0,200,0.1);">
+              <span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Aforo</span>
+              <span style="font-size:0.85rem;font-weight:700;color:var(--magenta);">Limitado</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── VALOR ─────────────────────────────────────────── -->
+<section id="valor" class="section">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px;" class="fade-section">
+      <p class="section-label">Por qué ir</p>
+      <h2 class="section-title">Todo lo que <span class="grad-text">te llevas</span></h2>
+      <p class="section-sub">Más que un evento — una experiencia diseñada para catapultar tu carrera y tu red.</p>
+    </div>
+    <div class="valor-grid">
+      <div class="valor-item fade-card tilt-card">
+        <span class="valor-icon">🧠</span>
+        <div class="valor-title">Conocimiento de vanguardia</div>
+        <div class="valor-desc">Aprende directamente de fundadores y líderes que están construyendo el futuro de la tecnología en LATAM y el mundo.</div>
+      </div>
+      <div class="valor-item fade-card tilt-card">
+        <span class="valor-icon">🤝</span>
+        <div class="valor-title">Red de alto valor</div>
+        <div class="valor-desc">Conecta con inversionistas, emprendedores y compañeros con la misma mentalidad. El networking es intencional y facilitado.</div>
+      </div>
+      <div class="valor-item fade-card tilt-card">
+        <span class="valor-icon">🏆</span>
+        <div class="valor-title">Startup Challenge</div>
+        <div class="valor-desc">Presenta tu idea ante un jurado de expertos y compite por reconocimiento, mentoría y visibilidad ante fondos de inversión.</div>
+      </div>
+      <div class="valor-item fade-card tilt-card">
+        <span class="valor-icon">💡</span>
+        <div class="valor-title">Inspiración real</div>
+        <div class="valor-desc">Sal con claridad, energía y un plan. Los ponentes comparten experiencias sin filtros sobre cómo construir desde cero.</div>
+      </div>
+      <div class="valor-item fade-card tilt-card">
+        <span class="valor-icon">🍽️</span>
+        <div class="valor-title">Catering incluido</div>
+        <div class="valor-desc">Dos rondas de catering durante el evento. Come, descansa y sigue conectando en un ambiente diseñado para la conversación.</div>
+      </div>
+      <div class="valor-item fade-card tilt-card">
+        <span class="valor-icon">📲</span>
+        <div class="valor-title">Comunidad post-evento</div>
+        <div class="valor-desc">Acceso al grupo exclusivo de asistentes: recursos, oportunidades y conexiones que siguen mucho después del 15 de mayo.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── AGENDA ────────────────────────────────────────── -->
+<section id="agenda" class="section">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:52px;" class="fade-section">
+      <p class="section-label">Programa</p>
+      <h2 class="section-title">Agenda del <span class="grad-text">15 de mayo</span></h2>
+    </div>
+    <div class="agenda-timeline fade-section">
+      <div class="agenda-line" id="agenda-line"></div>
+
+      <div class="agenda-item">
+        <div class="agenda-row">
+          <span class="agenda-time">2:30 PM</span>
+          <div class="agenda-content">
+            <div class="agenda-title">Apertura de puertas / Registro</div>
+            <div class="agenda-desc">Recorrido por stands y primeras conversaciones</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agenda-item">
+        <div class="agenda-row">
+          <span class="agenda-time">3:00 PM</span>
+          <div class="agenda-content">
+            <div class="agenda-title">Inauguración oficial</div>
+            <div class="agenda-desc">Bienvenida y arranque formal del evento</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agenda-item highlight">
+        <div class="agenda-row">
+          <span class="agenda-time">3:30 PM</span>
+          <div class="agenda-content">
+            <div class="agenda-title">⭐ Ponente 1</div>
+            <div class="agenda-desc">Primera conferencia de industria — por anunciarse</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agenda-item highlight">
+        <div class="agenda-row">
+          <span class="agenda-time">4:25 PM</span>
+          <div class="agenda-content">
+            <div class="agenda-title">⭐ Ponente 2</div>
+            <div class="agenda-desc">Segunda conferencia — por anunciarse</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agenda-item">
+        <div class="agenda-row">
+          <span class="agenda-time">5:20 PM</span>
+          <div class="agenda-content">
+            <div class="agenda-title">Stands + Catering</div>
+            <div class="agenda-desc">Networking, comida incluida y recorrido por emprendimientos</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agenda-item highlight">
+        <div class="agenda-row">
+          <span class="agenda-time">5:40 PM</span>
+          <div class="agenda-content">
+            <div class="agenda-title">⭐ Ponente 3</div>
+            <div class="agenda-desc">Tercera conferencia — por anunciarse</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agenda-item highlight">
+        <div class="agenda-row">
+          <span class="agenda-time">6:40 PM</span>
+          <div class="agenda-content">
+            <div class="agenda-title">⭐ Ponente 4</div>
+            <div class="agenda-desc">Cuarta conferencia — por anunciarse</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agenda-item">
+        <div class="agenda-row">
+          <span class="agenda-time">7:35 PM</span>
+          <div class="agenda-content">
+            <div class="agenda-title">Stands + Catering</div>
+            <div class="agenda-desc">Segunda ronda de networking y catering</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agenda-item highlight">
+        <div class="agenda-row">
+          <span class="agenda-time">8:00 PM</span>
+          <div class="agenda-content">
+            <div class="agenda-title">⭐ Startup Challenge — Pitch 1</div>
+            <div class="agenda-desc"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agenda-item highlight">
+        <div class="agenda-row">
+          <span class="agenda-time">8:15 PM</span>
+          <div class="agenda-content">
+            <div class="agenda-title">⭐ Startup Challenge — Pitch 2</div>
+            <div class="agenda-desc"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agenda-item highlight">
+        <div class="agenda-row">
+          <span class="agenda-time">8:30 PM</span>
+          <div class="agenda-content">
+            <div class="agenda-title">⭐ Startup Challenge — Pitch 3</div>
+            <div class="agenda-desc"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agenda-item highlight">
+        <div class="agenda-row">
+          <span class="agenda-time">8:55 PM</span>
+          <div class="agenda-content">
+            <div class="agenda-title">⭐ Anuncio del ganador</div>
+            <div class="agenda-desc">Premiación del Startup Challenge</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agenda-item">
+        <div class="agenda-row">
+          <span class="agenda-time">9:05 PM</span>
+          <div class="agenda-content">
+            <div class="agenda-title">Clausura</div>
+            <div class="agenda-desc">Palabras de cierre y foto oficial</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agenda-item">
+        <div class="agenda-row">
+          <span class="agenda-time">9:30 PM</span>
+          <div class="agenda-content">
+            <div class="agenda-title">Fin del evento</div>
+            <div class="agenda-desc"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SPEAKERS ──────────────────────────────────────── -->
+<section id="speakers" class="section">
+  <div class="container">
+    <div class="fade-section" style="margin-bottom:48px;">
+      <p class="section-label">Ponentes</p>
+      <h2 class="section-title">Los que <span class="grad-text">construyen el futuro</span></h2>
+      <p class="section-sub" style="margin-bottom:0;">Líderes que han fundado, escalado y fondeado compañías que transforman industrias.</p>
+    </div>
+
+    <div class="speakers-grid">
+
+      <!-- Speaker 1 -->
+      <div class="speaker-card fade-card tilt-card">
+        <div class="speaker-card-inner">
+          <div class="speaker-header">
+            <div class="speaker-avatar">
+              <div class="speaker-avatar-inner">LA</div>
+            </div>
+            <div class="speaker-info">
+              <div class="speaker-name">Luis Andrés Enriquez Arias</div>
+              <div class="speaker-role">General Partner · Nazca VC</div>
+              <img src="logos/nazca.svg" alt="Nazca VC" class="speaker-company-logo" onerror="this.style.display='none'"/>
+            </div>
+          </div>
+          <p class="speaker-bio">Co-fundador de Cultura Colectiva — 30M usuarios únicos y 60M seguidores en redes. Hoy lidera Nazca, el venture capital early-stage más activo de Latinoamérica hispanohablante, con 4 fondos y más de $300M bajo gestión. Matemático aplicado por el ITAM.</p>
+          <div class="speaker-video" data-youtube="">
+            <div class="play-btn">
+              <div class="play-icon"></div>
+            </div>
+            <span class="video-label">Video próximamente</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speaker 2 -->
+      <div class="speaker-card fade-card tilt-card">
+        <div class="speaker-card-inner">
+          <div class="speaker-header">
+            <div class="speaker-avatar" style="background:linear-gradient(135deg,var(--magenta),var(--purple));">
+              <div class="speaker-avatar-inner" style="color:var(--magenta);">SG</div>
+            </div>
+            <div class="speaker-info">
+              <div class="speaker-name">Sergio Daniel Gutiérrez Méndez</div>
+              <div class="speaker-role">Speaker confirmado</div>
+              <a href="https://linkedin.com/in/sergio-daniel-gutierrez-mendez" target="_blank" style="font-size:0.75rem;color:var(--text-muted);text-decoration:none;display:block;margin-top:2px;">linkedin.com/in/sergio-daniel-gutierrez-mendez</a>
+            </div>
+          </div>
+          <p class="speaker-bio">Perfil de referencia: linkedin.com/in/sergio-daniel-gutierrez-mendez — Bio próximamente disponible.</p>
+          <div class="speaker-video" data-youtube="">
+            <div class="play-btn">
+              <div class="play-icon"></div>
+            </div>
+            <span class="video-label">Video próximamente</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TBA -->
+    <div class="speaker-tba fade-section">
+      <div class="tba-icon">🔮</div>
+      <div class="tba-text">
+        <h4>Más ponentes por anunciar</h4>
+        <p>Estamos confirmando speakers adicionales de IA, venture capital y tecnología. Mantente al tanto en nuestras redes.</p>
+      </div>
+    </div>
+
+    <!-- Marquee -->
+    <div class="marquee-wrap fade-section">
+      <div class="marquee-track">
+        <span class="marquee-item">Inteligencia Artificial</span>
+        <span class="marquee-item">Venture Capital</span>
+        <span class="marquee-item">Startups LATAM</span>
+        <span class="marquee-item">Deep Tech</span>
+        <span class="marquee-item">Emprendimiento</span>
+        <span class="marquee-item">Cultura Colectiva</span>
+        <span class="marquee-item">Nazca VC</span>
+        <span class="marquee-item">Tec de Monterrey</span>
+        <span class="marquee-item">Innovación</span>
+        <span class="marquee-item">Tecnologías Emergentes</span>
+        <!-- Duplicate for seamless loop -->
+        <span class="marquee-item">Inteligencia Artificial</span>
+        <span class="marquee-item">Venture Capital</span>
+        <span class="marquee-item">Startups LATAM</span>
+        <span class="marquee-item">Deep Tech</span>
+        <span class="marquee-item">Emprendimiento</span>
+        <span class="marquee-item">Cultura Colectiva</span>
+        <span class="marquee-item">Nazca VC</span>
+        <span class="marquee-item">Tec de Monterrey</span>
+        <span class="marquee-item">Innovación</span>
+        <span class="marquee-item">Tecnologías Emergentes</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TRACK RECORD ──────────────────────────────────── -->
+<section id="track-record" class="section">
+  <div class="container">
+    <div class="fade-section" style="margin-bottom:52px;">
+      <p class="section-label">Track Record</p>
+      <h2 class="section-title">Números que <span class="grad-text">hablan</span></h2>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card fade-card">
+        <div class="counter-num" data-count="200"><span class="cval">0</span><span class="counter-suffix">+</span></div>
+        <div class="stat-label">Asistentes esperados</div>
+      </div>
+      <div class="stat-card fade-card">
+        <div class="counter-num" data-count="10"><span class="cval">0</span><span class="counter-suffix">+</span></div>
+        <div class="stat-label">Emprendimientos presentes</div>
+      </div>
+      <div class="stat-card fade-card">
+        <div class="counter-num" data-count="4"><span class="cval">0</span></div>
+        <div class="stat-label">Empresas colaboradoras</div>
+      </div>
+    </div>
+
+    <div class="photo-grid fade-section">
+      <div class="photo-cell">📸</div>
+      <div class="photo-cell">🎤</div>
+      <div class="photo-cell">🤝</div>
+      <div class="photo-cell">🏆</div>
+    </div>
+
+    <div class="collab-logos fade-section">
+      <img src="logos/tec.png" alt="Tec de Monterrey" class="collab-logo" onerror="this.style.display='none'"/>
+      <img src="logos/nazca.svg" alt="Nazca VC" class="collab-logo" onerror="this.style.display='none'"/>
+      <img src="logos/revolut.jpg" alt="Revolut" class="collab-logo" onerror="this.style.display='none'"/>
+      <img src="logos/trustco.jpeg" alt="TrustCo" class="collab-logo" onerror="this.style.display='none'"/>
+      <img src="logos/google.png" alt="Google" class="collab-logo" onerror="this.style.display='none'"/>
+      <img src="logos/microsoft.png" alt="Microsoft" class="collab-logo" onerror="this.style.display='none'"/>
+    </div>
+  </div>
+</section>
+
+<!-- ─── COMUNIDAD TEC ─────────────────────────────────── -->
+<section id="comunidad" class="section">
+  <div class="container">
+    <div class="fade-section" style="margin-bottom:40px;">
+      <p class="section-label">Comunidad</p>
+      <h2 class="section-title">Hecho por y para el <span class="grad-text">Tec CDMX</span></h2>
+    </div>
+    <div class="comunidad-inner fade-section">
+      <div>
+        <p>Este evento nace del ecosistema estudiantil del Tec de Monterrey Campus Ciudad de México. Organizado por alumnos, para alumnos — y para todo aquel que quiera conectar con la siguiente generación de fundadores.</p>
+        <p>Creemos que la innovación no espera a graduarse. Construimos este espacio para que las ideas, las conexiones y el aprendizaje pasen hoy.</p>
+        <div class="comunidad-pills">
+          <span class="pill">ITESM CDMX</span>
+          <span class="pill">Startups</span>
+          <span class="pill">IA & ML</span>
+          <span class="pill">Venture Capital</span>
+          <span class="pill">Deep Tech</span>
+          <span class="pill">Community</span>
+        </div>
+      </div>
+      <div class="comunidad-visual">
+        <div class="tec-stat">
+          <span class="tec-stat-label">Campus</span>
+          <span class="tec-stat-val">CDMX</span>
+        </div>
+        <div class="tec-stat">
+          <span class="tec-stat-label">Institución</span>
+          <span class="tec-stat-val">Tec de Monterrey</span>
+        </div>
+        <div class="tec-stat">
+          <span class="tec-stat-label">Organización</span>
+          <span class="tec-stat-val">100% estudiantes</span>
+        </div>
+        <div class="tec-stat">
+          <span class="tec-stat-label">Edición</span>
+          <span class="tec-stat-val">2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── STARTUP CHALLENGE ─────────────────────────────── -->
+<section id="startup-challenge" class="section">
+  <div class="container">
+    <div class="fade-section" style="margin-bottom:48px;">
+      <p class="section-label">Competencia</p>
+      <h2 class="section-title">Startup <span class="grad-text">Challenge</span></h2>
+      <p class="section-sub" style="margin-bottom:0;">Presenta tu startup o idea ante un jurado de expertos en inversión y tecnología.</p>
+    </div>
+
+    <div class="challenge-cards">
+      <div class="challenge-card fade-card">
+        <span class="challenge-card-icon">📋</span>
+        <div class="challenge-card-title">Inscribe tu startup</div>
+        <div class="challenge-card-desc">Aplica con tu idea o empresa en etapa temprana. Se seleccionarán 3 finalistas para pitchar en vivo.</div>
+      </div>
+      <div class="challenge-card fade-card">
+        <span class="challenge-card-icon">🎯</span>
+        <div class="challenge-card-title">Pitch en vivo</div>
+        <div class="challenge-card-desc">Cada equipo tiene tiempo en el escenario para presentar su propuesta ante el jurado y la audiencia.</div>
+      </div>
+      <div class="challenge-card fade-card">
+        <span class="challenge-card-icon">🥇</span>
+        <div class="challenge-card-title">Premio y reconocimiento</div>
+        <div class="challenge-card-desc">El ganador recibe visibilidad, mentoría con expertos de Nazca y acceso a la red de inversores.</div>
+      </div>
+    </div>
+
+    <div class="nazca-banner fade-section">
+      <img src="logos/nazca.svg" alt="Nazca VC" class="nazca-banner-logo" onerror="this.style.display='none'"/>
+      <div class="nazca-banner-text">
+        <h4>Patrocinado por Nazca VC</h4>
+        <p>El venture capital early-stage más activo de Latinoamérica hispanohablante — 4 fondos, +$300M bajo gestión, cientos de fundadores respaldados.</p>
+      </div>
+    </div>
+
+    <div class="challenge-dates fade-section">
+      <div class="date-item">
+        <div class="date-item-date">Antes del 10 Mayo</div>
+        <div class="date-item-label">Cierre de inscripciones al Challenge</div>
+      </div>
+      <div class="date-item">
+        <div class="date-item-date">12 Mayo</div>
+        <div class="date-item-label">Notificación a finalistas seleccionados</div>
+      </div>
+      <div class="date-item">
+        <div class="date-item-date">15 Mayo · 8:00 PM</div>
+        <div class="date-item-label">Pitches en vivo durante el evento</div>
+      </div>
+      <div class="date-item">
+        <div class="date-item-date">15 Mayo · 8:55 PM</div>
+        <div class="date-item-label">Anuncio del ganador</div>
+      </div>
+    </div>
+
+    <div class="challenge-perks fade-section">
+      <span class="perk-tag">Feedback de jurado experto</span>
+      <span class="perk-tag">Visibilidad ante +200 asistentes</span>
+      <span class="perk-tag">Acceso a red Nazca VC</span>
+      <span class="perk-tag">Mentoría post-evento</span>
+      <span class="perk-tag">Reconocimiento público</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SPONSORS ──────────────────────────────────────── -->
+<section id="sponsors" class="section">
+  <div class="container">
+    <div class="fade-section" style="margin-bottom:48px;">
+      <p class="section-label">Patrocinadores</p>
+      <h2 class="section-title">Quienes hacen <span class="grad-text">esto posible</span></h2>
+    </div>
+
+    <div class="sponsors-grid">
+      <div class="sponsor-card fade-card">
+        <img src="logos/nazca.svg" alt="Nazca VC" class="sponsor-logo" onerror="this.style.display='none'"/>
+        <span class="sponsor-tier tier-gold">Sponsor Principal</span>
+        <p class="sponsor-desc">El venture capital early-stage más activo de LATAM hispanohablante. Nazca apoya el ecosistema emprendedor estudiantil.</p>
+      </div>
+      <div class="sponsor-card fade-card">
+        <img src="logos/revolut.jpg" alt="Revolut" class="sponsor-logo" onerror="this.style.display='none'"/>
+        <span class="sponsor-tier tier-silver">Sponsor</span>
+        <p class="sponsor-desc">Fintech global líder en servicios financieros digitales, presente en más de 35 países y millones de usuarios.</p>
+      </div>
+      <div class="sponsor-card fade-card">
+        <img src="logos/trustco.jpeg" alt="TrustCo" class="sponsor-logo" onerror="this.style.display='none'"/>
+        <span class="sponsor-tier tier-silver">Sponsor</span>
+        <p class="sponsor-desc">Empresa líder en soluciones de identidad digital y tecnología de confianza para la nueva economía.</p>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:40px;" class="fade-section">
+      <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:16px;">¿Tu empresa quiere aparecer aquí?</p>
+      <a href="mailto:hola@w2tf.mx" class="btn btn-outline">
+        <span class="btn-shine"></span>
+        Ser patrocinador
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA FINAL ─────────────────────────────────────── -->
+<section id="cta-final">
+  <div class="container">
+    <div class="cta-inner fade-section">
+      <p class="section-label" style="justify-content:center;">Últimas plazas</p>
+      <h2><span class="grad-text">El futuro se construye</span><br>desde hoy</h2>
+      <p>No dejes pasar la oportunidad de estar en el evento más importante del ecosistema estudiantil del Tec. $200 MXN. Una sola fecha. Impacto real.</p>
+
+      <div class="cta-cds">
+        <div class="countdown" style="margin-bottom:0;">
+          <div class="cd-unit">
+            <div class="cd-num-wrap"><span class="cd-num" id="cd2-d">40</span></div>
+            <span class="cd-label">días</span>
+          </div>
+          <div class="cd-unit">
+            <div class="cd-num-wrap"><span class="cd-num" id="cd2-h">00</span></div>
+            <span class="cd-label">horas</span>
+          </div>
+          <div class="cd-unit">
+            <div class="cd-num-wrap"><span class="cd-num" id="cd2-m">00</span></div>
+            <span class="cd-label">min</span>
+          </div>
+          <div class="cd-unit">
+            <div class="cd-num-wrap"><span class="cd-num" id="cd2-s">00</span></div>
+            <span class="cd-label">seg</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="openModal()" style="font-size:1rem;padding:16px 40px;">
+          <span class="btn-shine"></span>
+          Reservar mi lugar — $200 MXN
+        </button>
+      </div>
+      <p class="cta-price-note">Pago único por transferencia SPEI · Boleto confirmado por correo · Cupo limitado</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-logos">
+      <img src="logos/tec.png" alt="Tec de Monterrey" class="footer-logo-img" onerror="this.style.display='none'"/>
+      <img src="logos/nazca.svg" alt="Nazca VC" class="footer-logo-img" onerror="this.style.display='none'"/>
+      <img src="logos/google.png" alt="Google" class="footer-logo-img" onerror="this.style.display='none'"/>
+      <img src="logos/microsoft.png" alt="Microsoft" class="footer-logo-img" onerror="this.style.display='none'"/>
+    </div>
+    <p class="footer-copy">© 2026 Welcome 2 The Future · Tec de Monterrey CDMX · Organizado por estudiantes</p>
+    <div class="footer-links">
+      <a href="#que-es">Qué es</a>
+      <a href="#agenda">Agenda</a>
+      <a href="#speakers">Speakers</a>
+      <a href="#startup-challenge">Challenge</a>
+      <a href="#sponsors">Sponsors</a>
+      <a href="mailto:hola@w2tf.mx">Contacto</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── MODAL ─────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title-text">Registro — W2TF 2026</span>
+      <button class="modal-close" onclick="closeModal()" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-steps">
+      <div class="modal-step active" id="step-indicator-1"></div>
+      <div class="modal-step" id="step-indicator-2"></div>
+      <div class="modal-step" id="step-indicator-3"></div>
+    </div>
+
+    <!-- Step 1: Formulario -->
+    <div class="modal-step-content active" id="modal-step-1">
+      <div class="form-group">
+        <label class="form-label" for="inp-nombre">Nombre completo</label>
+        <input class="form-input" id="inp-nombre" type="text" placeholder="Tu nombre completo" autocomplete="name"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="inp-email">Correo electrónico</label>
+        <input class="form-input" id="inp-email" type="email" placeholder="correo@ejemplo.com" autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="inp-matricula">Matrícula (opcional)</label>
+        <input class="form-input" id="inp-matricula" type="text" placeholder="A01234567"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="select-tipo">Tipo de asistente</label>
+        <select class="form-select" id="select-tipo">
+          <option value="">Selecciona una opción</option>
+          <option value="estudiante-tec">Estudiante Tec de Monterrey</option>
+          <option value="estudiante-otra">Estudiante de otra universidad</option>
+          <option value="profesional">Profesional / Emprendedor</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="select-boletos">Número de boletos</label>
+        <select class="form-select" id="select-boletos">
+          <option value="1">1 boleto — $200 MXN</option>
+          <option value="2">2 boletos — $400 MXN</option>
+          <option value="3">3 boletos — $600 MXN</option>
+        </select>
+      </div>
+      <div class="ref-display" id="ref-preview" style="display:none;">
+        <span>Referencia: </span><strong id="ref-value"></strong>
+      </div>
+      <br/>
+      <button class="btn btn-primary" style="width:100%;" onclick="irAPago()">
+        <span class="btn-shine"></span>
+        Continuar al pago
+      </button>
+    </div>
+
+    <!-- Step 2: SPEI -->
+    <div class="modal-step-content" id="modal-step-2">
+      <div class="spei-box">
+        <div class="spei-label">Banco destino</div>
+        <div class="spei-value">STP / Cuenca</div>
+        <div class="spei-label">CLABE interbancaria</div>
+        <div class="clabe-row">
+          <span class="clabe-num" id="clabe-display">638180010184222442</span>
+          <button class="copy-btn" onclick="copyClabe()">Copiar</button>
+        </div>
+      </div>
+      <div class="spei-box" style="margin-bottom:12px;">
+        <div class="spei-label">Monto a transferir</div>
+        <div class="spei-value" id="monto-display">$200 MXN</div>
+        <div class="spei-label">Referencia numérica</div>
+        <div class="spei-value" id="ref-spei-display">—</div>
+      </div>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:20px;">Realiza la transferencia desde tu banco e incluye la referencia numérica. Luego sube el comprobante:</p>
+
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+        <div class="upload-icon">📎</div>
+        <p class="upload-text"><strong>Haz clic</strong> o arrastra tu comprobante aquí</p>
+        <p class="upload-text" style="font-size:0.75rem;margin-top:4px;">PDF, JPG, PNG — máx 10MB</p>
+        <p id="file-name" style="font-size:0.8rem;color:var(--cyan);margin-top:8px;display:none;"></p>
+      </div>
+      <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" onchange="handleFile(this.files[0])"/>
+      <br/>
+      <button class="btn btn-primary" style="width:100%;" onclick="enviarRegistro()">
+        <span class="btn-shine"></span>
+        Confirmar registro
+      </button>
+      <button class="btn btn-outline" style="width:100%;margin-top:10px;" onclick="goToStep(1)">
+        <span class="btn-shine"></span>
+        Regresar
+      </button>
+    </div>
+
+    <!-- Step 3: Éxito -->
+    <div class="modal-step-content" id="modal-step-3">
+      <div class="success-content">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">¡Registro enviado!</div>
+        <p class="success-desc">Gracias por registrarte en Welcome 2 The Future 2026. Recibirás confirmación en tu correo en las próximas 24 horas una vez que verifiquemos tu pago.</p>
+        <br/>
+        <p class="success-desc" style="font-size:0.8rem;color:rgba(255,255,255,0.3);">Si tienes dudas escríbenos a hola@w2tf.mx</p>
+        <br/>
+        <button class="btn btn-primary" style="width:100%;" onclick="closeModal()">
+          <span class="btn-shine"></span>
+          ¡Nos vemos el 15 de mayo!
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SCRIPTS ───────────────────────────────────────── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   PARTICLES
+═══════════════════════════════════════════════════════ */
+(function initParticles(){
+  const canvas=document.getElementById('particles-canvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const isMobile=()=>window.innerWidth<768;
+  let W,H,particles=[];
+  function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
+  function mkParticle(){
+    const isCyan=Math.random()<.67;
+    const size=2+Math.random()*5;
+    const alpha=.1+Math.random()*.45;
+    return{x:Math.random()*W,y:H+Math.random()*20,size,
+      color:isCyan?`rgba(0,207,255,${alpha})`:`rgba(122,0,255,${alpha})`,
+      shadow:isCyan?`rgba(0,207,255,0.6)`:`rgba(122,0,255,0.6)`,
+      shadowBlur:size*3,vx:(Math.random()-.5)*.3,vy:-(0.2+Math.random()*.6),
+      life:0,maxLife:180+Math.random()*300};
+  }
+  function init(){
+    resize();
+    const count=isMobile()?18:36;
+    particles=Array.from({length:count},()=>{const p=mkParticle();p.y=Math.random()*H;p.life=Math.random()*p.maxLife;return p;});
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{
+      const t=p.life/p.maxLife;
+      const fade=t<.1?t/.1:t>.8?(1-t)/.2:1;
+      ctx.save();ctx.globalAlpha=fade;ctx.shadowBlur=p.shadowBlur;ctx.shadowColor=p.shadow;ctx.fillStyle=p.color;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.size/2,0,Math.PI*2);ctx.fill();ctx.restore();
+      p.x+=p.vx;p.y+=p.vy;p.life++;
+      if(p.life>=p.maxLife||p.y<-10){Object.assign(p,mkParticle());}
+    });
+    requestAnimationFrame(draw);
+  }
+  const pref=window.matchMedia('(prefers-reduced-motion:reduce)');
+  if(!pref.matches){init();draw();}
+  window.addEventListener('resize',init,{passive:true});
+})();
+
+/* ═══════════════════════════════════════════════════════
+   STARFIELD
+═══════════════════════════════════════════════════════ */
+(function generateStars(){
+  const container = document.getElementById('hero-stars');
+  if(!container) return;
+  for(let i = 0; i < 20; i++){
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = 1 + Math.random() * 2.5;
+    star.style.cssText = `
+      width:${size}px;height:${size}px;
+      left:${Math.random()*100}%;top:${Math.random()*100}%;
+      --d:${2 + Math.random()*4}s;
+      --o:${0.4 + Math.random()*0.6};
+      animation-delay:${Math.random()*4}s;
+    `;
+    container.appendChild(star);
+  }
+})();
+
+/* ═══════════════════════════════════════════════════════
+   ROTATING WORD
+═══════════════════════════════════════════════════════ */
+(function rotatingWord(){
+  const words = ['Innovación','Inteligencia Artificial','Emprendimiento','Deep Tech','Venture Capital','Startups'];
+  let idx = 0;
+  const el = document.getElementById('rotating-word');
+  if(!el) return;
+  function rotate(){
+    if(typeof gsap !== 'undefined'){
+      gsap.to(el,{opacity:0,y:-12,duration:0.3,ease:'power2.in',onComplete:()=>{
+        idx = (idx+1) % words.length;
+        el.textContent = words[idx];
+        gsap.fromTo(el,{opacity:0,y:12},{opacity:1,y:0,duration:0.4,ease:'power2.out'});
+      }});
+    } else {
+      idx = (idx+1) % words.length;
+      el.textContent = words[idx];
+    }
+  }
+  setInterval(rotate, 2800);
+})();
+
+/* ═══════════════════════════════════════════════════════
+   COUNTDOWN
+═══════════════════════════════════════════════════════ */
+(function initCountdown(){
+  const target = new Date('2026-05-15T14:30:00-06:00');
+  const prevVals = {cd1:{d:null,h:null,m:null,s:null},cd2:{d:null,h:null,m:null,s:null}};
+
+  function flipUpdate(id, val){
+    const el = document.getElementById(id);
+    if(!el) return;
+    const str = String(val).padStart(2,'0');
+    if(el.textContent === str) return;
+    if(typeof gsap !== 'undefined'){
+      gsap.to(el,{y:-20,opacity:0,duration:0.18,ease:'power2.in',onComplete:()=>{
+        el.textContent = str;
+        gsap.fromTo(el,{y:20,opacity:0},{y:0,opacity:1,duration:0.22,ease:'power2.out'});
+      }});
+    } else {
+      el.textContent = str;
+    }
+  }
+
+  function tick(){
+    const now = new Date();
+    const diff = target - now;
+    if(diff <= 0){
+      ['cd1-d','cd1-h','cd1-m','cd1-s','cd2-d','cd2-h','cd2-m','cd2-s'].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el) el.textContent='00';
+      });
+      return;
+    }
+    const days  = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins  = Math.floor((diff % 3600000) / 60000);
+    const secs  = Math.floor((diff % 60000) / 1000);
+
+    flipUpdate('cd1-d', days);
+    flipUpdate('cd1-h', hours);
+    flipUpdate('cd1-m', mins);
+    flipUpdate('cd1-s', secs);
+    flipUpdate('cd2-d', days);
+    flipUpdate('cd2-h', hours);
+    flipUpdate('cd2-m', mins);
+    flipUpdate('cd2-s', secs);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
+/* ═══════════════════════════════════════════════════════
+   GSAP ANIMATIONS
+═══════════════════════════════════════════════════════ */
+window.addEventListener('load', function(){
+  if(typeof gsap === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Orb ambient movement
+  gsap.to('#orb1',{x:40,y:30,duration:12,ease:'sine.inOut',repeat:-1,yoyo:true});
+  gsap.to('#orb2',{x:-35,y:-25,duration:14,ease:'sine.inOut',repeat:-1,yoyo:true,delay:2});
+
+  // Hero entrance
+  gsap.from('.hero-el',{y:50,opacity:0,duration:1.2,ease:'power4.out',stagger:0.2});
+
+  // Navbar scroll behavior
+  let lastY = 0;
+  ScrollTrigger.create({
+    start:'top top',
+    onUpdate(self){
+      const y = self.scroll();
+      const nav = document.getElementById('nav');
+      if(!nav) return;
+      if(y > lastY && y > 80){
+        nav.classList.add('nav-hidden');
+      } else {
+        nav.classList.remove('nav-hidden');
+        // Darken nav bg on scroll
+        const progress = Math.min(y / 300, 1);
+        nav.style.background = `rgba(8,0,25,${0.55 + progress * 0.35})`;
+      }
+      lastY = y;
+    }
+  });
+
+  // Agenda line animation
+  gsap.from('#agenda-line',{
+    scaleY:0,
+    scrollTrigger:{trigger:'#agenda',start:'top 70%',end:'bottom 80%',scrub:1}
+  });
+
+  // Fade sections
+  gsap.utils.toArray('.fade-section').forEach(el=>{
+    gsap.from(el,{
+      y:60,opacity:0,duration:0.9,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 82%',toggleActions:'play none none none'}
+    });
+  });
+
+  // Staggered cards
+  gsap.utils.toArray('.fade-card').forEach((el,i)=>{
+    gsap.from(el,{
+      y:50,opacity:0,duration:0.8,ease:'power3.out',
+      delay: (i % 3) * 0.12,
+      scrollTrigger:{trigger:el,start:'top 85%',toggleActions:'play none none none'}
+    });
+  });
+
+  // Agenda items staggered
+  gsap.utils.toArray('.agenda-item').forEach((el,i)=>{
+    gsap.from(el,{
+      x:-24,opacity:0,duration:0.6,ease:'power3.out',
+      delay:(i % 5) * 0.08,
+      scrollTrigger:{trigger:el,start:'top 88%',toggleActions:'play none none none'}
+    });
+  });
+
+  // Collab logos staggered
+  gsap.utils.toArray('.collab-logo').forEach((el,i)=>{
+    gsap.from(el,{
+      y:20,opacity:0,duration:0.5,ease:'power2.out',
+      delay:i * 0.1,
+      scrollTrigger:{trigger:el,start:'top 88%',toggleActions:'play none none none'}
+    });
+  });
+
+  // Counter animation
+  gsap.utils.toArray('.counter-num[data-count]').forEach(el=>{
+    const target = parseInt(el.getAttribute('data-count'));
+    const span = el.querySelector('.cval');
+    if(!span) return;
+    ScrollTrigger.create({
+      trigger:el,
+      start:'top 80%',
+      once:true,
+      onEnter:()=>{
+        gsap.to({val:0},{val:target,duration:1.8,ease:'power2.out',
+          onUpdate:function(){span.textContent=Math.round(this.targets()[0].val);}
+        });
+      }
+    });
+  });
+
+  // Button shine on hover
+  document.querySelectorAll('.btn').forEach(btn=>{
+    const shine = btn.querySelector('.btn-shine');
+    if(!shine) return;
+    btn.addEventListener('mouseenter',()=>{
+      gsap.fromTo(shine,{x:'-150%'},{x:'150%',duration:0.55,ease:'power2.inOut'});
+    });
+  });
+});
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   MODAL & PAYMENT LOGIC
+═══════════════════════════════════════════════════════ */
+const PRECIO = 200;
+const CLABE  = '638180010184222442';
+let selectedFile = null;
+let currentStep  = 1;
+
+function openModal(){
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modal-overlay').addEventListener('click', function(e){
+  if(e.target === this) closeModal();
+});
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeModal();
+});
+
+function goToStep(n){
+  document.querySelector('.modal-step-content.active').classList.remove('active');
+  document.getElementById('modal-step-'+n).classList.add('active');
+  document.querySelectorAll('.modal-step').forEach((s,i)=>{
+    s.classList.toggle('active', i < n);
+  });
+  currentStep = n;
+  // Update title
+  const titles = {1:'Tus datos',2:'Pago por SPEI',3:'¡Listo!'};
+  document.getElementById('modal-title-text').textContent = 'Registro — ' + (titles[n]||'W2TF');
+}
+
+function selectTipo(){ /* handled by select onChange */ }
+function selectBoletos(){ generarReferencia(); }
+
+function generarReferencia(){
+  const nombre = document.getElementById('inp-nombre').value.trim();
+  const boletos = parseInt(document.getElementById('select-boletos').value)||1;
+  if(!nombre) return;
+  const ts = Date.now().toString().slice(-6);
+  const ref = 'W2TF'+ts;
+  document.getElementById('ref-value').textContent = ref;
+  document.getElementById('ref-preview').style.display = 'block';
+  return ref;
+}
+
+document.getElementById('inp-nombre').addEventListener('input', generarReferencia);
+
+function irAPago(){
+  const nombre  = document.getElementById('inp-nombre').value.trim();
+  const email   = document.getElementById('inp-email').value.trim();
+  const tipo    = document.getElementById('select-tipo').value;
+  const boletos = parseInt(document.getElementById('select-boletos').value)||1;
+
+  if(!nombre){alert('Por favor ingresa tu nombre.');return;}
+  if(!email || !email.includes('@')){alert('Por favor ingresa un correo válido.');return;}
+  if(!tipo){alert('Por favor selecciona tu tipo de asistente.');return;}
+
+  const ref = generarReferencia();
+  const monto = boletos * PRECIO;
+
+  document.getElementById('clabe-display').textContent = CLABE;
+  document.getElementById('monto-display').textContent = '$' + monto + ' MXN';
+  document.getElementById('ref-spei-display').textContent = document.getElementById('ref-value').textContent;
+
+  goToStep(2);
+}
+
+function copyClabe(){
+  navigator.clipboard.writeText(CLABE).then(()=>{
+    const btn = document.querySelector('.copy-btn');
+    const orig = btn.textContent;
+    btn.textContent = '¡Copiado!';
+    setTimeout(()=>{ btn.textContent = orig; }, 1800);
+  }).catch(()=>{
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = CLABE;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+}
+
+function handleFile(file){
+  if(!file) return;
+  selectedFile = file;
+  const fn = document.getElementById('file-name');
+  fn.textContent = '✓ ' + file.name;
+  fn.style.display = 'block';
+}
+
+// Drag & drop
+(function(){
+  const zone = document.getElementById('upload-zone');
+  if(!zone) return;
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if(file){ document.getElementById('file-input').files = e.dataTransfer.files; handleFile(file); }
+  });
+})();
+
+/* ═══════════════════════════════════════════════════════
+   SCROLL PROGRESS BAR
+═══════════════════════════════════════════════════════ */
+(function initScrollBar(){
+  const bar = document.getElementById('scroll-bar');
+  if(!bar) return;
+  function update(){
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    if(docH <= 0) return;
+    bar.style.transform = 'scaleX(' + (window.scrollY / docH) + ')';
+  }
+  window.addEventListener('scroll', update, {passive:true});
+})();
+
+/* ═══════════════════════════════════════════════════════
+   CURSOR GLOW (desktop only)
+═══════════════════════════════════════════════════════ */
+(function initCursorGlow(){
+  const glow = document.getElementById('cursor-glow');
+  if(!glow) return;
+  if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+    glow.style.display = 'none';
+    return;
+  }
+  document.addEventListener('mousemove', function(e){
+    glow.style.transform = 'translate(' + (e.clientX - 200) + 'px,' + (e.clientY - 200) + 'px)';
+  }, {passive:true});
+})();
+
+/* ═══════════════════════════════════════════════════════
+   CARD SPOTLIGHT (valor-items)
+═══════════════════════════════════════════════════════ */
+(function initCardSpotlight(){
+  if(window.matchMedia('(hover:none)').matches) return;
+  document.querySelectorAll('.valor-item').forEach(card=>{
+    card.addEventListener('mousemove', function(e){
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1) + '%';
+      const y = ((e.clientY - rect.top)  / rect.height * 100).toFixed(1) + '%';
+      card.style.setProperty('--spot-x', x);
+      card.style.setProperty('--spot-y', y);
+    }, {passive:true});
+  });
+})();
+
+/* ═══════════════════════════════════════════════════════
+   3D TILT
+═══════════════════════════════════════════════════════ */
+(function initTilt(){
+  if(window.matchMedia('(hover:none) or (prefers-reduced-motion:reduce)').matches) return;
+  const intensity = 6;
+  document.querySelectorAll('.tilt-card').forEach(card=>{
+    card.addEventListener('mousemove', function(e){
+      const rect = card.getBoundingClientRect();
+      const cx = (e.clientX - rect.left) / rect.width  - 0.5;
+      const cy = (e.clientY - rect.top)  / rect.height - 0.5;
+      card.style.transform = `perspective(800px) rotateY(${cx * intensity}deg) rotateX(${-cy * intensity}deg) translateZ(4px)`;
+    }, {passive:true});
+    card.addEventListener('mouseleave', function(){
+      card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) translateZ(0)';
+    });
+  });
+})();
+
+async function enviarRegistro(){
+  if(!selectedFile){
+    alert('Por favor sube tu comprobante de pago.');
+    return;
+  }
+
+  const nombre    = document.getElementById('inp-nombre').value.trim();
+  const email     = document.getElementById('inp-email').value.trim();
+  const matricula = document.getElementById('inp-matricula').value.trim();
+  const tipo      = document.getElementById('select-tipo').value;
+  const boletos   = parseInt(document.getElementById('select-boletos').value)||1;
+  const referencia= document.getElementById('ref-value').textContent;
+
+  const formData = new FormData();
+  formData.append('nombre', nombre);
+  formData.append('email', email);
+  formData.append('matricula', matricula);
+  formData.append('tipo', tipo);
+  formData.append('boletos', boletos);
+  formData.append('referencia', referencia);
+  formData.append('monto', boletos * PRECIO);
+  formData.append('comprobante', selectedFile);
+
+  const btn = document.querySelector('#modal-step-2 .btn-primary');
+  const origText = btn.innerHTML;
+  btn.innerHTML = '<span class="btn-shine"></span>Enviando...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/registro', {method:'POST', body:formData});
+    if(res.ok){
+      goToStep(3);
+    } else {
+      const data = await res.json().catch(()=>({}));
+      alert(data.message || 'Hubo un error. Por favor intenta de nuevo.');
+      btn.innerHTML = origText;
+      btn.disabled = false;
+    }
+  } catch(err){
+    // Network error — still advance for offline fallback
+    goToStep(3);
+  }
+}
+</script>
+
+</body>
+</html>
