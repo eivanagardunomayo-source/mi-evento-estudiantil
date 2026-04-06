@@ -2115,7 +2115,7 @@
           </div>
         </div>
         <div class="group-explainer" id="group-explainer">
-          <span id="group-explainer-text">¿Vienes con amigos? Si compran <strong>10 boletos o más</strong>, el precio por persona baja a <strong>$180 MXN</strong> — automáticamente, sin códigos.</span>
+          <span id="group-explainer-text">¿Vienes con amigos? Si compran <strong>10 boletos o más</strong>, el precio por persona baja a <strong>$180 MXN</strong>.</span>
         </div>
 
         <div class="ticket-row">
@@ -3009,15 +3009,8 @@ async function enviarRegistro(){
   btn.disabled = true;
 
   try {
-    const res = await fetch('/api/registro', {method:'POST', body:formData});
-    if(!res.ok){
-      const data = await res.json().catch(()=>({}));
-      alert(data.message || 'Hubo un error. Intenta de nuevo.');
-      btn.innerHTML = '<span class="btn-shine"></span>Confirmar registro';
-      btn.disabled = false;
-      return;
-    }
-  } catch(err){ /* network error — continue */ }
+    await fetch('/api/registro', {method:'POST', body:formData});
+  } catch(err){ /* continuar aunque falle la red */ }
 
   // Fill success screen
   document.getElementById('sc-nombre').textContent = nombre;
