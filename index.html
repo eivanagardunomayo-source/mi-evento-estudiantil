@@ -598,15 +598,14 @@
     .challenge-card-title{font-size:0.9rem;font-weight:700;margin-bottom:6px;}
     .challenge-card-desc{font-size:0.82rem;color:var(--text-muted);}
     .nazca-banner{
-      background:linear-gradient(135deg,rgba(122,0,255,0.15),rgba(0,207,255,0.08));
-      border:1px solid rgba(122,0,255,0.25);
+      background:linear-gradient(135deg,rgba(122,0,255,0.2),rgba(122,0,255,0.06));
+      border:1px solid rgba(122,0,255,0.4);
       border-radius:18px;padding:28px 32px;
       display:flex;align-items:center;gap:24px;
       margin-bottom:24px;
     }
     .nazca-banner-logo{
-      height:32px;object-fit:contain;
-      filter:brightness(0) invert(1);opacity:0.85;flex-shrink:0;
+      height:28px;object-fit:contain;opacity:0.9;flex-shrink:0;
     }
     .nazca-banner-text h4{font-size:1rem;font-weight:800;margin-bottom:4px;}
     .nazca-banner-text p{font-size:0.85rem;color:var(--text-muted);}
@@ -1895,10 +1894,10 @@
 <!-- ─── THE CHALLENGE ─────────────────────────────── -->
 <section id="startup-challenge" class="section">
   <div class="container">
-    <div class="fade-section" style="margin-bottom:48px;">
+    <div class="fade-section" style="margin-bottom:48px;text-align:center;">
       <p class="section-label">Competencia</p>
       <h2 class="section-title">The <span class="grad-text">Challenge</span></h2>
-      <p class="section-sub" style="margin-bottom:0;">Presenta tu emprendimiento, startup o idea ante un jurado de expertos en inversión, negocios y tecnología.</p>
+      <p class="section-sub" style="margin-bottom:0;text-align:center;">Presenta tu emprendimiento, startup o idea ante un jurado de expertos en <strong style="color:rgba(255,255,255,0.85);">inversión, negocios y tecnología.</strong></p>
     </div>
 
     <div class="challenge-cards">
@@ -1916,12 +1915,17 @@
         <div class="challenge-card-title">Pitch en vivo</div>
         <div class="challenge-card-desc">Los finalistas tendrán tiempo en el escenario para presentar su propuesta ante el jurado y la audiencia.</div>
       </div>
-      <div class="challenge-card fade-card">
+      <div class="challenge-card fade-card" style="border-color:rgba(255,153,0,0.4);box-shadow:0 0 28px rgba(255,153,0,0.08);position:relative;">
+        <span style="position:absolute;top:12px;right:12px;font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#FF9900;background:rgba(255,153,0,0.12);border:1px solid rgba(255,153,0,0.3);border-radius:100px;padding:2px 8px;">Destacado</span>
         <span class="challenge-card-icon">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF9900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         </span>
         <div class="challenge-card-title">Premio y reconocimiento</div>
-        <div class="challenge-card-desc">El equipo ganador recibe mentoría uno a uno con el equipo de Nazca en sus oficinas. Más premios por anunciar.</div>
+        <div class="challenge-card-desc" style="margin-bottom:10px;">Mentoría y visibilidad con expertos en inversión y tecnología.</div>
+        <div style="font-size:0.72rem;color:rgba(255,153,0,0.85);background:rgba(255,153,0,0.07);border:1px solid rgba(255,153,0,0.2);border-radius:8px;padding:8px 10px;line-height:1.5;">
+          ★ El equipo ganador recibirá mentoría 1 a 1 con el equipo de Nazca en sus oficinas.<br>
+          <span style="color:var(--text-muted);">+ Más premios por anunciar</span>
+        </div>
       </div>
     </div>
 
@@ -1945,7 +1949,7 @@
         <div class="date-item-label">Notificación a finalistas seleccionados</div>
       </div>
       <div class="date-item">
-        <div class="date-item-date">15 Mayo · 8:00 PM</div>
+        <div class="date-item-date">15 de Mayo</div>
         <div class="date-item-label">Los finalistas pitchean en vivo y el jurado elige al equipo ganador</div>
       </div>
     </div>
