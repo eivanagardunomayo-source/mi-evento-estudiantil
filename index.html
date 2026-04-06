@@ -824,6 +824,15 @@
       opacity:0;transform:translateY(4px);transition:opacity 0.3s,transform 0.3s;
     }
     .savings-pill.show{opacity:1;transform:translateY(0);}
+    /* group explainer */
+    .group-explainer{
+      font-size:0.73rem;color:rgba(255,255,255,0.3);
+      line-height:1.55;margin-top:-8px;margin-bottom:16px;
+      padding:0 2px;
+    }
+    .group-explainer strong{color:rgba(255,255,255,0.55);}
+    .group-explainer.highlight{color:rgba(0,220,100,0.7);}
+    .group-explainer.highlight strong{color:#00dc64;}
     /* external note */
     .ext-note{
       font-size:0.72rem;color:rgba(255,255,255,0.25);
@@ -2099,7 +2108,7 @@
         <div class="ext-note" id="ext-note" style="display:none">Otras universidades, profesionales y público general. Precio fijo <strong>$300 MXN</strong> — sin descuento por grupo.</div>
         <input type="hidden" id="select-tipo" value="tec"/>
 
-        <!-- Descuentos por grupo (solo Tec, solo venta general) -->
+        <!-- Descuentos por grupo (solo Tec) -->
         <div class="discount-tiers" id="discount-tiers">
           <div class="dtier" id="dtier-5">
             <span class="dtier-dot"></span><span id="dtier-5-label">5–9 boletos: $200 c/u</span>
@@ -2107,6 +2116,9 @@
           <div class="dtier" id="dtier-10">
             <span class="dtier-dot"></span><span id="dtier-10-label">10+ boletos: $180 c/u</span>
           </div>
+        </div>
+        <div class="group-explainer" id="group-explainer">
+          <span id="group-explainer-text">¿Vienes con amigos? A partir del <strong>5° boleto</strong> el precio baja automáticamente — sin códigos, sin trámites.</span>
         </div>
 
         <div class="ticket-row">
@@ -2560,20 +2572,45 @@ function updatePriceUI(){
   const tiersEl = document.getElementById('discount-tiers');
   tiersEl.style.display = externo ? 'none' : 'flex';
 
-  if(!externo){
-    if(preventa){
-      document.getElementById('dtier-5-label').textContent  = '10+ boletos: $150 c/u';
-      document.getElementById('dtier-10-label').textContent = '¡Precio grupal de amigos!';
-      document.getElementById('dtier-5').style.display  = 'none'; // solo 1 tier en preventa
-      document.getElementById('dtier-10').style.display = 'flex';
-      document.getElementById('dtier-10').classList.toggle('active', ticketQty >= 10);
+  const explainerEl = document.getElementById('group-explainer');
+  const explainerTxt = document.getElementById('group-explainer-text');
+
+  if(externo){
+    explainerEl.className = 'group-explainer';
+    explainerTxt.innerHTML = 'Precio fijo para externos. No aplica descuento por cantidad.';
+  } else if(preventa){
+    document.getElementById('dtier-5').style.display  = 'none';
+    document.getElementById('dtier-10').style.display = 'flex';
+    document.getElementById('dtier-10-label').textContent = '10+ boletos: $150 c/u';
+    document.getElementById('dtier-10').classList.toggle('active', ticketQty >= 10);
+
+    if(ticketQty >= 10){
+      explainerEl.className = 'group-explainer highlight';
+      explainerTxt.innerHTML = '🎉 ¡Precio grupal activo! A partir del <strong>10° boleto</strong> cada persona paga solo <strong>$150 MXN</strong>.';
     } else {
-      document.getElementById('dtier-5').style.display  = 'flex';
-      document.getElementById('dtier-10').style.display = 'flex';
-      document.getElementById('dtier-5-label').textContent  = '5–9 boletos: $200 c/u';
-      document.getElementById('dtier-10-label').textContent = '10+ boletos: $180 c/u';
-      document.getElementById('dtier-5').classList.toggle('active', ticketQty >= 5 && ticketQty < 10);
-      document.getElementById('dtier-10').classList.toggle('active', ticketQty >= 10);
+      explainerEl.className = 'group-explainer';
+      const faltan = 10 - ticketQty;
+      explainerTxt.innerHTML = `¿Vienes con amigos? Si juntan <strong>10 boletos</strong>, cada uno paga <strong>$150 MXN</strong> — te faltan <strong>${faltan} más</strong> para activar el precio grupal.`;
+    }
+  } else {
+    document.getElementById('dtier-5').style.display  = 'flex';
+    document.getElementById('dtier-10').style.display = 'flex';
+    document.getElementById('dtier-5-label').textContent  = '5–9 boletos → $200 c/u';
+    document.getElementById('dtier-10-label').textContent = '10+ boletos → $180 c/u';
+    document.getElementById('dtier-5').classList.toggle('active', ticketQty >= 5 && ticketQty < 10);
+    document.getElementById('dtier-10').classList.toggle('active', ticketQty >= 10);
+
+    if(ticketQty >= 10){
+      explainerEl.className = 'group-explainer highlight';
+      explainerTxt.innerHTML = '🎉 ¡Precio grupal máximo! A partir del <strong>10° boleto</strong> cada persona paga <strong>$180 MXN</strong>.';
+    } else if(ticketQty >= 5){
+      explainerEl.className = 'group-explainer highlight';
+      const faltan = 10 - ticketQty;
+      explainerTxt.innerHTML = `¡Precio de grupo activo! Agrega <strong>${faltan} más</strong> para bajar a <strong>$180 c/u</strong>.`;
+    } else {
+      explainerEl.className = 'group-explainer';
+      const faltan5 = 5 - ticketQty;
+      explainerTxt.innerHTML = `¿Vienes con amigos? Desde el <strong>5° boleto</strong> el precio baja a <strong>$200</strong>, y desde el <strong>10°</strong> a <strong>$180</strong> — sin códigos ni trámites.`;
     }
   }
 }
