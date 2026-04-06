@@ -775,14 +775,61 @@
     .tc-btn:disabled{opacity:0.3;cursor:not-allowed;}
     .tc-count{font-size:1.3rem;font-weight:800;min-width:24px;text-align:center;}
     /* total box */
+    /* discount banner */
+    .discount-tiers{
+      display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;
+    }
+    .dtier{
+      display:flex;align-items:center;gap:6px;
+      padding:7px 12px;border-radius:20px;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.02);
+      font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.35);
+      transition:all 0.35s;
+    }
+    .dtier.active{
+      border-color:rgba(0,220,100,0.35);
+      background:rgba(0,220,100,0.08);
+      color:#00dc64;
+    }
+    .dtier-dot{
+      width:7px;height:7px;border-radius:50%;
+      background:rgba(255,255,255,0.15);flex-shrink:0;transition:background 0.35s;
+    }
+    .dtier.active .dtier-dot{background:#00dc64;}
+    /* per-ticket price in counter row */
+    .ticket-price-tag{
+      font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.4);
+      margin-top:4px;transition:color 0.3s;
+    }
+    .ticket-price-tag .orig{text-decoration:line-through;opacity:0.45;margin-right:4px;}
+    .ticket-price-tag .now{color:var(--cyan);}
+    /* total */
     .modal-total{
       display:flex;align-items:center;justify-content:space-between;
       padding:14px 18px;
       background:rgba(0,207,255,0.05);border:1px solid rgba(0,207,255,0.15);
-      border-radius:14px;margin-bottom:20px;
+      border-radius:14px;margin-bottom:20px;transition:border-color 0.35s,background 0.35s;
+    }
+    .modal-total.has-discount{
+      border-color:rgba(0,220,100,0.25);background:rgba(0,220,100,0.05);
     }
     .modal-total-label{font-size:0.75rem;color:var(--text-muted);}
     .modal-total-price{font-size:1.7rem;font-weight:800;color:var(--cyan);}
+    .savings-pill{
+      display:inline-flex;align-items:center;gap:5px;
+      background:rgba(0,220,100,0.12);border:1px solid rgba(0,220,100,0.25);
+      border-radius:20px;padding:3px 10px;margin-top:5px;
+      font-size:0.7rem;font-weight:700;color:#00dc64;
+      opacity:0;transform:translateY(4px);transition:opacity 0.3s,transform 0.3s;
+    }
+    .savings-pill.show{opacity:1;transform:translateY(0);}
+    /* external note */
+    .ext-note{
+      font-size:0.72rem;color:rgba(255,255,255,0.25);
+      margin-top:-10px;margin-bottom:16px;line-height:1.5;
+    }
+    .ext-note strong{color:rgba(0,220,100,0.7);}
     /* form */
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
     @media(max-width:420px){.form-row{grid-template-columns:1fr;}}
@@ -1355,7 +1402,7 @@
 
       <button class="btn btn-primary hero-cta-main" onclick="openModal()" style="width:100%;">
         <span class="btn-shine"></span>
-        🎟️ Reservar mi lugar — <strong>$200 MXN</strong>
+        🎟️ Reservar mi lugar — <strong>desde $200 MXN</strong>
       </button>
       <span style="font-size:0.72rem;color:rgba(255,255,255,0.3);">Pago único · Confirmación por correo</span>
 
@@ -1947,7 +1994,7 @@
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
         <button class="btn btn-primary" onclick="openModal()" style="font-size:1rem;padding:16px 40px;">
           <span class="btn-shine"></span>
-          Reservar mi lugar — $200 MXN
+          Reservar mi lugar — desde $200 MXN
         </button>
       </div>
       <p class="cta-price-note">Pago único por transferencia SPEI · Boleto confirmado por correo · Cupo limitado</p>
@@ -2014,17 +2061,28 @@
 
         <p class="form-section-label">¿Quién eres?</p>
         <div class="type-pills" id="type-pills">
-          <button class="type-pill selected" data-val="estudiante-tec">Estudiante Tec</button>
-          <button class="type-pill" data-val="estudiante-otra">Otra universidad</button>
-          <button class="type-pill" data-val="profesional">Profesional</button>
-          <button class="type-pill" data-val="otro">Otro</button>
+          <button class="type-pill selected" data-val="tec">🎓 Estudiante Tec — $200</button>
+          <button class="type-pill" data-val="externo">🌐 Externo — $250</button>
         </div>
-        <input type="hidden" id="select-tipo" value="estudiante-tec"/>
+        <div class="ext-note" id="ext-note" style="display:none">Otras universidades, profesionales y público general. <strong>Compra 10+ boletos y pagas $200 c/u (igual que Tec).</strong></div>
+        <input type="hidden" id="select-tipo" value="tec"/>
+
+        <!-- Descuentos por grupo -->
+        <div class="discount-tiers">
+          <div class="dtier" id="dtier-5">
+            <span class="dtier-dot"></span>5–9 boletos: −10%
+          </div>
+          <div class="dtier" id="dtier-10">
+            <span class="dtier-dot"></span>10+ boletos: −20%
+          </div>
+        </div>
 
         <div class="ticket-row">
           <div>
-            <div class="ticket-info-label">Boleto general</div>
-            <div class="ticket-info-name">Welcome 2 The Future</div>
+            <div class="ticket-info-label">Boleto general · W2TF 2026</div>
+            <div class="ticket-price-tag" id="ticket-price-tag">
+              <span class="now">$200 c/u</span>
+            </div>
           </div>
           <div class="tc-controls">
             <button class="tc-btn" id="tc-minus" onclick="changeQty(-1)" disabled>−</button>
@@ -2032,10 +2090,11 @@
             <button class="tc-btn" id="tc-plus" onclick="changeQty(1)">+</button>
           </div>
         </div>
-        <div class="modal-total">
+        <div class="modal-total" id="modal-total-box">
           <div>
             <div class="modal-total-label">Total a pagar</div>
             <div style="font-size:0.72rem;color:rgba(255,255,255,0.2);" id="qty-breakdown">1 boleto × $200</div>
+            <div class="savings-pill" id="savings-pill">🎉 <span id="savings-text">Ahorras $0</span></div>
           </div>
           <div class="modal-total-price" id="modal-total-price">$200 <span style="font-size:0.9rem;font-weight:600;">MXN</span></div>
         </div>
@@ -2394,14 +2453,62 @@ window.addEventListener('load', function(){
 /* ═══════════════════════════════════════════════════════
    MODAL & PAYMENT LOGIC
 ═══════════════════════════════════════════════════════ */
-const PRECIO = 200;
+const PRECIO_TEC = 200;   // Tec de Monterrey
+const PRECIO_EXT = 250;   // Externo
 const CLABE  = '638180010184222442';
 let selectedFile = null;
 let currentStep  = 1;
 
 /* ─── MODAL CHECKOUT ──────────────────────────────────── */
 let ticketQty = 1;
-let selectedTipo = 'estudiante-tec';
+let selectedTipo = 'tec';
+
+/* ── Pricing engine ── */
+function calcPrecio(){
+  const base     = selectedTipo === 'tec' ? PRECIO_TEC : PRECIO_EXT;
+  const disc     = ticketQty >= 10 ? 0.20 : ticketQty >= 5 ? 0.10 : 0;
+  const perUnit  = Math.round(base * (1 - disc));
+  const total    = perUnit * ticketQty;
+  const savings  = (base - perUnit) * ticketQty;
+  return { base, disc, perUnit, total, savings };
+}
+
+function updatePriceUI(){
+  const { base, disc, perUnit, total, savings } = calcPrecio();
+
+  // per-ticket tag
+  const tag = document.getElementById('ticket-price-tag');
+  if(disc > 0){
+    tag.innerHTML = `<span class="orig">$${base}</span><span class="now">$${perUnit} c/u</span>`;
+  } else {
+    tag.innerHTML = `<span class="now">$${perUnit} c/u</span>`;
+  }
+
+  // breakdown
+  document.getElementById('qty-breakdown').textContent =
+    ticketQty + ' boleto' + (ticketQty>1?'s':'') + ' × $' + perUnit
+    + (disc > 0 ? ` (−${disc*100|0}%)` : '');
+
+  // total price
+  document.getElementById('modal-total-price').innerHTML =
+    '$' + total.toLocaleString('es-MX') + ' <span style="font-size:0.9rem;font-weight:600;">MXN</span>';
+
+  // savings pill
+  const pill = document.getElementById('savings-pill');
+  const box  = document.getElementById('modal-total-box');
+  if(savings > 0){
+    document.getElementById('savings-text').textContent = 'Ahorras $' + savings.toLocaleString('es-MX');
+    pill.classList.add('show');
+    box.classList.add('has-discount');
+  } else {
+    pill.classList.remove('show');
+    box.classList.remove('has-discount');
+  }
+
+  // discount tier badges
+  document.getElementById('dtier-5').classList.toggle('active', ticketQty >= 5 && ticketQty < 10);
+  document.getElementById('dtier-10').classList.toggle('active', ticketQty >= 10);
+}
 
 function openModal(){
   document.getElementById('modal-overlay').classList.add('open');
@@ -2423,27 +2530,28 @@ document.addEventListener('keydown', function(e){
 // ── Type pills ──
 (function(){
   const pills = document.querySelectorAll('.type-pill');
-  const mat = document.getElementById('matricula-group');
+  const mat   = document.getElementById('matricula-group');
+  const note  = document.getElementById('ext-note');
   pills.forEach(pill=>{
     pill.addEventListener('click',()=>{
       pills.forEach(p=>p.classList.remove('selected'));
       pill.classList.add('selected');
       selectedTipo = pill.dataset.val;
       document.getElementById('select-tipo').value = selectedTipo;
-      mat.style.display = selectedTipo === 'estudiante-tec' ? 'block' : 'none';
+      mat.style.display  = selectedTipo === 'tec' ? 'block' : 'none';
+      note.style.display = selectedTipo === 'externo' ? 'block' : 'none';
+      updatePriceUI();
     });
   });
 })();
 
 // ── Ticket counter ──
 function changeQty(delta){
-  ticketQty = Math.max(1, Math.min(5, ticketQty + delta));
+  ticketQty = Math.max(1, Math.min(15, ticketQty + delta));
   document.getElementById('tc-count').textContent = ticketQty;
   document.getElementById('tc-minus').disabled = ticketQty <= 1;
-  document.getElementById('tc-plus').disabled  = ticketQty >= 5;
-  const total = ticketQty * PRECIO;
-  document.getElementById('modal-total-price').innerHTML = '$' + total.toLocaleString('es-MX') + ' <span style="font-size:0.9rem;font-weight:600;">MXN</span>';
-  document.getElementById('qty-breakdown').textContent = ticketQty + ' boleto' + (ticketQty>1?'s':'') + ' × $' + PRECIO;
+  document.getElementById('tc-plus').disabled  = ticketQty >= 15;
+  updatePriceUI();
 }
 
 // ── Step navigation ──
@@ -2494,11 +2602,14 @@ function irAPago(){
   const ref   = generarReferencia();
   const monto = ticketQty * PRECIO;
 
+  const { perUnit, total, disc } = calcPrecio();
+  const descLabel = disc > 0 ? ` (−${disc*100|0}% grupal)` : '';
+
   // Fill step 2
   document.getElementById('oc-nombre').textContent = nombre;
-  document.getElementById('oc-qty').textContent    = ticketQty + ' boleto' + (ticketQty>1?'s':'');
-  document.getElementById('oc-total').textContent  = '$' + monto.toLocaleString('es-MX') + ' MXN';
-  document.getElementById('monto-display').textContent = '$' + monto.toLocaleString('es-MX') + ' MXN';
+  document.getElementById('oc-qty').textContent    = ticketQty + ' boleto' + (ticketQty>1?'s':'') + ' × $' + perUnit + descLabel;
+  document.getElementById('oc-total').textContent  = '$' + total.toLocaleString('es-MX') + ' MXN';
+  document.getElementById('monto-display').textContent = '$' + total.toLocaleString('es-MX') + ' MXN';
   document.getElementById('ref-spei-display').textContent = ref;
 
   goToStep(2);
@@ -2768,9 +2879,10 @@ async function enviarRegistro(){
   formData.append('email', email);
   formData.append('matricula', matricula);
   formData.append('tipo', tipo);
+  const { total } = calcPrecio();
   formData.append('boletos', ticketQty);
   formData.append('referencia', referencia);
-  formData.append('monto', ticketQty * PRECIO);
+  formData.append('monto', total);
   formData.append('comprobante', selectedFile);
 
   const btn = document.getElementById('confirm-btn');
