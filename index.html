@@ -313,7 +313,14 @@
     .valor-item:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,207,255,0.1);border-color:rgba(0,207,255,0.15);}
     .valor-item:hover::before{opacity:1;}
     .valor-icon{
-      font-size:1.8rem;margin-bottom:14px;display:block;
+      display:flex;align-items:center;justify-content:flex-start;
+      margin-bottom:16px;
+    }
+    .valor-icon svg{
+      width:32px;height:32px;
+      stroke:var(--cyan);stroke-width:1.5;
+      fill:none;stroke-linecap:round;stroke-linejoin:round;
+      opacity:0.85;
     }
     .valor-title{font-size:1rem;font-weight:700;margin-bottom:8px;color:#fff;}
     .valor-desc{font-size:0.875rem;color:var(--text-muted);line-height:1.6;}
@@ -1549,34 +1556,46 @@
     </div>
     <div class="valor-grid">
       <div class="valor-item fade-card tilt-card">
-        <span class="valor-icon">🧠</span>
+        <span class="valor-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </span>
         <div class="valor-title">Conocimiento de vanguardia</div>
         <div class="valor-desc">Aprende directamente de fundadores y líderes que están construyendo el futuro de la tecnología en LATAM y el mundo.</div>
       </div>
       <div class="valor-item fade-card tilt-card">
-        <span class="valor-icon">🤝</span>
+        <span class="valor-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v4m0 0l-5 6m5-6l5 6"/></svg>
+        </span>
         <div class="valor-title">Red de alto valor</div>
         <div class="valor-desc">Conecta con inversionistas, emprendedores y compañeros con la misma mentalidad. El networking es intencional y facilitado.</div>
       </div>
       <div class="valor-item fade-card tilt-card">
-        <span class="valor-icon">🏆</span>
+        <span class="valor-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </span>
         <div class="valor-title">Startup Challenge</div>
-        <div class="valor-desc">Presenta tu idea ante un jurado de expertos y compite por reconocimiento, mentoría y visibilidad ante fondos de inversión.</div>
+        <div class="valor-desc">Presenta tu idea ante un jurado de expertos y compite por reconocimiento, mentoría y visibilidad ante fondo de inversión.</div>
       </div>
       <div class="valor-item fade-card tilt-card">
-        <span class="valor-icon">💡</span>
+        <span class="valor-icon">
+          <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </span>
         <div class="valor-title">Inspiración real</div>
         <div class="valor-desc">Sal con claridad, energía y un plan. Los ponentes comparten experiencias sin filtros sobre cómo construir desde cero.</div>
       </div>
       <div class="valor-item fade-card tilt-card">
-        <span class="valor-icon">🍽️</span>
-        <div class="valor-title">Catering incluido</div>
-        <div class="valor-desc">Dos rondas de catering durante el evento. Come, descansa y sigue conectando en un ambiente diseñado para la conversación.</div>
+        <span class="valor-icon">
+          <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        </span>
+        <div class="valor-title">Catering y dinámicas</div>
+        <div class="valor-desc">Alimentos incluidos sin costo extra durante todo el evento. Además, dinámicas interactivas diseñadas para conectar, aprender y activarte entre sesión y sesión.</div>
       </div>
       <div class="valor-item fade-card tilt-card">
-        <span class="valor-icon">📲</span>
-        <div class="valor-title">Comunidad post-evento</div>
-        <div class="valor-desc">Acceso al grupo exclusivo de asistentes: recursos, oportunidades y conexiones que siguen mucho después del 15 de mayo.</div>
+        <span class="valor-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2 6.3-6.4 2.1 2-6.3z"/></svg>
+        </span>
+        <div class="valor-title">Experiencia</div>
+        <div class="valor-desc">Esto no es solo un evento — es una experiencia completa que recordarás. Cada momento está diseñado para que te vayas diferente a como llegaste. No te lo puedes perder.</div>
       </div>
     </div>
   </div>
