@@ -2102,7 +2102,7 @@
 
         <p class="form-section-label">¿Quién eres?</p>
         <div class="type-pills" id="type-pills">
-          <button class="type-pill selected" data-val="tec">🎓 Estudiante Tec</button>
+          <button class="type-pill selected" data-val="tec">🎓 Estudiante Tec / Exatec</button>
           <button class="type-pill" data-val="externo">🌐 Externo</button>
         </div>
         <div class="ext-note" id="ext-note" style="display:none">Otras universidades, profesionales y público general. Precio fijo <strong>$300 MXN</strong> — sin descuento por grupo.</div>
@@ -2118,7 +2118,7 @@
           </div>
         </div>
         <div class="group-explainer" id="group-explainer">
-          <span id="group-explainer-text">¿Vienes con amigos? A partir del <strong>5° boleto</strong> el precio baja automáticamente — sin códigos, sin trámites.</span>
+          <span id="group-explainer-text">¿Vienes con amigos? Si compran <strong>10 boletos o más</strong>, el precio por persona baja a <strong>$180 MXN</strong> — automáticamente, sin códigos.</span>
         </div>
 
         <div class="ticket-row">
@@ -2610,7 +2610,7 @@ function updatePriceUI(){
     } else {
       explainerEl.className = 'group-explainer';
       const faltan5 = 5 - ticketQty;
-      explainerTxt.innerHTML = `¿Vienes con amigos? Desde el <strong>5° boleto</strong> el precio baja a <strong>$200</strong>, y desde el <strong>10°</strong> a <strong>$180</strong> — sin códigos ni trámites.`;
+      explainerTxt.innerHTML = `¿Vienes con amigos? Si compran <strong>5 boletos o más</strong>, el precio baja a <strong>$200</strong> por persona. Con <strong>10 o más</strong>, baja a <strong>$180</strong> — sin códigos ni trámites.`;
     }
   }
 }
