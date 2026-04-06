@@ -598,14 +598,15 @@
     .challenge-card-title{font-size:0.9rem;font-weight:700;margin-bottom:6px;}
     .challenge-card-desc{font-size:0.82rem;color:var(--text-muted);}
     .nazca-banner{
-      background:linear-gradient(135deg,rgba(122,0,255,0.2),rgba(122,0,255,0.06));
-      border:1px solid rgba(122,0,255,0.4);
+      background:linear-gradient(135deg,rgba(100,40,255,0.28),rgba(160,80,255,0.12));
+      border:1px solid rgba(160,80,255,0.55);
       border-radius:18px;padding:28px 32px;
       display:flex;align-items:center;gap:24px;
       margin-bottom:24px;
     }
     .nazca-banner-logo{
-      height:28px;object-fit:contain;opacity:0.9;flex-shrink:0;
+      height:30px;object-fit:contain;opacity:1;flex-shrink:0;
+      filter:brightness(0) invert(1);
     }
     .nazca-banner-text h4{font-size:1rem;font-weight:800;margin-bottom:4px;}
     .nazca-banner-text p{font-size:0.85rem;color:var(--text-muted);}
@@ -1921,17 +1922,14 @@
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF9900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         </span>
         <div class="challenge-card-title">Premio y reconocimiento</div>
-        <div class="challenge-card-desc" style="margin-bottom:10px;">Mentoría y visibilidad con expertos en inversión y tecnología.</div>
-        <div style="font-size:0.72rem;color:rgba(255,153,0,0.85);background:rgba(255,153,0,0.07);border:1px solid rgba(255,153,0,0.2);border-radius:8px;padding:8px 10px;line-height:1.5;">
-          ★ El equipo ganador recibirá mentoría 1 a 1 con el equipo de Nazca en sus oficinas.<br>
-          <span style="color:var(--text-muted);">+ Más premios por anunciar</span>
-        </div>
+        <div class="challenge-card-desc" style="margin-bottom:10px;">El equipo ganador recibirá mentoría 1 a 1 con el equipo de Nazca en sus oficinas.</div>
+        <div style="font-size:0.71rem;color:var(--text-muted);margin-top:6px;">+ Más premios por anunciar</div>
       </div>
     </div>
 
     <a href="https://nazca.vc/" target="_blank" rel="noopener" style="text-decoration:none;display:block;">
     <div class="nazca-banner fade-section" style="cursor:pointer;transition:border-color 0.3s;" onmouseenter="this.style.borderColor='rgba(122,0,255,0.5)'" onmouseleave="this.style.borderColor=''">
-      <img src="logo-nazca.png" alt="Nazca VC" class="nazca-banner-logo"/>
+      <img src="logo-nazca.svg" alt="Nazca VC" class="nazca-banner-logo"/>
       <div class="nazca-banner-text">
         <h4>Patrocinado por Nazca VC</h4>
         <p>El venture capital early-stage más activo de Latinoamérica — 4 fondos, +$300M bajo gestión. Inversores detrás de empresas como Kavak, Luuna y Ben & Frank.</p>
