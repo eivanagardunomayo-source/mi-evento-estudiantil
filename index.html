@@ -310,78 +310,98 @@
     .valor-desc{font-size:0.875rem;color:var(--text-muted);line-height:1.6;}
 
     /* ─── Agenda ─────────────────────────────────────── */
-    /* ─── Agenda Columns ─────────────────────────────── */
-    .agenda-cols{
-      display:flex;gap:8px;height:380px;
+    /* ─── Agenda Timeline ────────────────────────────── */
+    .ag-wrap{position:relative;}
+    /* ── track ── */
+    .ag-track{
+      display:flex;align-items:flex-start;justify-content:space-between;
+      position:relative;padding:0 0 0;margin-bottom:0;
     }
-    .ag-col{
-      flex:0 0 68px;border-radius:20px;overflow:hidden;
-      position:relative;cursor:pointer;
-      transition:flex 0.55s var(--ease-spring);
+    .ag-track::before{
+      content:'';position:absolute;top:19px;left:0;right:0;height:2px;
+      background:rgba(255,255,255,0.08);z-index:0;
+    }
+    .ag-progress-line{
+      position:absolute;top:19px;left:0;height:2px;
+      background:linear-gradient(90deg,var(--cyan),var(--purple));
+      transition:width 0.5s var(--ease-out-expo);z-index:1;
+    }
+    /* ── stops ── */
+    .ag-stop{
+      display:flex;flex-direction:column;align-items:center;gap:10px;
+      cursor:pointer;position:relative;z-index:2;flex:1;
+      background:none;border:none;color:inherit;font-family:inherit;
+      padding:0;
+    }
+    .ag-dot{
+      width:20px;height:20px;border-radius:50%;flex-shrink:0;
+      background:#0a0c1e;border:2px solid rgba(255,255,255,0.15);
+      transition:border-color 0.3s,background 0.3s,transform 0.3s var(--ease-spring),box-shadow 0.3s;
+    }
+    .ag-stop.ag-on .ag-dot{
+      border-color:var(--ag-clr);background:var(--ag-clr);
+      transform:scale(1.35);
+      box-shadow:0 0 14px var(--ag-clr);
+    }
+    .ag-stop-info{text-align:center;}
+    .ag-stop-time{
+      display:block;font-size:0.68rem;font-weight:700;
+      color:rgba(255,255,255,0.3);letter-spacing:0.04em;
+      transition:color 0.3s;
+    }
+    .ag-stop.ag-on .ag-stop-time{color:var(--ag-clr);}
+    .ag-stop-label{
+      display:block;font-size:0.72rem;font-weight:700;
+      letter-spacing:0.06em;text-transform:uppercase;
+      color:rgba(255,255,255,0.2);margin-top:2px;
+      transition:color 0.3s;
+    }
+    .ag-stop.ag-on .ag-stop-label{color:#fff;}
+    /* ── detail panel ── */
+    .ag-detail{
+      position:relative;overflow:hidden;
+      min-height:210px;margin-top:28px;
+      border-radius:20px;
       background:var(--card-bg);border:1px solid var(--card-border);
     }
-    .ag-col.ag-active{flex:1;}
-    /* color accent top bar */
-    .ag-col::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:3px;
-      background:var(--ag-accent,var(--cyan));
-      opacity:0.7;border-radius:20px 20px 0 0;
-    }
-    /* vertical phase label */
-    .ag-vlabel{
-      position:absolute;top:50%;left:50%;
-      transform:translate(-50%,-50%) rotate(-90deg);
-      white-space:nowrap;font-size:0.65rem;font-weight:700;
-      letter-spacing:0.12em;text-transform:uppercase;
-      color:rgba(255,255,255,0.3);
-      transition:opacity 0.25s;pointer-events:none;
-    }
-    .ag-col.ag-active .ag-vlabel{opacity:0;}
-    /* header inside expanded */
-    .ag-header{
-      padding:20px 20px 12px;
-      border-bottom:1px solid rgba(255,255,255,0.07);
-      opacity:0;transform:translateY(-6px);
-      transition:opacity 0.3s 0.1s,transform 0.3s 0.1s;
+    .ag-detail-inner{
+      position:absolute;inset:0;padding:24px 28px;
+      opacity:0;transform:translateY(10px);
+      transition:opacity 0.35s,transform 0.35s;
       pointer-events:none;
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px 24px;
+      align-content:start;
     }
-    .ag-col.ag-active .ag-header{opacity:1;transform:translateY(0);}
-    .ag-phase-name{
-      font-size:0.62rem;font-weight:700;letter-spacing:0.12em;
-      text-transform:uppercase;color:var(--ag-accent,var(--cyan));margin-bottom:4px;
+    .ag-detail-inner.ag-show{
+      opacity:1;transform:translateY(0);pointer-events:all;
     }
-    .ag-phase-range{
-      font-size:0.85rem;font-weight:800;color:#fff;
+    .ag-detail-header{
+      grid-column:1/-1;display:flex;align-items:center;gap:12px;
+      margin-bottom:8px;padding-bottom:12px;
+      border-bottom:1px solid rgba(255,255,255,0.07);
     }
-    /* scrollable item list */
-    .ag-list{
-      padding:10px 20px 16px;
-      overflow-y:auto;height:calc(100% - 70px);
-      scrollbar-width:none;
-      opacity:0;transform:translateX(8px);
-      transition:opacity 0.35s 0.15s,transform 0.35s 0.15s;
+    .ag-detail-icon{
+      width:36px;height:36px;border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:1rem;flex-shrink:0;
     }
-    .ag-list::-webkit-scrollbar{display:none;}
-    .ag-col.ag-active .ag-list{opacity:1;transform:translateX(0);}
-    .ag-entry{
+    .ag-detail-htitle{font-size:1rem;font-weight:800;color:#fff;}
+    .ag-detail-hrange{font-size:0.75rem;color:var(--text-muted);margin-top:2px;}
+    /* items inside detail */
+    .ag-row{
       display:flex;gap:10px;align-items:flex-start;
-      padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);
+      padding:6px 0;
     }
-    .ag-entry:last-child{border-bottom:none;}
-    .ag-entry-time{
-      font-size:0.68rem;font-weight:700;color:var(--ag-accent,var(--cyan));
-      width:46px;flex-shrink:0;padding-top:2px;letter-spacing:0.02em;
+    .ag-row-time{
+      font-size:0.7rem;font-weight:700;
+      width:40px;flex-shrink:0;padding-top:3px;
     }
-    .ag-entry-body{}
-    .ag-entry-title{font-size:0.84rem;font-weight:700;color:#fff;line-height:1.3;}
-    .ag-entry-desc{font-size:0.74rem;color:var(--text-muted);margin-top:2px;line-height:1.45;}
-    .ag-entry.ag-hl .ag-entry-title{color:var(--cyan);}
-    @media(max-width:700px){
-      .agenda-cols{height:auto;flex-direction:column;}
-      .ag-col{flex:none!important;height:52px;border-radius:14px;}
-      .ag-col.ag-active{height:auto;}
-      .ag-vlabel{transform:translate(-50%,-50%);writing-mode:horizontal-tb;letter-spacing:0.08em;}
-      .ag-list{height:auto;max-height:280px;}
+    .ag-row-title{font-size:0.85rem;font-weight:700;color:#fff;line-height:1.3;}
+    .ag-row-desc{font-size:0.73rem;color:var(--text-muted);margin-top:2px;}
+    .ag-row.ag-star .ag-row-title{color:var(--cyan);}
+    @media(max-width:600px){
+      .ag-stop-label{display:none;}
+      .ag-detail-inner{grid-template-columns:1fr;}
     }
 
     /* ─── Speakers ───────────────────────────────────── */
@@ -1374,149 +1394,153 @@
       <p class="section-sub" style="margin-bottom:0;">Pasa el cursor sobre cada bloque para ver el detalle</p>
     </div>
 
-    <div class="agenda-cols fade-section" id="agenda-cols">
+    <div class="ag-wrap fade-section">
 
-      <!-- Bloque 1: Apertura -->
-      <div class="ag-col ag-active" style="--ag-accent:var(--cyan)">
-        <div class="ag-vlabel">Apertura</div>
-        <div class="ag-header">
-          <div class="ag-phase-name">Apertura</div>
-          <div class="ag-phase-range">2:30 – 3:00</div>
-        </div>
-        <div class="ag-list">
-          <div class="ag-entry">
-            <span class="ag-entry-time">2:30</span>
-            <div class="ag-entry-body">
-              <div class="ag-entry-title">Apertura de puertas</div>
-              <div class="ag-entry-desc">Registro, recorrido por stands y primeras conversaciones</div>
-            </div>
+      <!-- ── Rail de paradas ── -->
+      <div class="ag-track" id="ag-track">
+        <div class="ag-progress-line" id="ag-progress"></div>
+
+        <button class="ag-stop ag-on" data-idx="0" style="--ag-clr:var(--cyan)">
+          <span class="ag-dot"></span>
+          <div class="ag-stop-info">
+            <span class="ag-stop-time">2:30</span>
+            <span class="ag-stop-label">Apertura</span>
           </div>
-          <div class="ag-entry">
-            <span class="ag-entry-time">3:00</span>
-            <div class="ag-entry-body">
-              <div class="ag-entry-title">Inauguración oficial</div>
-              <div class="ag-entry-desc">Bienvenida y arranque formal del evento</div>
-            </div>
+        </button>
+
+        <button class="ag-stop" data-idx="1" style="--ag-clr:var(--purple)">
+          <span class="ag-dot"></span>
+          <div class="ag-stop-info">
+            <span class="ag-stop-time">3:30</span>
+            <span class="ag-stop-label">Conferencias I</span>
           </div>
-        </div>
+        </button>
+
+        <button class="ag-stop" data-idx="2" style="--ag-clr:var(--magenta)">
+          <span class="ag-dot"></span>
+          <div class="ag-stop-info">
+            <span class="ag-stop-time">5:20</span>
+            <span class="ag-stop-label">Networking</span>
+          </div>
+        </button>
+
+        <button class="ag-stop" data-idx="3" style="--ag-clr:var(--cyan)">
+          <span class="ag-dot"></span>
+          <div class="ag-stop-info">
+            <span class="ag-stop-time">6:40</span>
+            <span class="ag-stop-label">Conferencias II</span>
+          </div>
+        </button>
+
+        <button class="ag-stop" data-idx="4" style="--ag-clr:#FF9900">
+          <span class="ag-dot"></span>
+          <div class="ag-stop-info">
+            <span class="ag-stop-time">8:00</span>
+            <span class="ag-stop-label">Challenge</span>
+          </div>
+        </button>
       </div>
 
-      <!-- Bloque 2: Conferencias I -->
-      <div class="ag-col" style="--ag-accent:var(--purple)">
-        <div class="ag-vlabel">Conferencias I</div>
-        <div class="ag-header">
-          <div class="ag-phase-name">Conferencias I</div>
-          <div class="ag-phase-range">3:30 – 5:00</div>
-        </div>
-        <div class="ag-list">
-          <div class="ag-entry ag-hl">
-            <span class="ag-entry-time">3:30</span>
-            <div class="ag-entry-body">
-              <div class="ag-entry-title">⭐ Ponente 1</div>
-              <div class="ag-entry-desc">Primera conferencia de industria — por anunciarse</div>
-            </div>
-          </div>
-          <div class="ag-entry ag-hl">
-            <span class="ag-entry-time">4:25</span>
-            <div class="ag-entry-body">
-              <div class="ag-entry-title">⭐ Ponente 2</div>
-              <div class="ag-entry-desc">Segunda conferencia — por anunciarse</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- ── Panel de detalle ── -->
+      <div class="ag-detail" id="ag-detail">
 
-      <!-- Bloque 3: Networking + Ponente 3 -->
-      <div class="ag-col" style="--ag-accent:var(--magenta)">
-        <div class="ag-vlabel">Networking</div>
-        <div class="ag-header">
-          <div class="ag-phase-name">Break & Ponente 3</div>
-          <div class="ag-phase-range">5:20 – 6:30</div>
-        </div>
-        <div class="ag-list">
-          <div class="ag-entry">
-            <span class="ag-entry-time">5:20</span>
-            <div class="ag-entry-body">
-              <div class="ag-entry-title">Stands + Catering</div>
-              <div class="ag-entry-desc">Networking, comida incluida y recorrido por emprendimientos</div>
+        <!-- Panel 0: Apertura -->
+        <div class="ag-detail-inner ag-show" data-panel="0">
+          <div class="ag-detail-header">
+            <div class="ag-detail-icon" style="background:rgba(0,207,255,0.15);">🚀</div>
+            <div>
+              <div class="ag-detail-htitle">Apertura</div>
+              <div class="ag-detail-hrange">2:30 PM — 3:00 PM</div>
             </div>
           </div>
-          <div class="ag-entry ag-hl">
-            <span class="ag-entry-time">5:40</span>
-            <div class="ag-entry-body">
-              <div class="ag-entry-title">⭐ Ponente 3</div>
-              <div class="ag-entry-desc">Tercera conferencia — por anunciarse</div>
-            </div>
+          <div class="ag-row">
+            <span class="ag-row-time" style="color:var(--cyan)">2:30</span>
+            <div><div class="ag-row-title">Apertura de puertas</div><div class="ag-row-desc">Registro, stands y primeras conversaciones</div></div>
+          </div>
+          <div class="ag-row">
+            <span class="ag-row-time" style="color:var(--cyan)">3:00</span>
+            <div><div class="ag-row-title">Inauguración oficial</div><div class="ag-row-desc">Bienvenida y arranque formal del evento</div></div>
           </div>
         </div>
-      </div>
 
-      <!-- Bloque 4: Conferencias II -->
-      <div class="ag-col" style="--ag-accent:var(--cyan)">
-        <div class="ag-vlabel">Conferencias II</div>
-        <div class="ag-header">
-          <div class="ag-phase-name">Conferencias II</div>
-          <div class="ag-phase-range">6:40 – 7:35</div>
-        </div>
-        <div class="ag-list">
-          <div class="ag-entry ag-hl">
-            <span class="ag-entry-time">6:40</span>
-            <div class="ag-entry-body">
-              <div class="ag-entry-title">⭐ Ponente 4</div>
-              <div class="ag-entry-desc">Cuarta conferencia — por anunciarse</div>
+        <!-- Panel 1: Conferencias I -->
+        <div class="ag-detail-inner" data-panel="1">
+          <div class="ag-detail-header">
+            <div class="ag-detail-icon" style="background:rgba(122,0,255,0.15);">🎤</div>
+            <div>
+              <div class="ag-detail-htitle">Conferencias I</div>
+              <div class="ag-detail-hrange">3:30 PM — 5:00 PM</div>
             </div>
           </div>
-          <div class="ag-entry">
-            <span class="ag-entry-time">7:35</span>
-            <div class="ag-entry-body">
-              <div class="ag-entry-title">Stands + Catering</div>
-              <div class="ag-entry-desc">Segunda ronda de networking y catering</div>
-            </div>
+          <div class="ag-row ag-star">
+            <span class="ag-row-time" style="color:var(--purple)">3:30</span>
+            <div><div class="ag-row-title">⭐ Ponente 1</div><div class="ag-row-desc">Primera conferencia de industria — por anunciarse</div></div>
+          </div>
+          <div class="ag-row ag-star">
+            <span class="ag-row-time" style="color:var(--purple)">4:25</span>
+            <div><div class="ag-row-title">⭐ Ponente 2</div><div class="ag-row-desc">Segunda conferencia — por anunciarse</div></div>
           </div>
         </div>
-      </div>
 
-      <!-- Bloque 5: Startup Challenge -->
-      <div class="ag-col" style="--ag-accent:#FF9900">
-        <div class="ag-vlabel">Challenge</div>
-        <div class="ag-header">
-          <div class="ag-phase-name">Startup Challenge</div>
-          <div class="ag-phase-range">8:00 – 9:30</div>
-        </div>
-        <div class="ag-list">
-          <div class="ag-entry ag-hl">
-            <span class="ag-entry-time">8:00</span>
-            <div class="ag-entry-body"><div class="ag-entry-title">⭐ Pitch 1</div></div>
-          </div>
-          <div class="ag-entry ag-hl">
-            <span class="ag-entry-time">8:15</span>
-            <div class="ag-entry-body"><div class="ag-entry-title">⭐ Pitch 2</div></div>
-          </div>
-          <div class="ag-entry ag-hl">
-            <span class="ag-entry-time">8:30</span>
-            <div class="ag-entry-body"><div class="ag-entry-title">⭐ Pitch 3</div></div>
-          </div>
-          <div class="ag-entry ag-hl">
-            <span class="ag-entry-time">8:55</span>
-            <div class="ag-entry-body">
-              <div class="ag-entry-title">⭐ Anuncio del ganador</div>
-              <div class="ag-entry-desc">Premiación del Startup Challenge</div>
+        <!-- Panel 2: Networking -->
+        <div class="ag-detail-inner" data-panel="2">
+          <div class="ag-detail-header">
+            <div class="ag-detail-icon" style="background:rgba(255,0,200,0.15);">🤝</div>
+            <div>
+              <div class="ag-detail-htitle">Break & Ponente 3</div>
+              <div class="ag-detail-hrange">5:20 PM — 6:30 PM</div>
             </div>
           </div>
-          <div class="ag-entry">
-            <span class="ag-entry-time">9:05</span>
-            <div class="ag-entry-body">
-              <div class="ag-entry-title">Clausura</div>
-              <div class="ag-entry-desc">Palabras de cierre y foto oficial</div>
-            </div>
+          <div class="ag-row">
+            <span class="ag-row-time" style="color:var(--magenta)">5:20</span>
+            <div><div class="ag-row-title">Stands + Catering</div><div class="ag-row-desc">Networking, comida incluida y emprendimientos</div></div>
           </div>
-          <div class="ag-entry">
-            <span class="ag-entry-time">9:30</span>
-            <div class="ag-entry-body"><div class="ag-entry-title">Fin del evento</div></div>
+          <div class="ag-row ag-star">
+            <span class="ag-row-time" style="color:var(--magenta)">5:40</span>
+            <div><div class="ag-row-title">⭐ Ponente 3</div><div class="ag-row-desc">Tercera conferencia — por anunciarse</div></div>
           </div>
         </div>
-      </div>
 
+        <!-- Panel 3: Conferencias II -->
+        <div class="ag-detail-inner" data-panel="3">
+          <div class="ag-detail-header">
+            <div class="ag-detail-icon" style="background:rgba(0,207,255,0.15);">💡</div>
+            <div>
+              <div class="ag-detail-htitle">Conferencias II</div>
+              <div class="ag-detail-hrange">6:40 PM — 7:35 PM</div>
+            </div>
+          </div>
+          <div class="ag-row ag-star">
+            <span class="ag-row-time" style="color:var(--cyan)">6:40</span>
+            <div><div class="ag-row-title">⭐ Ponente 4</div><div class="ag-row-desc">Cuarta conferencia — por anunciarse</div></div>
+          </div>
+          <div class="ag-row">
+            <span class="ag-row-time" style="color:var(--cyan)">7:35</span>
+            <div><div class="ag-row-title">Stands + Catering</div><div class="ag-row-desc">Segunda ronda de networking</div></div>
+          </div>
+        </div>
+
+        <!-- Panel 4: Startup Challenge -->
+        <div class="ag-detail-inner" data-panel="4">
+          <div class="ag-detail-header">
+            <div class="ag-detail-icon" style="background:rgba(255,153,0,0.15);">🏆</div>
+            <div>
+              <div class="ag-detail-htitle">Startup Challenge</div>
+              <div class="ag-detail-hrange">8:00 PM — 9:30 PM</div>
+            </div>
+          </div>
+          <div class="ag-row ag-star"><span class="ag-row-time" style="color:#FF9900">8:00</span><div><div class="ag-row-title">⭐ Pitch 1</div></div></div>
+          <div class="ag-row ag-star"><span class="ag-row-time" style="color:#FF9900">8:15</span><div><div class="ag-row-title">⭐ Pitch 2</div></div></div>
+          <div class="ag-row ag-star"><span class="ag-row-time" style="color:#FF9900">8:30</span><div><div class="ag-row-title">⭐ Pitch 3</div></div></div>
+          <div class="ag-row ag-star">
+            <span class="ag-row-time" style="color:#FF9900">8:55</span>
+            <div><div class="ag-row-title">⭐ Anuncio del ganador</div><div class="ag-row-desc">Premiación del Startup Challenge</div></div>
+          </div>
+          <div class="ag-row"><span class="ag-row-time" style="color:#FF9900">9:05</span><div><div class="ag-row-title">Clausura</div><div class="ag-row-desc">Palabras de cierre y foto oficial</div></div></div>
+          <div class="ag-row"><span class="ag-row-time" style="color:#FF9900">9:30</span><div><div class="ag-row-title">Fin del evento</div></div></div>
+        </div>
+
+      </div>
     </div>
   </div>
 </section>
@@ -2344,18 +2368,39 @@ function handleFile(file){
 /* ═══════════════════════════════════════════════════════
    SPEAKER ACCORDION
 ═══════════════════════════════════════════════════════ */
-(function initAgendaCols(){
-  const cols = document.querySelectorAll('.ag-col');
-  if(!cols.length) return;
-  const isTouch = !window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-  function activate(col){
-    cols.forEach(c=>c.classList.remove('ag-active'));
-    col.classList.add('ag-active');
+(function initAgendaTimeline(){
+  const stops   = document.querySelectorAll('.ag-stop');
+  const panels  = document.querySelectorAll('.ag-detail-inner');
+  const progress= document.getElementById('ag-progress');
+  const track   = document.getElementById('ag-track');
+  if(!stops.length) return;
+
+  function activate(idx){
+    stops.forEach((s,i)=>{
+      s.classList.toggle('ag-on', i===idx);
+    });
+    panels.forEach(p=>{
+      p.classList.toggle('ag-show', parseInt(p.dataset.panel)===idx);
+    });
+    // update progress line width
+    if(progress && track){
+      const stopEl  = stops[idx];
+      const tRect   = track.getBoundingClientRect();
+      const sRect   = stopEl.getBoundingClientRect();
+      const pct     = ((sRect.left + sRect.width/2) - tRect.left) / tRect.width * 100;
+      progress.style.width = pct + '%';
+    }
   }
-  cols.forEach(col=>{
-    if(!isTouch) col.addEventListener('mouseenter', function(){ activate(this); });
-    col.addEventListener('click', function(){ activate(this); });
+
+  const isTouch = !window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  stops.forEach(stop=>{
+    const trigger = isTouch ? 'click' : 'mouseenter';
+    stop.addEventListener(trigger, ()=> activate(parseInt(stop.dataset.idx)));
+    if(!isTouch) stop.addEventListener('click', ()=> activate(parseInt(stop.dataset.idx)));
   });
+
+  // init progress line on first stop
+  requestAnimationFrame(()=> activate(0));
 })();
 
 (function initSpeakerAccordion(){
