@@ -545,11 +545,12 @@
       flex-wrap:wrap;
     }
     .collab-logo{
-      height:28px;object-fit:contain;
-      filter:brightness(0) invert(1);opacity:0.35;
+      height:32px;object-fit:contain;
+      opacity:0.75;
       transition:opacity 0.2s;
     }
-    .collab-logo:hover{opacity:0.7;}
+    .collab-logo:hover{opacity:1;}
+    .collab-logo.logo-white{filter:brightness(0) invert(1);}
 
     /* ─── Comunidad Tec ──────────────────────────────── */
     #comunidad{text-align:center;}
@@ -1851,39 +1852,37 @@
 <section id="track-record" class="section">
   <div class="container">
     <div class="fade-section" style="margin-bottom:52px;">
-      <p class="section-label">Track Record</p>
-      <h2 class="section-title">Números que <span class="grad-text">hablan</span></h2>
+      <p class="section-label">Edición Anterior</p>
+      <h2 class="section-title">Así se vivió la <span class="grad-text">primera edición</span></h2>
     </div>
 
     <div class="stats-grid">
       <div class="stat-card fade-card">
         <div class="counter-num" data-count="200"><span class="cval">0</span><span class="counter-suffix">+</span></div>
-        <div class="stat-label">Asistentes esperados</div>
+        <div class="stat-label">Número de asistentes</div>
       </div>
       <div class="stat-card fade-card">
         <div class="counter-num" data-count="10"><span class="cval">0</span><span class="counter-suffix">+</span></div>
-        <div class="stat-label">Emprendimientos presentes</div>
+        <div class="stat-label">Emprendimientos participantes</div>
       </div>
       <div class="stat-card fade-card">
-        <div class="counter-num" data-count="4"><span class="cval">0</span></div>
+        <div class="counter-num" data-count="5"><span class="cval">0</span><span class="counter-suffix">+</span></div>
         <div class="stat-label">Empresas colaboradoras</div>
       </div>
     </div>
 
     <div class="photo-grid fade-section">
-      <div class="photo-cell">📸</div>
-      <div class="photo-cell">🎤</div>
-      <div class="photo-cell">🤝</div>
-      <div class="photo-cell">🏆</div>
+      <div class="photo-cell"><img src="prev-1.jpg" alt="" style="width:100%;height:100%;object-fit:cover;"/></div>
+      <div class="photo-cell"><img src="prev-2.jpg" alt="" style="width:100%;height:100%;object-fit:cover;"/></div>
+      <div class="photo-cell"><img src="prev-3.jpg" alt="" style="width:100%;height:100%;object-fit:cover;"/></div>
+      <div class="photo-cell"><img src="prev-4.jpg" alt="" style="width:100%;height:100%;object-fit:cover;"/></div>
     </div>
 
     <div class="collab-logos fade-section">
-      <img src="logos/tec.png" alt="Tec de Monterrey" class="collab-logo" onerror="this.style.display='none'"/>
-      <img src="logos/nazca.svg" alt="Nazca VC" class="collab-logo" onerror="this.style.display='none'"/>
-      <img src="logos/revolut.jpg" alt="Revolut" class="collab-logo" onerror="this.style.display='none'"/>
-      <img src="logos/trustco.jpeg" alt="TrustCo" class="collab-logo" onerror="this.style.display='none'"/>
-      <img src="logos/google.png" alt="Google" class="collab-logo" onerror="this.style.display='none'"/>
-      <img src="logos/microsoft.png" alt="Microsoft" class="collab-logo" onerror="this.style.display='none'"/>
+      <img src="logo-microsoft.png" alt="Microsoft" class="collab-logo"/>
+      <img src="logo-th.png" alt="Th" class="collab-logo logo-white"/>
+      <img src="logo-google.png" alt="Google" class="collab-logo"/>
+      <img src="logo-qcy.png" alt="QCY" class="collab-logo"/>
     </div>
   </div>
 </section>
