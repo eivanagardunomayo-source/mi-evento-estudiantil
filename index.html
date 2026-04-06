@@ -830,6 +830,31 @@
       margin-top:-10px;margin-bottom:16px;line-height:1.5;
     }
     .ext-note strong{color:rgba(0,220,100,0.7);}
+    /* preventa banner */
+    .preventa-banner{
+      display:flex;align-items:center;gap:10px;
+      background:linear-gradient(90deg,rgba(255,153,0,0.1),rgba(255,80,0,0.08));
+      border:1px solid rgba(255,153,0,0.3);border-radius:14px;
+      padding:10px 14px;margin-bottom:18px;
+    }
+    .preventa-badge{
+      background:linear-gradient(90deg,#FF9900,#FF5000);
+      border-radius:6px;padding:3px 8px;
+      font-size:0.62rem;font-weight:800;letter-spacing:0.08em;color:#000;
+      text-transform:uppercase;flex-shrink:0;
+    }
+    .preventa-text{font-size:0.75rem;color:rgba(255,255,255,0.65);flex:1;line-height:1.4;}
+    .preventa-text strong{color:#FF9900;}
+    .preventa-cd{
+      font-size:0.78rem;font-weight:800;color:#FF9900;
+      font-family:'Courier New',monospace;white-space:nowrap;flex-shrink:0;
+    }
+    /* expired state */
+    .preventa-banner.expired{
+      background:rgba(255,255,255,0.02);border-color:rgba(255,255,255,0.07);
+    }
+    .preventa-banner.expired .preventa-badge{background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.4);}
+    .preventa-banner.expired .preventa-text,.preventa-banner.expired .preventa-cd{color:rgba(255,255,255,0.3);}
     /* form */
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
     @media(max-width:420px){.form-row{grid-template-columns:1fr;}}
@@ -2059,21 +2084,28 @@
         <p class="ms1-title">Reserva tu lugar 🎟️</p>
         <p class="ms1-sub">Welcome 2 The Future 2026 · Tec CDMX</p>
 
+        <!-- Banner preventa -->
+        <div class="preventa-banner" id="preventa-banner">
+          <span class="preventa-badge" id="preventa-label">Preventa</span>
+          <span class="preventa-text" id="preventa-text">Precio especial activo. <strong>Termina el 17 de abril.</strong></span>
+          <span class="preventa-cd" id="preventa-cd">--:--:--</span>
+        </div>
+
         <p class="form-section-label">¿Quién eres?</p>
         <div class="type-pills" id="type-pills">
-          <button class="type-pill selected" data-val="tec">🎓 Estudiante Tec — $200</button>
-          <button class="type-pill" data-val="externo">🌐 Externo — $250</button>
+          <button class="type-pill selected" data-val="tec">🎓 Estudiante Tec</button>
+          <button class="type-pill" data-val="externo">🌐 Externo</button>
         </div>
-        <div class="ext-note" id="ext-note" style="display:none">Otras universidades, profesionales y público general. <strong>Compra 10+ boletos y pagas $200 c/u (igual que Tec).</strong></div>
+        <div class="ext-note" id="ext-note" style="display:none">Otras universidades, profesionales y público general. Precio fijo <strong>$300 MXN</strong> — sin descuento por grupo.</div>
         <input type="hidden" id="select-tipo" value="tec"/>
 
-        <!-- Descuentos por grupo -->
-        <div class="discount-tiers">
+        <!-- Descuentos por grupo (solo Tec, solo venta general) -->
+        <div class="discount-tiers" id="discount-tiers">
           <div class="dtier" id="dtier-5">
-            <span class="dtier-dot"></span>5–9 boletos: −10%
+            <span class="dtier-dot"></span><span id="dtier-5-label">5–9 boletos: $200 c/u</span>
           </div>
           <div class="dtier" id="dtier-10">
-            <span class="dtier-dot"></span>10+ boletos: −20%
+            <span class="dtier-dot"></span><span id="dtier-10-label">10+ boletos: $180 c/u</span>
           </div>
         </div>
 
@@ -2453,9 +2485,8 @@ window.addEventListener('load', function(){
 /* ═══════════════════════════════════════════════════════
    MODAL & PAYMENT LOGIC
 ═══════════════════════════════════════════════════════ */
-const PRECIO_TEC = 200;   // Tec de Monterrey
-const PRECIO_EXT = 250;   // Externo
 const CLABE  = '638180010184222442';
+const PREVENTA_END = new Date('2026-04-18T00:00:00-06:00'); // 17 abr 23:59 CST
 let selectedFile = null;
 let currentStep  = 1;
 
@@ -2463,33 +2494,53 @@ let currentStep  = 1;
 let ticketQty = 1;
 let selectedTipo = 'tec';
 
+function isPreventaActive(){
+  return new Date() < PREVENTA_END;
+}
+
 /* ── Pricing engine ── */
 function calcPrecio(){
-  const base     = selectedTipo === 'tec' ? PRECIO_TEC : PRECIO_EXT;
-  const disc     = ticketQty >= 10 ? 0.20 : ticketQty >= 5 ? 0.10 : 0;
-  const perUnit  = Math.round(base * (1 - disc));
-  const total    = perUnit * ticketQty;
-  const savings  = (base - perUnit) * ticketQty;
-  return { base, disc, perUnit, total, savings };
+  const preventa = isPreventaActive();
+
+  if(selectedTipo === 'externo'){
+    // Externos: precio fijo siempre, sin descuento
+    return { base:300, perUnit:300, total:300*ticketQty, savings:0, disc:0, label:'Precio externo' };
+  }
+
+  // Tec — preventa activa
+  if(preventa){
+    const base    = 200;
+    const perUnit = ticketQty >= 10 ? 150 : 200;
+    const total   = perUnit * ticketQty;
+    const savings = (base - perUnit) * ticketQty;
+    return { base, perUnit, total, savings, disc: ticketQty>=10 ? 0.25 : 0, label:'Preventa Tec' };
+  }
+
+  // Tec — venta general
+  const base    = 250;
+  const perUnit = ticketQty >= 10 ? 180 : ticketQty >= 5 ? 200 : 250;
+  const total   = perUnit * ticketQty;
+  const savings = (base - perUnit) * ticketQty;
+  return { base, perUnit, total, savings, disc: ticketQty>=10 ? 0.28 : ticketQty>=5 ? 0.20 : 0, label:'Venta general Tec' };
 }
 
 function updatePriceUI(){
-  const { base, disc, perUnit, total, savings } = calcPrecio();
+  const { base, perUnit, total, savings, disc } = calcPrecio();
+  const preventa = isPreventaActive();
+  const externo  = selectedTipo === 'externo';
 
   // per-ticket tag
   const tag = document.getElementById('ticket-price-tag');
-  if(disc > 0){
-    tag.innerHTML = `<span class="orig">$${base}</span><span class="now">$${perUnit} c/u</span>`;
-  } else {
-    tag.innerHTML = `<span class="now">$${perUnit} c/u</span>`;
-  }
+  tag.innerHTML = disc > 0
+    ? `<span class="orig">$${base}</span><span class="now">$${perUnit} c/u</span>`
+    : `<span class="now">$${perUnit} c/u</span>`;
 
   // breakdown
   document.getElementById('qty-breakdown').textContent =
     ticketQty + ' boleto' + (ticketQty>1?'s':'') + ' × $' + perUnit
-    + (disc > 0 ? ` (−${disc*100|0}%)` : '');
+    + (disc > 0 ? ` (−${Math.round(disc*100)}%)` : '');
 
-  // total price
+  // total
   document.getElementById('modal-total-price').innerHTML =
     '$' + total.toLocaleString('es-MX') + ' <span style="font-size:0.9rem;font-weight:600;">MXN</span>';
 
@@ -2505,10 +2556,56 @@ function updatePriceUI(){
     box.classList.remove('has-discount');
   }
 
-  // discount tier badges
-  document.getElementById('dtier-5').classList.toggle('active', ticketQty >= 5 && ticketQty < 10);
-  document.getElementById('dtier-10').classList.toggle('active', ticketQty >= 10);
+  // discount tier badges — solo visible para Tec
+  const tiersEl = document.getElementById('discount-tiers');
+  tiersEl.style.display = externo ? 'none' : 'flex';
+
+  if(!externo){
+    if(preventa){
+      document.getElementById('dtier-5-label').textContent  = '10+ boletos: $150 c/u';
+      document.getElementById('dtier-10-label').textContent = '¡Precio grupal de amigos!';
+      document.getElementById('dtier-5').style.display  = 'none'; // solo 1 tier en preventa
+      document.getElementById('dtier-10').style.display = 'flex';
+      document.getElementById('dtier-10').classList.toggle('active', ticketQty >= 10);
+    } else {
+      document.getElementById('dtier-5').style.display  = 'flex';
+      document.getElementById('dtier-10').style.display = 'flex';
+      document.getElementById('dtier-5-label').textContent  = '5–9 boletos: $200 c/u';
+      document.getElementById('dtier-10-label').textContent = '10+ boletos: $180 c/u';
+      document.getElementById('dtier-5').classList.toggle('active', ticketQty >= 5 && ticketQty < 10);
+      document.getElementById('dtier-10').classList.toggle('active', ticketQty >= 10);
+    }
+  }
 }
+
+/* ── Preventa countdown ── */
+(function initPreventaCountdown(){
+  const banner = document.getElementById('preventa-banner');
+  const cdEl   = document.getElementById('preventa-cd');
+  const txtEl  = document.getElementById('preventa-text');
+  const lblEl  = document.getElementById('preventa-label');
+
+  function tick(){
+    const now  = new Date();
+    const diff = PREVENTA_END - now;
+    if(diff <= 0){
+      banner.classList.add('expired');
+      lblEl.textContent = 'Preventa';
+      txtEl.innerHTML   = 'La preventa ha finalizado. Precios de venta general activos.';
+      cdEl.textContent  = 'Expirada';
+      updatePriceUI();
+      return;
+    }
+    const d  = Math.floor(diff / 86400000);
+    const h  = Math.floor((diff % 86400000) / 3600000);
+    const m  = Math.floor((diff % 3600000)  / 60000);
+    const s  = Math.floor((diff % 60000)    / 1000);
+    const pad = n => String(n).padStart(2,'0');
+    cdEl.textContent = d > 0 ? `${d}d ${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(h)}:${pad(m)}:${pad(s)}`;
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
 
 function openModal(){
   document.getElementById('modal-overlay').classList.add('open');
@@ -2599,9 +2696,7 @@ function irAPago(){
   else if(!email || !email.includes('@') || !email.includes('.')){ eEl.classList.add('err'); if(ok) eEl.focus(); ok=false; }
   if(!ok) return;
 
-  const ref   = generarReferencia();
-  const monto = ticketQty * PRECIO;
-
+  const ref = generarReferencia();
   const { perUnit, total, disc } = calcPrecio();
   const descLabel = disc > 0 ? ` (−${disc*100|0}% grupal)` : '';
 
