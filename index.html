@@ -278,6 +278,15 @@
       display:flex;align-items:center;gap:10px;
       font-size:0.9rem;color:rgba(255,255,255,0.75);
     }
+    .que-es-feature--highlight{
+      border-color:rgba(0,220,100,0.25);
+      background:rgba(0,220,100,0.05);
+      color:#fff;
+    }
+    .que-es-feature--highlight::before{
+      background:rgba(0,220,100,0.8)!important;
+      box-shadow:0 0 8px rgba(0,220,100,0.4);
+    }
     .que-es-feature::before{
       content:'';display:block;width:8px;height:8px;border-radius:50%;
       background:var(--cyan);flex-shrink:0;
@@ -1479,15 +1488,15 @@
     <div class="que-es-grid">
       <div class="que-es-text fade-section">
         <p class="section-label">Qué es</p>
-        <h2 class="section-title">El summit estudiantil de innovación más ambicioso del Tec</h2>
+        <h2 class="section-title">El summit de tecnologías emergentes que conecta a las disciplinas del futuro</h2>
         <p>Welcome 2 The Future es un evento de un día que reúne a fundadores, inversionistas, expertos en IA y tecnología con la comunidad estudiantil del Tec de Monterrey CDMX.</p>
         <p>Un espacio donde el conocimiento de industria se encuentra con el talento joven para construir el ecosistema emprendedor del futuro.</p>
         <div class="que-es-feature-list">
           <div class="que-es-feature">4 conferencias magistrales de industria</div>
           <div class="que-es-feature">Startup Challenge con jurado experto</div>
-          <div class="que-es-feature">Networking con emprendedores y VCs</div>
-          <div class="que-es-feature">Catering y stands de emprendimiento</div>
-          <div class="que-es-feature">Acceso a comunidad exclusiva post-evento</div>
+          <div class="que-es-feature">Networking con expertos y emprendedores</div>
+          <div class="que-es-feature">Catering y stands de empresas globales</div>
+          <div class="que-es-feature que-es-feature--highlight">Dinámicas y certificado con valor curricular</div>
         </div>
         <br/>
         <button class="btn btn-primary" onclick="openModal()" style="margin-top:8px;">
@@ -1498,20 +1507,31 @@
       <div class="que-es-visual fade-section">
         <div class="que-es-card">
           <div class="que-es-card-icon">🚀</div>
-          <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:8px;">Un día. Impacto duradero.</h3>
+          <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:8px;">Lo que debes saber</h3>
           <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:20px;">Desde las 2:30 PM hasta las 9:30 PM en el campus Tec de Monterrey CDMX — ponentes de primer nivel, pitches en vivo y conexiones reales.</p>
           <div style="display:flex;flex-direction:column;gap:10px;">
             <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(0,207,255,0.05);border-radius:10px;border:1px solid rgba(0,207,255,0.1);">
               <span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Fecha</span>
               <span style="font-size:0.85rem;font-weight:700;color:var(--cyan);">15 Mayo 2026</span>
             </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(0,207,255,0.05);border-radius:10px;border:1px solid rgba(0,207,255,0.1);">
+              <span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Lugar</span>
+              <span style="font-size:0.85rem;font-weight:700;color:var(--cyan);">Pabellón de Biblioteca</span>
+            </div>
             <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(122,0,255,0.05);border-radius:10px;border:1px solid rgba(122,0,255,0.12);">
               <span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Precio</span>
-              <span style="font-size:0.85rem;font-weight:700;color:#bf7fff;">$200 MXN</span>
+              <div style="text-align:right;">
+                <span style="font-size:0.85rem;font-weight:700;color:#bf7fff;">$200 MXN preventa</span>
+                <span style="display:block;font-size:0.7rem;color:rgba(255,255,255,0.3);">Sube a $250 después del 17 de abril</span>
+              </div>
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(255,0,200,0.05);border-radius:10px;border:1px solid rgba(255,0,200,0.1);">
               <span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Aforo</span>
               <span style="font-size:0.85rem;font-weight:700;color:var(--magenta);">Limitado</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(0,220,100,0.05);border-radius:10px;border:1px solid rgba(0,220,100,0.15);">
+              <span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Certificado</span>
+              <span style="font-size:0.85rem;font-weight:700;color:#00dc64;">Valor curricular ✓</span>
             </div>
           </div>
         </div>
