@@ -770,6 +770,23 @@
       .tilt-card{transform:none!important;}
     }
 
+    /* ─── Hero CTA Principal ─────────────────────────── */
+    .hero-cta-main{
+      font-size:1.1rem!important;padding:18px 44px!important;
+      background:linear-gradient(135deg,var(--cyan) 0%,var(--purple) 60%,var(--magenta) 100%)!important;
+      box-shadow:0 0 40px rgba(0,207,255,0.45),0 0 80px rgba(122,0,255,0.2)!important;
+      animation:cta-pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes cta-pulse{
+      0%,100%{box-shadow:0 0 32px rgba(0,207,255,0.4),0 0 64px rgba(122,0,255,0.15);}
+      50%{box-shadow:0 0 52px rgba(0,207,255,0.65),0 0 100px rgba(122,0,255,0.3);}
+    }
+    .hero-cta-main:hover{
+      transform:translateY(-3px) scale(1.03)!important;
+      animation:none;
+      box-shadow:0 0 60px rgba(0,207,255,0.7),0 12px 40px rgba(0,0,0,0.4)!important;
+    }
+
     /* ─── Hero Logo Combo ────────────────────────────── */
     .hero-logo-combo{
       display:flex;align-items:center;gap:16px;margin-bottom:28px;
@@ -925,13 +942,7 @@
   <div id="hero-stars"></div>
   <span class="ghost-wm" style="bottom:-2rem;left:50%;transform:translateX(-50%);">2026</span>
 
-  <div class="hero-logo-combo hero-el">
-    <img src="logo.png" alt="W2TF" class="hero-logo"/>
-    <div class="hero-logo-wordmark">
-      <div>WELCOME</div>
-      <div>2 THE FUTURE</div>
-    </div>
-  </div>
+  <img src="logo.png" alt="Welcome 2 The Future" class="hero-logo hero-el" style="width:140px;height:140px;margin-bottom:20px;"/>
 
   <p class="hero-eyebrow hero-el">
     <span></span>
@@ -994,10 +1005,13 @@
   </div>
 
   <div class="hero-ctas hero-el">
-    <button class="btn btn-primary" onclick="openModal()">
-      <span class="btn-shine"></span>
-      Reservar mi lugar
-    </button>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <button class="btn btn-primary hero-cta-main" onclick="openModal()">
+        <span class="btn-shine"></span>
+        🎟️ Reservar mi lugar — <strong>$200 MXN</strong>
+      </button>
+      <span style="font-size:0.75rem;color:rgba(255,255,255,0.35);letter-spacing:0.04em;">Pago único · Cupo muy limitado · Confirmación por correo</span>
+    </div>
     <a href="#que-es" class="btn btn-outline">
       <span class="btn-shine"></span>
       Conoce más
