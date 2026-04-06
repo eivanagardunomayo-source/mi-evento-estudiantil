@@ -770,6 +770,29 @@
       .tilt-card{transform:none!important;}
     }
 
+    /* ─── Hero Logo Background ───────────────────────── */
+    .hero-logo-bg{
+      position:absolute;
+      width:clamp(420px,70vw,780px);
+      height:clamp(420px,70vw,780px);
+      object-fit:contain;
+      opacity:0.07;
+      pointer-events:none;
+      user-select:none;
+      top:50%;left:50%;
+      transform:translate(-50%,-52%);
+      z-index:0;
+      filter:drop-shadow(0 0 60px rgba(0,207,255,0.3));
+    }
+    #hero h1.hero-title,
+    #hero .hero-eyebrow,
+    #hero .hero-subtitle,
+    #hero .hero-meta,
+    #hero .urgency-badge,
+    #hero .cd-big-wrap,
+    #hero .cd-progress-outer,
+    #hero .hero-ctas{position:relative;z-index:1;}
+
     /* ─── Hero CTA Principal ─────────────────────────── */
     .hero-cta-main{
       font-size:1.1rem!important;padding:18px 44px!important;
@@ -942,7 +965,8 @@
   <div id="hero-stars"></div>
   <span class="ghost-wm" style="bottom:-2rem;left:50%;transform:translateX(-50%);">2026</span>
 
-  <img src="logo.png" alt="Welcome 2 The Future" class="hero-logo hero-el" style="width:140px;height:140px;margin-bottom:20px;"/>
+  <img src="logo.png" alt="" aria-hidden="true" class="hero-logo-bg"/>
+  <img src="logo.png" alt="Welcome 2 The Future" class="hero-logo hero-el" style="width:88px;height:88px;margin-bottom:20px;position:relative;z-index:1;"/>
 
   <p class="hero-eyebrow hero-el">
     <span></span>
