@@ -1485,7 +1485,7 @@
 
       <!-- Panel 1 — Luis Andrés -->
       <div class="sa-panel sa-active">
-        <div class="sa-panel-bg" style="background:linear-gradient(160deg,rgba(0,207,255,0.25) 0%,rgba(122,0,255,0.35) 100%);"></div>
+        <div class="sa-panel-bg" style="background-image:linear-gradient(160deg,rgba(0,207,255,0.18) 0%,rgba(122,0,255,0.28) 100%),url('luis-enriquez.jpg');background-size:cover;background-position:center top;"></div>
         <div class="sa-panel-initial">LA</div>
         <div class="sa-panel-vlabel">Luis Andrés</div>
         <div class="sa-panel-content">
@@ -2298,11 +2298,16 @@ function handleFile(file){
 (function initSpeakerAccordion(){
   const panels = document.querySelectorAll('.sa-panel');
   if(!panels.length) return;
+  const isTouch = !window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  function activate(panel){
+    panels.forEach(p=>p.classList.remove('sa-active'));
+    panel.classList.add('sa-active');
+  }
   panels.forEach(panel=>{
-    panel.addEventListener('click', function(){
-      panels.forEach(p=>p.classList.remove('sa-active'));
-      this.classList.add('sa-active');
-    });
+    // hover en desktop
+    if(!isTouch) panel.addEventListener('mouseenter', function(){ activate(this); });
+    // tap en móvil / fallback
+    panel.addEventListener('click', function(){ activate(this); });
   });
 })();
 
