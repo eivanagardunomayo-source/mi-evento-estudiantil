@@ -153,7 +153,7 @@
     #hero{
       position:relative;min-height:100vh;display:flex;flex-direction:column;
       align-items:center;justify-content:center;text-align:center;
-      padding:120px 24px 80px;overflow:hidden;
+      padding:80px 24px 40px;overflow:hidden;gap:0;
     }
     #hero-stars{position:absolute;inset:0;pointer-events:none;}
     .star{
@@ -169,7 +169,7 @@
     }
     .hero-eyebrow{
       font-size:0.75rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;
-      color:var(--cyan);margin-bottom:20px;
+      color:var(--cyan);margin-bottom:12px;
       display:inline-flex;align-items:center;gap:10px;
     }
     .hero-eyebrow span{display:inline-block;width:32px;height:1px;background:var(--cyan);opacity:0.6;}
@@ -182,7 +182,7 @@
     }
     .hero-subtitle{
       font-size:clamp(1rem,2.5vw,1.25rem);color:rgba(255,255,255,0.7);
-      max-width:600px;margin:0 auto 20px;
+      max-width:600px;margin:0 auto 12px;
     }
     #rotating-word{
       color:var(--cyan);font-weight:700;display:inline-block;
@@ -201,7 +201,7 @@
       background:rgba(255,0,200,0.12);border:1px solid rgba(255,0,200,0.3);
       border-radius:100px;padding:8px 18px;
       font-size:0.8rem;font-weight:700;color:var(--magenta);
-      margin-bottom:32px;letter-spacing:0.04em;
+      margin-bottom:16px;letter-spacing:0.04em;
     }
     .urgency-badge .dot{
       width:7px;height:7px;border-radius:50%;background:var(--magenta);
@@ -772,11 +772,11 @@
 
     /* ─── Hero Title Logo ────────────────────────────── */
     .hero-title-logo{
-      width:clamp(260px,50vw,520px);
+      width:clamp(220px,38vw,420px);
       height:auto;
       object-fit:contain;
       filter:drop-shadow(0 0 40px rgba(0,207,255,0.5)) drop-shadow(0 0 80px rgba(122,0,255,0.35));
-      margin-bottom:20px;
+      margin-bottom:12px;
       position:relative;z-index:1;
     }
 
@@ -837,7 +837,7 @@
     /* ─── Big Countdown ──────────────────────────────── */
     .cd-big-wrap{
       display:flex;align-items:center;justify-content:center;
-      gap:24px;margin-bottom:14px;
+      gap:16px;margin-bottom:8px;
     }
     .cd-big-label{
       font-size:0.6rem;font-weight:700;letter-spacing:0.2em;
@@ -848,7 +848,7 @@
     .cd-big-nums{display:flex;align-items:center;gap:6px;}
     .cd-big-unit{display:flex;flex-direction:column;align-items:center;}
     .cd-big-num{
-      font-size:clamp(3rem,8vw,6rem);font-weight:800;line-height:1;
+      font-size:clamp(2.2rem,6vw,4.5rem);font-weight:800;line-height:1;
       color:#fff;letter-spacing:-0.04em;
       min-width:1.6ch;text-align:center;
     }
@@ -857,14 +857,14 @@
       text-transform:uppercase;color:var(--text-muted);margin-top:5px;
     }
     .cd-big-sep{
-      font-size:clamp(2rem,5vw,4rem);font-weight:800;
+      font-size:clamp(1.5rem,4vw,3rem);font-weight:800;
       color:rgba(255,255,255,0.15);line-height:1;
-      padding-bottom:18px;
+      padding-bottom:14px;
     }
 
     /* ─── Countdown Progress Bar ─────────────────────── */
     .cd-progress-outer{
-      width:100%;max-width:440px;margin:0 auto 40px;
+      width:100%;max-width:440px;margin:0 auto 20px;
       height:3px;background:rgba(255,255,255,0.08);
       border-radius:2px;overflow:hidden;
     }
