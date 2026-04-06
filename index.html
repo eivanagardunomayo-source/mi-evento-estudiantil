@@ -2108,11 +2108,8 @@
         <div class="ext-note" id="ext-note" style="display:none">Otras universidades, profesionales y público general. Precio fijo <strong>$300 MXN</strong> — sin descuento por grupo.</div>
         <input type="hidden" id="select-tipo" value="tec"/>
 
-        <!-- Descuentos por grupo (solo Tec) -->
+        <!-- Descuento por grupo (solo Tec) -->
         <div class="discount-tiers" id="discount-tiers">
-          <div class="dtier" id="dtier-5">
-            <span class="dtier-dot"></span><span id="dtier-5-label">5–9 boletos: $200 c/u</span>
-          </div>
           <div class="dtier" id="dtier-10">
             <span class="dtier-dot"></span><span id="dtier-10-label">10+ boletos: $180 c/u</span>
           </div>
@@ -2530,10 +2527,10 @@ function calcPrecio(){
 
   // Tec — venta general
   const base    = 250;
-  const perUnit = ticketQty >= 10 ? 180 : ticketQty >= 5 ? 200 : 250;
+  const perUnit = ticketQty >= 10 ? 180 : 250;
   const total   = perUnit * ticketQty;
   const savings = (base - perUnit) * ticketQty;
-  return { base, perUnit, total, savings, disc: ticketQty>=10 ? 0.28 : ticketQty>=5 ? 0.20 : 0, label:'Venta general Tec' };
+  return { base, perUnit, total, savings, disc: ticketQty >= 10 ? 0.28 : 0, label:'Venta general Tec' };
 }
 
 function updatePriceUI(){
@@ -2579,8 +2576,6 @@ function updatePriceUI(){
     explainerEl.className = 'group-explainer';
     explainerTxt.innerHTML = 'Precio fijo para externos. No aplica descuento por cantidad.';
   } else if(preventa){
-    document.getElementById('dtier-5').style.display  = 'none';
-    document.getElementById('dtier-10').style.display = 'flex';
     document.getElementById('dtier-10-label').textContent = '10+ boletos: $150 c/u';
     document.getElementById('dtier-10').classList.toggle('active', ticketQty >= 10);
 
@@ -2590,27 +2585,19 @@ function updatePriceUI(){
     } else {
       explainerEl.className = 'group-explainer';
       const faltan = 10 - ticketQty;
-      explainerTxt.innerHTML = `¿Vienes con amigos? Si juntan <strong>10 boletos</strong>, cada uno paga <strong>$150 MXN</strong> — te faltan <strong>${faltan} más</strong> para activar el precio grupal.`;
+      explainerTxt.innerHTML = `¿Vienes con amigos? Si compran <strong>10 boletos o más</strong>, cada uno paga <strong>$150 MXN</strong> — te faltan <strong>${faltan}</strong> para activar el precio grupal.`;
     }
   } else {
-    document.getElementById('dtier-5').style.display  = 'flex';
-    document.getElementById('dtier-10').style.display = 'flex';
-    document.getElementById('dtier-5-label').textContent  = '5–9 boletos → $200 c/u';
-    document.getElementById('dtier-10-label').textContent = '10+ boletos → $180 c/u';
-    document.getElementById('dtier-5').classList.toggle('active', ticketQty >= 5 && ticketQty < 10);
+    document.getElementById('dtier-10-label').textContent = '10+ boletos: $180 c/u';
     document.getElementById('dtier-10').classList.toggle('active', ticketQty >= 10);
 
     if(ticketQty >= 10){
       explainerEl.className = 'group-explainer highlight';
-      explainerTxt.innerHTML = '🎉 ¡Precio grupal máximo! A partir del <strong>10° boleto</strong> cada persona paga <strong>$180 MXN</strong>.';
-    } else if(ticketQty >= 5){
-      explainerEl.className = 'group-explainer highlight';
-      const faltan = 10 - ticketQty;
-      explainerTxt.innerHTML = `¡Precio de grupo activo! Agrega <strong>${faltan} más</strong> para bajar a <strong>$180 c/u</strong>.`;
+      explainerTxt.innerHTML = '🎉 ¡Precio grupal activo! A partir del <strong>10° boleto</strong> cada persona paga <strong>$180 MXN</strong>.';
     } else {
       explainerEl.className = 'group-explainer';
-      const faltan5 = 5 - ticketQty;
-      explainerTxt.innerHTML = `¿Vienes con amigos? Si compran <strong>5 boletos o más</strong>, el precio baja a <strong>$200</strong> por persona. Con <strong>10 o más</strong>, baja a <strong>$180</strong> — sin códigos ni trámites.`;
+      const faltan = 10 - ticketQty;
+      explainerTxt.innerHTML = `¿Vienes con amigos? Si compran <strong>10 boletos o más</strong>, el precio por persona baja a <strong>$180 MXN</strong> — te faltan <strong>${faltan}</strong> para activar el descuento.`;
     }
   }
 }
