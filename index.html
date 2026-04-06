@@ -770,6 +770,16 @@
       .tilt-card{transform:none!important;}
     }
 
+    /* ─── Hero Title Logo ────────────────────────────── */
+    .hero-title-logo{
+      width:clamp(260px,50vw,520px);
+      height:auto;
+      object-fit:contain;
+      filter:drop-shadow(0 0 40px rgba(0,207,255,0.5)) drop-shadow(0 0 80px rgba(122,0,255,0.35));
+      margin-bottom:20px;
+      position:relative;z-index:1;
+    }
+
     /* ─── Hero Logo Background ───────────────────────── */
     .hero-logo-bg{
       position:absolute;
@@ -965,15 +975,13 @@
   <div id="hero-stars"></div>
   <span class="ghost-wm" style="bottom:-2rem;left:50%;transform:translateX(-50%);">2026</span>
 
-  <img src="logo.png" alt="" aria-hidden="true" class="hero-logo-bg"/>
-
   <p class="hero-eyebrow hero-el">
     <span></span>
     Tec de Monterrey · CDMX · 2026
     <span></span>
   </p>
 
-  <h1 class="hero-title hero-el">Welcome 2<br>The Future</h1>
+  <img src="logo.png" alt="Welcome 2 The Future" class="hero-title-logo hero-el"/>
 
   <p class="hero-subtitle hero-el">
     <span id="rotating-word">Innovación</span>, IA y tecnologías emergentes
