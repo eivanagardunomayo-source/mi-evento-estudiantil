@@ -1025,6 +1025,11 @@
     .sa-panel.sa-active{flex:1;}
     .sa-panel-bg{
       position:absolute;inset:0;
+      filter:grayscale(1) brightness(0.7);
+      transition:filter 0.55s var(--ease-out-expo);
+    }
+    .sa-panel.sa-active .sa-panel-bg{
+      filter:grayscale(0) brightness(1);
     }
     .sa-panel-initial{
       position:absolute;top:50%;left:50%;
@@ -1485,7 +1490,7 @@
 
       <!-- Panel 1 — Luis Andrés -->
       <div class="sa-panel sa-active">
-        <div class="sa-panel-bg" style="background-image:linear-gradient(160deg,rgba(0,207,255,0.18) 0%,rgba(122,0,255,0.28) 100%),url('luis-enriquez.jpg');background-size:cover;background-position:center top;"></div>
+        <div class="sa-panel-bg" style="background-image:url('luis-enriquez.jpg');background-size:cover;background-position:center top;"></div>
         <div class="sa-panel-initial">LA</div>
         <div class="sa-panel-vlabel">Luis Andrés</div>
         <div class="sa-panel-content">
