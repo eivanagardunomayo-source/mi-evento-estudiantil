@@ -118,8 +118,8 @@ function buildTicketBlock({ nombre, ref, tipo, montoPorBoleto, numBoleto, totalB
             <div style="color:rgba(255,255,255,0.85);font-size:9px;letter-spacing:0.25em;text-transform:uppercase;font-family:Arial,sans-serif;margin-bottom:4px;">Welcome 2 The Future · 2026</div>
             <div style="color:#ffffff;font-size:18px;font-weight:900;letter-spacing:0.08em;font-family:Arial,sans-serif;">✦ BOLETO OFICIAL ✦</div>
           </td>
-          <td style="text-align:right;vertical-align:middle;width:60px;">
-            <img src="${base}/logo-oficial.png" width="52" height="52" alt="W2TF" style="display:inline-block;border-radius:50%;"/>
+          <td style="text-align:right;vertical-align:middle;width:90px;">
+            <img src="${base}/logo-oficial.png" width="84" alt="W2TF" style="display:inline-block;max-width:84px;"/>
           </td>
         </tr>
       </table>
@@ -219,8 +219,7 @@ function buildEmail({ nombre, boletos, ticketBlocks }) {
 
   <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
     <tr><td style="text-align:center;">
-      <img src="${base}/logo-oficial.png" width="72" height="72" alt="W2TF 2026" style="display:inline-block;border-radius:50%;"/>
-      <div style="color:#94A3B8;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;margin-top:10px;">Welcome 2 The Future · 2026</div>
+      <img src="${base}/logo-oficial.png" width="140" alt="W2TF 2026" style="display:inline-block;max-width:140px;"/>
     </td></tr>
   </table>
 
@@ -241,6 +240,11 @@ function buildEmail({ nombre, boletos, ticketBlocks }) {
     </td></tr>
   </table>
 
+  <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
+    <tr><td style="text-align:center;">
+      <img src="${base}/logo-belae.png" width="80" alt="BeLAE" style="display:inline-block;max-width:80px;opacity:0.7;"/>
+    </td></tr>
+  </table>
   <p style="text-align:center;color:#64748B;font-size:11px;margin:0;">
     ¿Dudas? <a href="mailto:belaeccm.tec@gmail.com" style="color:#00CFFF;">belaeccm.tec@gmail.com</a><br/>
     © 2026 BeLAE · Welcome 2 The Future
