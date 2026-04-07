@@ -54,8 +54,8 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ success: true, referencia });
 
   } catch (err) {
-    console.error('Error en /api/registro:', err?.message, err?.body, err?.stack);
-    return res.status(500).json({ error: 'Error al procesar tu registro. Intenta de nuevo.', detail: err?.message });
+    console.error('Error en /api/registro:', err?.message, err?.body);
+    return res.status(500).json({ error: 'Error al procesar tu registro. Intenta de nuevo.' });
   }
 };
 
