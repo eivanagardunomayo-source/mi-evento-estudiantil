@@ -1537,7 +1537,7 @@
               <span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Precio</span>
               <div style="text-align:right;">
                 <span style="font-size:0.85rem;font-weight:700;color:#FF9900;">$200 MXN · Preventa</span>
-                <span style="display:block;font-size:0.7rem;color:rgba(255,153,0,0.55);">El precio más bajo que tendrá este evento — hasta el 17 de abril</span>
+                <span style="display:block;font-size:0.7rem;color:rgba(255,153,0,0.55);">Precio de preventa — después subirá a $250 MXN</span>
               </div>
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(255,0,200,0.05);border-radius:10px;border:1px solid rgba(255,0,200,0.1);">
@@ -2204,6 +2204,10 @@
           <label class="form-label" for="inp-matricula">Matrícula</label>
           <input class="form-input" id="inp-matricula" type="text" placeholder="A01234567"/>
         </div>
+        <div class="form-group">
+          <label class="form-label" for="inp-celular">Número de celular</label>
+          <input class="form-input" id="inp-celular" type="tel" placeholder="55 1234 5678" autocomplete="tel"/>
+        </div>
 
         <button class="btn btn-primary" style="width:100%;margin-top:6px;" onclick="irAPago()">
           <span class="btn-shine"></span>
@@ -2761,12 +2765,15 @@ function irAPago(){
   const email  = document.getElementById('inp-email').value.trim();
 
   // Inline validation
+  const celular = document.getElementById('inp-celular').value.trim();
   let ok = true;
   const nEl = document.getElementById('inp-nombre');
   const eEl = document.getElementById('inp-email');
-  nEl.classList.remove('err'); eEl.classList.remove('err');
+  const cEl = document.getElementById('inp-celular');
+  nEl.classList.remove('err'); eEl.classList.remove('err'); cEl.classList.remove('err');
   if(!nombre){ nEl.classList.add('err'); nEl.focus(); ok=false; }
   else if(!email || !email.includes('@') || !email.includes('.')){ eEl.classList.add('err'); if(ok) eEl.focus(); ok=false; }
+  else if(!celular){ cEl.classList.add('err'); if(ok) cEl.focus(); ok=false; }
   if(!ok) return;
 
   const ref = generarReferencia();
@@ -3038,6 +3045,7 @@ async function enviarRegistro(){
 
   const nombre    = document.getElementById('inp-nombre').value.trim();
   const email     = document.getElementById('inp-email').value.trim();
+  const celular   = document.getElementById('inp-celular').value.trim();
   const matricula = document.getElementById('inp-matricula').value.trim();
   const tipo      = document.getElementById('select-tipo').value;
   const referencia= document.getElementById('ref-value').value;
@@ -3063,7 +3071,7 @@ async function enviarRegistro(){
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        nombre, email, institucion: matricula, carrera: '', tipo,
+        nombre, email, celular, institucion: matricula, carrera: '', tipo,
         boletos: ticketQty, referencia, monto: total,
         comprobante: comprobanteBase64
       })

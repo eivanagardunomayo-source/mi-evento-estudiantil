@@ -11,7 +11,7 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { nombre, email, institucion, carrera, tipo, boletos, referencia, comprobante, monto: montoRaw } = req.body;
+    const { nombre, email, celular, institucion, carrera, tipo, boletos, referencia, comprobante, monto: montoRaw } = req.body;
     const monto = parseInt(montoRaw) || (parseInt(boletos) * (tipo === 'externo' ? (parseInt(process.env.PRECIO_EXTERNO) || 300) : (parseInt(process.env.PRECIO_BOLETO) || 200)));
     const fecha = new Date().toISOString().split('T')[0];
     const token = require('crypto').randomUUID();
@@ -28,6 +28,7 @@ module.exports = async function handler(req, res) {
       properties: {
         'Nombre':       { title:     [{ text: { content: nombre } }] },
         'Email':        { email:     email },
+        'Celular':      { phone_number: celular || '' },
         'Institución':  { rich_text: [{ text: { content: institucion || '' } }] },
         'Carrera':      { rich_text: [{ text: { content: carrera  || '' } }] },
         'Tipo':         { select:    { name: tipo || 'Tec' } },
@@ -68,7 +69,7 @@ module.exports = async function handler(req, res) {
       from,
       to: process.env.ADMIN_EMAIL,
       subject: `Nuevo pago pendiente — ${referencia} — ${nombre}`,
-      html: buildEmailAdmin({ nombre, email, institucion, carrera, tipo, boletos, monto, referencia, tieneComprobante: adminAttachments.length > 0 }),
+      html: buildEmailAdmin({ nombre, email, celular, institucion, carrera, tipo, boletos, monto, referencia, tieneComprobante: adminAttachments.length > 0 }),
       attachments: adminAttachments
     });
 
@@ -136,7 +137,7 @@ function buildEmailComprador({ nombre, boletos, monto, referencia }) {
 </html>`;
 }
 
-function buildEmailAdmin({ nombre, email, institucion, carrera, tipo, boletos, monto, referencia, tieneComprobante }) {
+function buildEmailAdmin({ nombre, email, celular, institucion, carrera, tipo, boletos, monto, referencia, tieneComprobante }) {
   return `<!DOCTYPE html>
 <html lang="es">
 <head><meta charset="UTF-8"/></head>
@@ -152,6 +153,7 @@ function buildEmailAdmin({ nombre, email, institucion, carrera, tipo, boletos, m
       <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:10px 0;color:#64748B;width:140px;">Referencia</td><td style="padding:10px 0;font-weight:700;color:#7A00FF;">${referencia}</td></tr>
       <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:10px 0;color:#64748B;">Nombre</td><td style="padding:10px 0;font-weight:600;color:#0f172a;">${nombre}</td></tr>
       <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:10px 0;color:#64748B;">Email</td><td style="padding:10px 0;color:#0f172a;">${email}</td></tr>
+      <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:10px 0;color:#64748B;">Celular</td><td style="padding:10px 0;color:#0f172a;">${celular || '—'}</td></tr>
       <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:10px 0;color:#64748B;">Institución</td><td style="padding:10px 0;color:#0f172a;">${institucion || '—'}${carrera ? ' · ' + carrera : ''}</td></tr>
       <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:10px 0;color:#64748B;">Tipo</td><td style="padding:10px 0;color:#0f172a;">${tipo}</td></tr>
       <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:10px 0;color:#64748B;"># Boletos</td><td style="padding:10px 0;color:#0f172a;">${boletos}</td></tr>
