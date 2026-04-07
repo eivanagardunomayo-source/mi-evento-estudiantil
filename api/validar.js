@@ -13,7 +13,12 @@ module.exports = async function handler(req, res) {
   try {
     const query = await notion.databases.query({
       database_id: process.env.NOTION_DB_ID,
-      filter: { property: 'Token', rich_text: { equals: token } }
+      filter: {
+        and: [
+          { property: 'Token', rich_text: { equals: token } },
+          { property: 'EsBoleto', checkbox: { equals: true } }
+        ]
+      }
     });
 
     if (!query.results.length) {
@@ -23,23 +28,23 @@ module.exports = async function handler(req, res) {
     const page = query.results[0];
     const props = page.properties;
 
-    const estado     = props.Estado?.select?.name || '';
-    const ingresado  = props.Ingresado?.checkbox || false;
-    const nombre     = props.Nombre?.title?.[0]?.plain_text || '';
-    const boletos    = props['# Boletos']?.number || 1;
-    const ref        = props.Referencia?.rich_text?.[0]?.plain_text || '';
-    const tipo       = props.Tipo?.select?.name || '';
-    const horaIngreso = props['Hora Ingreso']?.date?.start || null;
+    const estado       = props.Estado?.select?.name || '';
+    const ingresado    = props.Ingresado?.checkbox || false;
+    const nombre       = props.Nombre?.title?.[0]?.plain_text || '';
+    const ref          = props.Referencia?.rich_text?.[0]?.plain_text || '';
+    const tipo         = props.Tipo?.select?.name || '';
+    const numBoleto    = props.NumBoleto?.number || 1;
+    const totalBoletos = props.TotalBoletos?.number || 1;
+    const horaIngreso  = props['Hora Ingreso']?.date?.start || null;
 
     if (estado !== 'Confirmado') {
       return res.status(200).json({ ok: false, reason: 'not_confirmed', nombre });
     }
 
     if (ingresado) {
-      return res.status(200).json({ ok: false, reason: 'already_used', nombre, boletos, ref, tipo, horaIngreso });
+      return res.status(200).json({ ok: false, reason: 'already_used', nombre, ref, tipo, numBoleto, totalBoletos, horaIngreso });
     }
 
-    // Marcar como ingresado
     const ahora = new Date().toISOString();
     await notion.pages.update({
       page_id: page.id,
@@ -49,7 +54,7 @@ module.exports = async function handler(req, res) {
       }
     });
 
-    return res.status(200).json({ ok: true, nombre, boletos, ref, tipo });
+    return res.status(200).json({ ok: true, nombre, ref, tipo, numBoleto, totalBoletos });
 
   } catch (err) {
     console.error('Error en validar:', err?.message);
