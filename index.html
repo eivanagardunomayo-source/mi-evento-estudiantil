@@ -3041,24 +3041,33 @@ async function enviarRegistro(){
   const matricula = document.getElementById('inp-matricula').value.trim();
   const tipo      = document.getElementById('select-tipo').value;
   const referencia= document.getElementById('ref-value').value;
-
-  const formData = new FormData();
-  formData.append('nombre', nombre);
-  formData.append('email', email);
-  formData.append('matricula', matricula);
-  formData.append('tipo', tipo);
   const { total } = calcPrecio();
-  formData.append('boletos', ticketQty);
-  formData.append('referencia', referencia);
-  formData.append('monto', total);
-  formData.append('comprobante', selectedFile);
 
   const btn = document.getElementById('confirm-btn');
   btn.innerHTML = '<span class="btn-shine"></span>Enviando...';
   btn.disabled = true;
 
+  // Convertir archivo a base64 para enviarlo como JSON
+  let comprobanteBase64 = null;
+  if (selectedFile) {
+    comprobanteBase64 = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(selectedFile);
+    });
+  }
+
   try {
-    await fetch('/api/registro', {method:'POST', body:formData});
+    await fetch('/api/registro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nombre, email, institucion: matricula, carrera: '', tipo,
+        boletos: ticketQty, referencia, monto: total,
+        comprobante: comprobanteBase64
+      })
+    });
   } catch(err){ /* continuar aunque falle la red */ }
 
   // Fill success screen
