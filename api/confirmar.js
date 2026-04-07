@@ -3,6 +3,7 @@ const transporter = require('./_mailer');
 const crypto = require('crypto');
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const base = process.env.BASE_URL || 'https://welcome2thefuture2026.vercel.app';
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -42,7 +43,6 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Este registro ya fue confirmado' });
     }
 
-    const base = process.env.BASE_URL || 'https://welcome2thefuture2026.vercel.app';
     const from = `"Welcome 2 The Future" <${process.env.GMAIL_USER}>`;
     const montoPorBoleto = Math.round(monto / boletos);
     const fecha = new Date().toISOString().split('T')[0];
