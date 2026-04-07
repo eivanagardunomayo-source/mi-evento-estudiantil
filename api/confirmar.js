@@ -119,7 +119,7 @@ function buildTicketBlock({ nombre, ref, tipo, montoPorBoleto, numBoleto, totalB
             <div style="color:#ffffff;font-size:18px;font-weight:900;letter-spacing:0.08em;font-family:Arial,sans-serif;">✦ BOLETO OFICIAL ✦</div>
           </td>
           <td style="text-align:right;vertical-align:middle;width:60px;">
-            <div style="width:52px;height:52px;background:rgba(255,255,255,0.2);border-radius:50%;border:2px solid rgba(255,255,255,0.4);text-align:center;line-height:52px;font-size:22px;font-weight:900;color:#fff;font-family:Arial,sans-serif;display:inline-block;">W</div>
+            <img src="${base}/logo-oficial.png" width="52" height="52" alt="W2TF" style="display:inline-block;border-radius:50%;"/>
           </td>
         </tr>
       </table>
@@ -219,7 +219,7 @@ function buildEmail({ nombre, boletos, ticketBlocks }) {
 
   <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
     <tr><td style="text-align:center;">
-      <div style="display:inline-block;background:linear-gradient(135deg,#7A00FF,#00CFFF);border-radius:50%;width:64px;height:64px;line-height:64px;font-size:28px;color:#fff;font-weight:900;text-align:center;">W</div>
+      <img src="${base}/logo-oficial.png" width="72" height="72" alt="W2TF 2026" style="display:inline-block;border-radius:50%;"/>
       <div style="color:#94A3B8;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;margin-top:10px;">Welcome 2 The Future · 2026</div>
     </td></tr>
   </table>
