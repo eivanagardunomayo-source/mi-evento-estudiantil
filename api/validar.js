@@ -10,13 +10,16 @@ module.exports = async function handler(req, res) {
   const token = req.query.t;
   if (!token) return res.status(400).json({ ok: false, reason: 'no_token' });
 
+  const staffpin  = req.query.staffpin;
+  const isStaff   = staffpin && staffpin === process.env.STAFF_PIN;
+
   try {
     const query = await notion.databases.query({
       database_id: process.env.NOTION_DB_ID,
       filter: {
         and: [
-          { property: 'Token', rich_text: { equals: token } },
-          { property: 'EsBoleto', checkbox: { equals: true } }
+          { property: 'Token',    rich_text: { equals: token } },
+          { property: 'EsBoleto', checkbox:   { equals: true } }
         ]
       }
     });
@@ -25,15 +28,15 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: false, reason: 'not_found' });
     }
 
-    const page = query.results[0];
+    const page  = query.results[0];
     const props = page.properties;
 
     const estado       = props.Estado?.select?.name || '';
-    const ingresado    = props.Ingresado?.checkbox || false;
+    const ingresado    = props.Ingresado?.checkbox  || false;
     const nombre       = props.Nombre?.title?.[0]?.plain_text || '';
     const ref          = props.Referencia?.rich_text?.[0]?.plain_text || '';
     const tipo         = props.Tipo?.select?.name || '';
-    const numBoleto    = props.NumBoleto?.number || 1;
+    const numBoleto    = props.NumBoleto?.number    || 1;
     const totalBoletos = props.TotalBoletos?.number || 1;
     const horaIngreso  = props['Hora Ingreso']?.date?.start || null;
 
@@ -41,8 +44,20 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: false, reason: 'not_confirmed', nombre });
     }
 
+    // Sin PIN de staff → solo lectura (no marca ingresado)
+    if (!isStaff) {
+      return res.status(200).json({
+        ok: true, viewOnly: true,
+        ingresado, nombre, ref, tipo, numBoleto, totalBoletos
+      });
+    }
+
+    // Con PIN de staff → validar entrada
     if (ingresado) {
-      return res.status(200).json({ ok: false, reason: 'already_used', nombre, ref, tipo, numBoleto, totalBoletos, horaIngreso });
+      return res.status(200).json({
+        ok: false, reason: 'already_used',
+        nombre, ref, tipo, numBoleto, totalBoletos, horaIngreso
+      });
     }
 
     const ahora = new Date().toISOString();

@@ -57,17 +57,22 @@
         const res = await fetch('/api/validar?t=' + encodeURIComponent(t));
         const data = await res.json();
 
-        if (data.ok) {
-          card.className = 'card ok';
+        if (data.ok && data.viewOnly) {
+          // Solo lectura — el asistente ve su boleto, no está "ingresando"
+          const estadoIngreso = data.ingresado
+            ? `<div class="status" style="color:#FCD34D;">Ya ingresaste al evento</div>`
+            : `<div class="status">Boleto válido</div>`;
+          card.className = data.ingresado ? 'card warn' : 'card ok';
           card.innerHTML = `
-            <span class="icon">✅</span>
-            <div class="status">Acceso permitido</div>
+            <span class="icon">${data.ingresado ? '✔️' : '🎟️'}</span>
+            ${estadoIngreso}
             <div class="nombre">${data.nombre}</div>
             <div class="badges">
               <span class="badge">${data.tipo || 'Asistente'}</span>
-              <span class="badge">${data.boletos} boleto${data.boletos > 1 ? 's' : ''}</span>
+              <span class="badge">Boleto ${data.numBoleto} de ${data.totalBoletos}</span>
             </div>
             <div class="ref">${data.ref}</div>
+            <p class="sub" style="margin-top:12px;font-size:12px;">Preséntalo al staff en la entrada del evento.</p>
             <div class="brand">W2TF 2026 · BeLAE</div>`;
 
         } else if (data.reason === 'already_used') {

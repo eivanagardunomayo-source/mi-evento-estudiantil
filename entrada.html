@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <title>Entrada · W2TF 2026</title>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#050714;--card:#0f1140;
+      --purple:#7C3AED;--cyan:#22D3EE;
+      --green:#10B981;--red:#EF4444;--yellow:#F59E0B;
+      --text:#CBD5E1;--muted:#64748B;
+    }
+    body{background:var(--bg);color:var(--text);font-family:'Helvetica Neue',Arial,sans-serif;min-height:100vh;min-height:100dvh;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+    @keyframes scanLine{0%{top:8%}100%{top:88%}}
+
+    /* ===== PIN SCREEN ===== */
+    #pin-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;min-height:100dvh;padding:32px 24px;}
+    .pin-logo{width:64px;height:64px;background:linear-gradient(135deg,var(--purple),var(--cyan));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:#fff;margin-bottom:16px;}
+    .pin-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px;}
+    .pin-subtitle{font-size:13px;color:var(--muted);margin-bottom:40px;}
+    .pin-dots{display:flex;gap:16px;margin-bottom:40px;}
+    .pin-dot{width:20px;height:20px;border-radius:50%;border:2px solid rgba(124,58,237,0.4);transition:all .15s;}
+    .pin-dot.filled{background:var(--purple);border-color:var(--purple);}
+    .pin-dots.shake{animation:shake .4s ease;}
+    .pin-keypad{display:grid;grid-template-columns:repeat(3,72px);gap:12px;}
+    .pin-key{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:22px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;user-select:none;-webkit-tap-highlight-color:transparent;}
+    .pin-key:active{background:rgba(124,58,237,0.3);border-color:var(--purple);transform:scale(0.9);}
+    .pin-key.del{font-size:18px;}
+    .pin-key.empty{visibility:hidden;pointer-events:none;}
+    .pin-error{color:#F87171;font-size:13px;margin-top:20px;min-height:20px;text-align:center;}
+
+    /* ===== SCANNER SCREEN ===== */
+    #scanner-screen{display:none;flex-direction:column;min-height:100vh;min-height:100dvh;}
+    .scanner-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:rgba(5,7,20,0.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;}
+    .scanner-header-left{display:flex;align-items:center;gap:10px;}
+    .scanner-logo-sm{width:36px;height:36px;background:linear-gradient(135deg,var(--purple),var(--cyan));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0;}
+    .scanner-title{font-size:15px;font-weight:700;color:#fff;line-height:1.2;}
+    .scanner-sub{font-size:11px;color:var(--muted);}
+    .btn-logout{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;color:#F87171;font-size:12px;font-weight:600;padding:8px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;white-space:nowrap;}
+    .btn-logout:active{opacity:.7;}
+
+    .camera-wrap{position:relative;width:100%;background:#000;overflow:hidden;flex-shrink:0;}
+    #video{width:100%;display:block;object-fit:cover;max-height:60vw;}
+    .cam-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+    .scan-frame{width:200px;height:200px;position:relative;}
+    .sf-tl,.sf-tr,.sf-bl,.sf-br{position:absolute;width:36px;height:36px;border-color:#fff;border-style:solid;}
+    .sf-tl{top:0;left:0;border-width:3px 0 0 3px;border-radius:4px 0 0 0;}
+    .sf-tr{top:0;right:0;border-width:3px 3px 0 0;border-radius:0 4px 0 0;}
+    .sf-bl{bottom:0;left:0;border-width:0 0 3px 3px;border-radius:0 0 0 4px;}
+    .sf-br{bottom:0;right:0;border-width:0 3px 3px 0;border-radius:0 0 4px 0;}
+    .scan-line{position:absolute;left:6px;right:6px;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation:scanLine 2s linear infinite;top:8%;}
+    .cam-hint{position:absolute;bottom:10px;left:0;right:0;text-align:center;color:rgba(255,255,255,0.45);font-size:11px;}
+
+    canvas{display:none;}
+
+    .result-area{flex:1;padding:16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;}
+    .counter-bar{background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:10px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+    .counter-bar .label{font-size:12px;color:var(--muted);}
+    .counter-bar .value{font-size:15px;font-weight:700;color:#A78BFA;}
+
+    .result-card{border-radius:16px;padding:20px;display:flex;align-items:center;gap:14px;border:1px solid;}
+    .result-card.idle{background:rgba(255,255,255,0.02);border-color:rgba(255,255,255,0.06);flex-direction:column;align-items:center;padding:28px;text-align:center;}
+    .result-card.ok{background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.4);}
+    .result-card.fail{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.4);}
+    .result-card.warn{background:rgba(234,179,8,0.08);border-color:rgba(234,179,8,0.35);}
+    .result-card.loading{background:rgba(124,58,237,0.06);border-color:rgba(124,58,237,0.2);justify-content:center;padding:28px;}
+    .r-icon{font-size:42px;flex-shrink:0;}
+    .r-status{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px;}
+    .result-card.ok .r-status{color:#34D399;}
+    .result-card.fail .r-status{color:#F87171;}
+    .result-card.warn .r-status{color:#FCD34D;}
+    .r-nombre{font-size:19px;font-weight:800;color:#fff;margin-bottom:3px;}
+    .r-detail{font-size:12px;color:var(--muted);line-height:1.5;}
+    .spinner{width:32px;height:32px;border:3px solid rgba(124,58,237,0.2);border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite;}
+  </style>
+</head>
+<body>
+
+<!-- PIN Screen -->
+<div id="pin-screen">
+  <div class="pin-logo">W</div>
+  <div class="pin-title">Acceso Staff</div>
+  <div class="pin-subtitle">Welcome 2 The Future 2026</div>
+
+  <div class="pin-dots" id="pin-dots">
+    <div class="pin-dot" id="d0"></div>
+    <div class="pin-dot" id="d1"></div>
+    <div class="pin-dot" id="d2"></div>
+    <div class="pin-dot" id="d3"></div>
+  </div>
+
+  <div class="pin-keypad" id="keypad">
+    <button class="pin-key" data-v="1">1</button>
+    <button class="pin-key" data-v="2">2</button>
+    <button class="pin-key" data-v="3">3</button>
+    <button class="pin-key" data-v="4">4</button>
+    <button class="pin-key" data-v="5">5</button>
+    <button class="pin-key" data-v="6">6</button>
+    <button class="pin-key" data-v="7">7</button>
+    <button class="pin-key" data-v="8">8</button>
+    <button class="pin-key" data-v="9">9</button>
+    <button class="pin-key empty" aria-hidden="true"></button>
+    <button class="pin-key" data-v="0">0</button>
+    <button class="pin-key del" id="del-btn">⌫</button>
+  </div>
+
+  <div class="pin-error" id="pin-error"></div>
+</div>
+
+<!-- Scanner Screen -->
+<div id="scanner-screen">
+  <div class="scanner-header">
+    <div class="scanner-header-left">
+      <div class="scanner-logo-sm">W</div>
+      <div>
+        <div class="scanner-title">Control de Entrada</div>
+        <div class="scanner-sub">W2TF 2026 · 15 mayo</div>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
+  </div>
+
+  <div class="camera-wrap">
+    <video id="video" playsinline autoplay muted></video>
+    <div class="cam-overlay">
+      <div class="scan-frame">
+        <div class="sf-tl"></div><div class="sf-tr"></div>
+        <div class="sf-bl"></div><div class="sf-br"></div>
+        <div class="scan-line"></div>
+      </div>
+    </div>
+    <div class="cam-hint" id="cam-hint">Apunta la cámara al código QR del boleto</div>
+  </div>
+
+  <canvas id="canvas"></canvas>
+
+  <div class="result-area">
+    <div class="counter-bar">
+      <span class="label">Boletos validados hoy</span>
+      <span class="value" id="counter">0</span>
+    </div>
+    <div class="result-card idle" id="result-card">
+      <div style="font-size:36px;margin-bottom:8px;">📷</div>
+      <div style="color:#475569;font-size:13px;">Esperando escaneo…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PIN_KEY   = 'w2tf_staff_pin';
+const COUNT_KEY = 'w2tf_count_' + new Date().toDateString();
+
+let pin = '';
+let isProcessing = false;
+let scanCount = parseInt(localStorage.getItem(COUNT_KEY) || '0');
+document.getElementById('counter').textContent = scanCount;
+
+// ── PIN ──────────────────────────────────────────────────────────
+function updateDots() {
+  for (let i = 0; i < 4; i++)
+    document.getElementById('d' + i).classList.toggle('filled', i < pin.length);
+}
+
+document.getElementById('keypad').addEventListener('click', e => {
+  const key = e.target.closest('.pin-key');
+  if (!key || key.classList.contains('empty')) return;
+  if (key.id === 'del-btn') { pin = pin.slice(0, -1); updateDots(); return; }
+  if (pin.length >= 4) return;
+  pin += key.dataset.v;
+  updateDots();
+  if (pin.length === 4) submitPin();
+});
+
+async function submitPin() {
+  const entered = pin;
+  document.getElementById('pin-error').textContent = '';
+  try {
+    const res  = await fetch('/api/staff-auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pin: entered })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      localStorage.setItem(PIN_KEY, entered);
+      showScanner();
+    } else {
+      shakeAndReset('PIN incorrecto');
+    }
+  } catch {
+    shakeAndReset('Error de conexión');
+  }
+}
+
+function shakeAndReset(msg) {
+  pin = '';
+  updateDots();
+  document.getElementById('pin-error').textContent = msg;
+  const dots = document.getElementById('pin-dots');
+  dots.classList.add('shake');
+  dots.addEventListener('animationend', () => dots.classList.remove('shake'), { once: true });
+}
+
+function logout() {
+  localStorage.removeItem(PIN_KEY);
+  stopCamera();
+  document.getElementById('scanner-screen').style.display = 'none';
+  document.getElementById('pin-screen').style.display    = 'flex';
+  pin = '';
+  updateDots();
+  document.getElementById('pin-error').textContent = '';
+}
+
+// ── CAMERA ───────────────────────────────────────────────────────
+const video  = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const ctx    = canvas.getContext('2d');
+let rafId    = null;
+let lastData = '';
+let lastTime = 0;
+
+async function startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 } }
+    });
+    video.srcObject = stream;
+    await video.play();
+    rafId = requestAnimationFrame(tick);
+  } catch {
+    document.getElementById('cam-hint').textContent = 'No se pudo acceder a la cámara — revisa los permisos';
+  }
+}
+
+function stopCamera() {
+  if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  if (video.srcObject) { video.srcObject.getTracks().forEach(t => t.stop()); video.srcObject = null; }
+}
+
+function tick() {
+  rafId = requestAnimationFrame(tick);
+  if (isProcessing || video.readyState !== video.HAVE_ENOUGH_DATA) return;
+  canvas.width  = video.videoWidth;
+  canvas.height = video.videoHeight;
+  ctx.drawImage(video, 0, 0);
+  const img  = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const code = jsQR(img.data, img.width, img.height, { inversionAttempts: 'dontInvert' });
+  if (!code) return;
+  const now = Date.now();
+  if (code.data === lastData && now - lastTime < 5000) return;
+  lastData = code.data;
+  lastTime = now;
+  processQR(code.data);
+}
+
+function extractToken(text) {
+  try { return new URL(text).searchParams.get('t') || text; }
+  catch { return text; }
+}
+
+async function processQR(raw) {
+  isProcessing = true;
+  const token = extractToken(raw);
+  const storedPin = localStorage.getItem(PIN_KEY);
+  const card = document.getElementById('result-card');
+  card.className = 'result-card loading';
+  card.innerHTML = '<div class="spinner"></div>';
+
+  try {
+    const res  = await fetch(`/api/validar?t=${encodeURIComponent(token)}&staffpin=${encodeURIComponent(storedPin)}`);
+    const data = await res.json();
+    renderResult(data);
+  } catch {
+    card.className = 'result-card fail';
+    card.innerHTML = `<div class="r-icon">⚠️</div><div><div class="r-status">Error</div><div class="r-detail">Sin conexión — intenta de nuevo</div></div>`;
+  } finally {
+    setTimeout(() => { isProcessing = false; }, 3500);
+  }
+}
+
+function renderResult(d) {
+  const card = document.getElementById('result-card');
+  if (d.ok && !d.viewOnly) {
+    scanCount++;
+    localStorage.setItem(COUNT_KEY, scanCount);
+    document.getElementById('counter').textContent = scanCount;
+    card.className = 'result-card ok';
+    card.innerHTML = `<div class="r-icon">✅</div><div><div class="r-status">Acceso permitido</div><div class="r-nombre">${d.nombre}</div><div class="r-detail">${d.tipo || 'Asistente'} · Boleto ${d.numBoleto} de ${d.totalBoletos}<br>${d.ref}</div></div>`;
+  } else if (d.reason === 'already_used') {
+    card.className = 'result-card fail';
+    card.innerHTML = `<div class="r-icon">🚫</div><div><div class="r-status">Ya ingresó</div><div class="r-nombre">${d.nombre}</div><div class="r-detail">Este boleto ya fue utilizado</div></div>`;
+  } else if (d.reason === 'not_confirmed') {
+    card.className = 'result-card warn';
+    card.innerHTML = `<div class="r-icon">⚠️</div><div><div class="r-status">Pago no confirmado</div><div class="r-nombre">${d.nombre || '—'}</div><div class="r-detail">El pago aún no ha sido aprobado</div></div>`;
+  } else if (d.reason === 'not_found') {
+    card.className = 'result-card fail';
+    card.innerHTML = `<div class="r-icon">❌</div><div><div class="r-status">Código inválido</div><div class="r-detail">No corresponde a ningún boleto</div></div>`;
+  } else {
+    card.className = 'result-card fail';
+    card.innerHTML = `<div class="r-icon">❌</div><div><div class="r-status">Error</div><div class="r-detail">${d.reason || 'Intenta de nuevo'}</div></div>`;
+  }
+}
+
+function showScanner() {
+  document.getElementById('pin-screen').style.display    = 'none';
+  document.getElementById('scanner-screen').style.display = 'flex';
+  startCamera();
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+const saved = localStorage.getItem(PIN_KEY);
+if (saved) {
+  fetch('/api/staff-auth', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pin: saved })
+  })
+  .then(r => r.json())
+  .then(d => { if (d.ok) showScanner(); else localStorage.removeItem(PIN_KEY); })
+  .catch(() => showScanner()); // offline: confiar en localStorage
+}
+</script>
+</body>
+</html>
