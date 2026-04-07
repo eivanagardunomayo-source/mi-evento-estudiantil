@@ -175,6 +175,13 @@
       .hero-split{grid-template-columns:1fr;gap:32px;}
       .hero-left{align-items:center;text-align:center;}
     }
+    @media(max-width:600px){
+      #hero{padding-top:140px;}
+      .nav-links{display:none;}
+      #nav{gap:14px;padding:10px 16px;}
+      .hero-cta-main{font-size:0.92rem!important;padding:15px 22px!important;white-space:nowrap;}
+      h1.hero-title{font-size:clamp(2.8rem,12vw,4rem);}
+    }
     #hero-stars{position:absolute;inset:0;pointer-events:none;}
     .star{
       position:absolute;border-radius:50%;
