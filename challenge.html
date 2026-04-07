@@ -97,6 +97,7 @@
       content:'';display:block;
       width:32px;height:1px;background:var(--cyan);
     }
+    .hero-event-logo{width:clamp(100px,18vw,160px);margin-bottom:24px;filter:brightness(0) invert(1);opacity:0.88;}
     .hero-title{
       font-size:clamp(4rem,12vw,9rem);
       font-weight:900;line-height:0.9;letter-spacing:-0.03em;
@@ -139,10 +140,14 @@
     .btn-outline:hover{background:rgba(0,207,255,0.08);transform:translateY(-2px);}
     .hero-meta{
       margin-top:28px;
-      font-size:0.9rem;
+      display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 20px;
+      font-size:0.82rem;
       color:rgba(255,255,255,0.5);
       letter-spacing:0.02em;
     }
+    .hero-meta-item{display:inline-flex;align-items:center;gap:6px;}
+    .hero-meta-item svg{flex-shrink:0;opacity:0.7;}
+    .hero-meta-sep{color:rgba(255,255,255,0.2);}
     .scroll-indicator{
       position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
       font-size:1.5rem;color:rgba(255,255,255,0.3);
@@ -195,7 +200,7 @@
       transition:transform 0.25s var(--ease-out-expo),box-shadow 0.25s;
     }
     .feature-card:hover{transform:translateY(-4px);box-shadow:0 0 28px rgba(122,0,255,0.18);}
-    .feature-icon{font-size:1.8rem;margin-bottom:12px;}
+    .feature-icon{margin-bottom:12px;color:var(--cyan);}
     .feature-title{font-size:1rem;font-weight:700;margin-bottom:6px;}
     .feature-desc{font-size:0.875rem;color:rgba(255,255,255,0.55);}
 
@@ -211,7 +216,7 @@
       transition:transform 0.25s var(--ease-out-expo),box-shadow 0.25s;
     }
     .audience-card:hover{transform:translateY(-4px);box-shadow:0 0 28px rgba(122,0,255,0.18);}
-    .audience-icon{font-size:2rem;margin-bottom:14px;}
+    .audience-icon{margin-bottom:14px;color:var(--cyan);}
     .audience-title{font-size:1rem;font-weight:700;margin-bottom:8px;}
     .audience-desc{font-size:0.875rem;color:rgba(255,255,255,0.6);line-height:1.6;}
 
@@ -382,7 +387,7 @@
     .meta-badges{
       display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;
     }
-    .meta-badge{
+    .meta-badge{display:inline-flex;align-items:center;gap:6px;
       background:var(--card-bg);border:1px solid var(--card-border);
       border-radius:100px;padding:8px 16px;
       font-size:0.8rem;color:rgba(255,255,255,0.55);
@@ -531,7 +536,8 @@
       .cta-btns .btn-primary,.cta-btns .btn-outline{text-align:center;}
     }
     @media(max-width:480px){
-      .hero-title{font-size:3.5rem;}
+      .hero-event-logo{width:clamp(100px,18vw,160px);margin-bottom:24px;filter:brightness(0) invert(1);opacity:0.88;}
+    .hero-title{font-size:3.5rem;}
       .nazca-big{font-size:4.5rem;}
     }
   </style>
@@ -550,10 +556,26 @@
 
   <div class="hero-content">
     <div class="eyebrow">2da Edici&#243;n &middot; Convocatoria Abierta</div>
+    <img src="/logo.png" alt="Welcome 2 The Future" class="hero-event-logo reveal"/>
     <h1 class="hero-title">THE CHALLENGE</h1>
-    <p class="hero-tagline">No te falta experiencia. Te falta que alguien apueste por ti.</p>
+    <p class="hero-tagline">Una plataforma para las ideas que buscan ir m&#225;s lejos.</p>
     <button class="btn-primary" onclick="openModal()">Inscribirme ahora &#8599;</button>
-    <p class="hero-meta">&#128197; 15 de mayo, 2026 &nbsp;&middot;&nbsp; &#128205; Tec de Monterrey &middot; CCM &nbsp;&middot;&nbsp; &#127903; Gratis &nbsp;&middot;&nbsp; 1 a 5 personas</p>
+    <div class="hero-meta">
+      <span class="hero-meta-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M1 5.5h12M4.5 1v2.5M9.5 1v2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        5 de mayo &middot; Cierre de inscripciones
+      </span>
+      <span class="hero-meta-sep">&middot;</span>
+      <span class="hero-meta-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1a4.5 4.5 0 0 1 4.5 4.5c0 4-4.5 8-4.5 8S2.5 9.5 2.5 5.5A4.5 4.5 0 0 1 7 1z" stroke="currentColor" stroke-width="1.4"/><circle cx="7" cy="5.5" r="1.5" fill="currentColor"/></svg>
+        15 de mayo &middot; Gran final en Tec de Monterrey CCM
+      </span>
+      <span class="hero-meta-sep">&middot;</span>
+      <span class="hero-meta-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.8 3.8 4.2.6-3 3 .7 4.2L7 10.5l-3.7 2.1.7-4.2-3-3 4.2-.6L7 1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        Aplicaci&#243;n gratuita
+      </span>
+    </div>
   </div>
 
   <div class="scroll-indicator">&#8595;</div>
@@ -569,22 +591,22 @@
 
   <div class="features-grid">
     <div class="feature-card reveal reveal-delay-1">
-      <div class="feature-icon">&#129504;</div>
+      <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2a7 7 0 0 1 4 12.3V17a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-2.7A7 7 0 0 1 11 2z" stroke="currentColor" stroke-width="1.5"/><path d="M8.5 20h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M9 14.5h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
       <div class="feature-title">Innovaci&#243;n real</div>
       <div class="feature-desc">Ideas que resuelven problemas concretos</div>
     </div>
     <div class="feature-card reveal reveal-delay-2">
-      <div class="feature-icon">&#128640;</div>
+      <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3c4-1.5 7.5 0 7.5 7 0 3.5-2 6.5-3.5 8.5l-4-4-4 4C5.5 16.5 3.5 13.5 3.5 10c0-7 3.5-8.5 7.5-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="11" cy="10" r="2" stroke="currentColor" stroke-width="1.5"/></svg></div>
       <div class="feature-title">Cualquier etapa</div>
       <div class="feature-desc">Idea, prototipo, MVP o primeros usuarios</div>
     </div>
     <div class="feature-card reveal reveal-delay-3">
-      <div class="feature-icon">&#128101;</div>
+      <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="8" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 19c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="16" cy="8" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M18.5 19c0-2.5-1.6-4.6-3.8-5.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
       <div class="feature-title">1 a 5 personas</div>
       <div class="feature-desc">Equipos peque&#241;os, impacto grande</div>
     </div>
     <div class="feature-card reveal reveal-delay-4">
-      <div class="feature-icon">&#9889;</div>
+      <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2l2.4 5 5.6.8-4 4 .9 5.5L11 14.7l-4.9 2.6.9-5.5-4-4 5.6-.8L11 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
       <div class="feature-title">Aplicaci&#243;n gratis</div>
       <div class="feature-desc">Sin barreras de entrada, sin excusas</div>
     </div>
@@ -601,22 +623,22 @@
 
   <div class="audience-grid">
     <div class="audience-card reveal reveal-delay-1">
-      <div class="audience-icon">&#127891;</div>
+      <div class="audience-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 4L2 9l9 5 9-5-9-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 11.5v3.5c2 1.5 8 1.5 10 0v-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M20 9v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
       <div class="audience-title">Estudiantes Tec de Monterrey</div>
       <div class="audience-desc">Cualquier carrera. Cualquier campus. Si estudias en el Tec, tienes un lugar en la mesa.</div>
     </div>
     <div class="audience-card reveal reveal-delay-2">
-      <div class="audience-icon">&#127760;</div>
+      <div class="audience-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M11 2c-2.5 3-2.5 14 0 18M11 2c2.5 3 2.5 14 0 18M2 11h18" stroke="currentColor" stroke-width="1.5"/></svg></div>
       <div class="audience-title">Exatecs</div>
       <div class="audience-desc">Si ya egresaste pero sigues con esa chispa emprendedora, este espacio tambi&#233;n es tuyo.</div>
     </div>
     <div class="audience-card reveal reveal-delay-3">
-      <div class="audience-icon">&#128640;</div>
+      <div class="audience-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M2 8l9-5 9 5-9 5-9-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M2 13l9 5 9-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
       <div class="audience-title">Proyectos en cualquier etapa</div>
       <div class="audience-desc">Idea en papel, prototipo, MVP, primeros usuarios o generando ingresos. Todas son bienvenidas.</div>
     </div>
     <div class="audience-card reveal reveal-delay-4">
-      <div class="audience-icon">&#128187;</div>
+      <div class="audience-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="7" y="7" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M10 2v3M12 2v3M10 17v3M12 17v3M2 10h3M2 12h3M17 10h3M17 12h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
       <div class="audience-title">Tech-driven</div>
       <div class="audience-desc">IA, IoT, transformaci&#243;n digital &#8212; si la tecnolog&#237;a es parte de tu soluci&#243;n, encajas perfectamente.</div>
     </div>
@@ -649,7 +671,7 @@
 
   <div class="nazca-cards">
     <div class="nazca-info-card reveal">
-      <div class="card-icon">&#127942;</div>
+      <div class="card-icon" style="color:var(--cyan)"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 14c-3.3 0-6-2.7-6-6V4h12v4c0 3.3-2.7 6-6 6z" stroke="currentColor" stroke-width="1.5"/><path d="M5 6H3a2 2 0 0 0 0 4h2M17 6h2a2 2 0 0 0 0 4h-2M11 14v3M8 17h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M7 20h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
       <div class="card-title">Portafolio de clase mundial</div>
       <div class="card-body">
         Han respaldado a empresas como Kavak, Luuna, Ben &amp; Frank y muchas m&#225;s. Su red incluye +400 co-inversionistas globales, desde Sequoia hasta Andreessen Horowitz.
@@ -659,7 +681,7 @@
       </div>
     </div>
     <div class="nazca-info-card reveal">
-      <div class="card-icon">&#129504;</div>
+      <div class="card-icon" style="color:var(--purple)"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M9 4C6.5 4 4 6 4 9c0 1.5.5 2.8 1.3 3.8C4.5 13.5 4 14.7 4 16c0 2 1.5 3 3 3h2M13 4c2.5 0 5 2 5 5 0 1.5-.5 2.8-1.3 3.8.8.7 1.3 1.9 1.3 3.2 0 2-1.5 3-3 3h-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M9 4v15M13 4v15M9 11h4M9 8h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
       <div class="card-title">Feedback que importa</div>
       <div class="card-body">
         Vas a recibir feedback de personas que eval&#250;an proyectos de innovaci&#243;n profesionalmente todos los d&#237;as. Su perspectiva puede ahorrarte meses de aprendizaje.
@@ -684,22 +706,22 @@
 
   <div class="prizes-grid">
     <div class="prize-card reveal">
-      <div class="prize-icon">&#9889;</div>
+      <div class="prize-icon" style="color:var(--cyan)"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M13.5 2L4 13h7l-2.5 7 9.5-11h-7l2.5-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
       <div class="prize-title">Si eres Finalista</div>
       <ul class="prize-list">
-        <li><span>&#10003;</span><span>Pitch en vivo frente al equipo de Nazca</span></li>
-        <li><span>&#10003;</span><span>Feedback directo y detallado de inversionistas profesionales</span></li>
-        <li><span>&#10003;</span><span>Acceso completo al summit Welcome to the Future</span></li>
-        <li><span>&#10003;</span><span>Visibilidad frente a la comunidad de innovaci&#243;n y emprendimiento</span></li>
+        <li><span style="color:var(--cyan);display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Pitch en vivo frente al equipo de Nazca</span></li>
+        <li><span style="color:var(--cyan);display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Feedback directo y detallado de inversionistas profesionales</span></li>
+        <li><span style="color:var(--cyan);display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Acceso completo al summit Welcome to the Future</span></li>
+        <li><span style="color:var(--cyan);display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Visibilidad frente a la comunidad de innovaci&#243;n y emprendimiento</span></li>
       </ul>
     </div>
     <div class="prize-card winner reveal">
-      <div class="prize-icon">&#127942;</div>
+      <div class="prize-icon" style="color:#FF9900"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 14c-3.3 0-6-2.7-6-6V4h12v4c0 3.3-2.7 6-6 6z" stroke="currentColor" stroke-width="1.5"/><path d="M5 6H3a2 2 0 0 0 0 4h2M17 6h2a2 2 0 0 0 0 4h-2M11 14v3M8 17h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M7 20h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
       <div class="prize-title">Si eres el Equipo Ganador</div>
       <ul class="prize-list">
-        <li><span>&#127942;</span><span>Acceso directo a las oficinas de Nazca &#8212; donde se han tomado las decisiones detr&#225;s de Kavak, Ben &amp; Frank y +90 empresas</span></li>
-        <li><span>&#127942;</span><span>Sesi&#243;n de trabajo uno a uno con el equipo de Nazca</span></li>
-        <li><span>&#127942;</span><span>La oportunidad de que tu proyecto est&#233; en el radar de quienes deciden en qu&#233; se invierte</span></li>
+        <li><span style="color:#FF9900;display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="9" r="4" stroke="currentColor" stroke-width="1.4"/><path d="M5 5L3 1h8L9 5" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span><span>Acceso directo a las oficinas de Nazca &#8212; donde se han tomado las decisiones detr&#225;s de Kavak, Ben &amp; Frank y +90 empresas</span></li>
+        <li><span style="color:#FF9900;display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="9" r="4" stroke="currentColor" stroke-width="1.4"/><path d="M5 5L3 1h8L9 5" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span><span>Sesi&#243;n de trabajo uno a uno con el equipo de Nazca</span></li>
+        <li><span style="color:#FF9900;display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="9" r="4" stroke="currentColor" stroke-width="1.4"/><path d="M5 5L3 1h8L9 5" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span><span>La oportunidad de que tu proyecto est&#233; en el radar de quienes deciden en qu&#233; se invierte</span></li>
       </ul>
     </div>
   </div>
@@ -718,7 +740,7 @@
       <div>
         <div class="timeline-dot"></div>
         <div class="timeline-label">Marzo 2026</div>
-        <div class="timeline-title">&#128640; Apertura de aplicaciones</div>
+        <div class="timeline-title">Apertura de aplicaciones</div>
         <div class="timeline-desc">La convocatoria est&#225; abierta. Es momento de dar el primer paso.</div>
       </div>
     </div>
@@ -727,7 +749,7 @@
       <div>
         <div class="timeline-dot"></div>
         <div class="timeline-label">Abril 2026</div>
-        <div class="timeline-title">&#9200; Cierre de aplicaciones</div>
+        <div class="timeline-title">Cierre de aplicaciones</div>
         <div class="timeline-desc">&#218;ltima oportunidad para enviar tu proyecto. No dejes para ma&#241;ana lo que puedes construir hoy.</div>
       </div>
     </div>
@@ -736,7 +758,7 @@
       <div>
         <div class="timeline-dot"></div>
         <div class="timeline-label">Mayo 2026</div>
-        <div class="timeline-title">&#129504; Revisi&#243;n y posible contacto</div>
+        <div class="timeline-title">Revisi&#243;n y posible contacto</div>
         <div class="timeline-desc">El equipo eval&#250;a los proyectos. Podr&#237;amos buscarte para entrevistas o aclaraciones.</div>
       </div>
     </div>
@@ -745,7 +767,7 @@
       <div>
         <div class="timeline-dot"></div>
         <div class="timeline-label">Mayo 2026</div>
-        <div class="timeline-title">&#9889; Anuncio de finalistas</div>
+        <div class="timeline-title">Anuncio de finalistas</div>
         <div class="timeline-desc">Los equipos seleccionados son notificados. Confirma tu asistencia inmediatamente.</div>
       </div>
     </div>
@@ -754,14 +776,14 @@
       <div>
         <div class="timeline-dot"></div>
         <div class="timeline-label">Mayo 2026</div>
-        <div class="timeline-title">&#127942; Final presencial</div>
+        <div class="timeline-title">Final presencial</div>
         <div class="timeline-desc">Tec de Monterrey &middot; Campus CCM. El d&#237;a que tu idea compite frente a Nazca.</div>
       </div>
     </div>
   </div>
 
   <div class="timeline-note reveal">
-    &#8505;&#65039; <strong>Nota importante:</strong> Est&#233;n muy atentos a los medios de contacto que pongan en su aplicaci&#243;n. Podr&#237;amos buscarlos para entrevistas o aclaraciones durante el proceso de selecci&#243;n.
+    <span style="color:var(--cyan);display:inline-flex;vertical-align:middle;margin-right:6px"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v5M8 5v.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><strong>Nota importante:</strong> Est&#233;n muy atentos a los medios de contacto que pongan en su aplicaci&#243;n. Podr&#237;amos buscarlos para entrevistas o aclaraciones durante el proceso de selecci&#243;n.
   </div>
 
   <button class="btn-primary reveal" onclick="openModal()">Inscribirme ahora &#8594;</button>
@@ -774,22 +796,22 @@
 
   <div class="faq-grid">
     <div class="faq-card reveal reveal-delay-1">
-      <div class="faq-icon">&#128176;</div>
+      <div class="faq-icon" style="color:var(--cyan)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v10M9.5 9.5c0-1 1-1.5 2.5-1.5s2.5.5 2.5 1.5-1 1.5-2.5 1.5-2.5.5-2.5 1.5 1 1.5 2.5 1.5 2.5-.5 2.5-1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
       <div class="faq-q">&#191;Tiene costo?</div>
       <div class="faq-a">No. Aplicar es completamente gratis. Si eres finalista, tu equipo entra al evento sin costo. Si no quedas, asiste al summit por $200 MXN con 20% de descuento por haber aplicado.</div>
     </div>
     <div class="faq-card reveal reveal-delay-2">
-      <div class="faq-icon">&#128205;</div>
+      <div class="faq-icon" style="color:var(--magenta)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2a7 7 0 0 1 7 7c0 5.5-7 13-7 13S5 14.5 5 9a7 7 0 0 1 7-7z" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="9" r="2.5" fill="currentColor"/></svg></div>
       <div class="faq-q">&#191;La final es presencial?</div>
       <div class="faq-a">S&#237;. No hay opci&#243;n remota. Los equipos que no se presenten el 15 de mayo en Tec de Monterrey Campus CCM pierden su lugar autom&#225;ticamente.</div>
     </div>
     <div class="faq-card reveal reveal-delay-3">
-      <div class="faq-icon">&#128652;</div>
+      <div class="faq-icon" style="color:var(--purple)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3 9h18M8 17v2M16 17v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="14" r="1.5" fill="currentColor"/><circle cx="16" cy="14" r="1.5" fill="currentColor"/></svg></div>
       <div class="faq-q">&#191;Gastos de transporte?</div>
       <div class="faq-a">Cada equipo cubre sus propios gastos de transporte y hospedaje. Ninguna instituci&#243;n organizadora se hace responsable de estos costos.</div>
     </div>
     <div class="faq-card reveal reveal-delay-4">
-      <div class="faq-icon">&#8599;&#65039;</div>
+      <div class="faq-icon" style="color:var(--cyan)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="faq-q">&#191;Qu&#233; pasa despu&#233;s?</div>
       <div class="faq-a">El equipo ganador podr&#225; coordinar con Nazca para seguimiento y visita a sus oficinas. Una puerta que muy pocos logran abrir.</div>
     </div>
@@ -811,10 +833,10 @@
     <a href="#que-es" class="btn-outline">Conocer m&#225;s</a>
   </div>
   <div class="meta-badges reveal">
-    <span class="meta-badge">&#128176; Aplicaci&#243;n gratuita</span>
-    <span class="meta-badge">&#128101; Equipos de 1 a 5</span>
-    <span class="meta-badge">&#128197; Final 15 Mayo 2026</span>
-    <span class="meta-badge">&#128205; Tec CCM &middot; CDMX</span>
+    <span class="meta-badge"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="5.5" width="12" height="7" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M7 5.5V12.5M1 8.5h12M4.5 5.5c0-1.5 2.5-4 2.5-4s2.5 2.5 2.5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> Aplicaci&#243;n gratuita</span>
+    <span class="meta-badge"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="5" cy="4.5" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M1 12c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="10.5" cy="5" r="1.7" stroke="currentColor" stroke-width="1.3"/><path d="M12.3 12c0-1.7-1.1-3.2-2.7-3.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> Equipos de 1 a 5</span>
+    <span class="meta-badge"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 5.5h12M4.5 1v2.5M9.5 1v2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> Final 15 Mayo 2026</span>
+    <span class="meta-badge"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1a4 4 0 0 1 4 4c0 3.5-4 8-4 8S3 8.5 3 5a4 4 0 0 1 4-4z" stroke="currentColor" stroke-width="1.3"/><circle cx="7" cy="5" r="1.3" fill="currentColor"/></svg> Tec CCM &middot; CDMX</span>
   </div>
 </div>
 
@@ -822,7 +844,7 @@
 <footer>
   <p class="footer-copy">&#169; 2026 The Challenge &middot; Welcome 2 The Future &middot; BeLAE &#215; Nazca</p>
   <div class="footer-logos">
-    <img src="/logos/logo-belae.png" alt="BeLAE" />
+    <img src="/logo-belae.png" alt="BeLAE" />
     <img src="/logo-nazca2.png" alt="Nazca" />
   </div>
 </footer>
@@ -838,8 +860,8 @@
     <p class="modal-date">Cierre de inscripciones: <strong>24 de abril, 2026</strong></p>
 
     <div class="tab-row">
-      <button class="tab-btn active" onclick="switchTab('form')">&#128221; Formulario</button>
-      <button class="tab-btn" onclick="switchTab('gforms')">&#128202; Google Forms</button>
+      <button class="tab-btn active" onclick="switchTab('form')" style="display:inline-flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="1" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 4.5h5M4.5 7h5M4.5 9.5h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> Formulario</button>
+      <button class="tab-btn" onclick="switchTab('gforms')" style="display:inline-flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 5.5h12M1 9h12M5.5 1v12" stroke="currentColor" stroke-width="1.3"/></svg> Google Forms</button>
     </div>
 
     <!-- Tab: Formulario -->
@@ -920,7 +942,7 @@
     <!-- Tab: Google Forms -->
     <div class="tab-panel" id="tab-gforms">
       <div class="gforms-placeholder">
-        <p>&#128279; <strong>Formulario externo</strong></p>
+        <p><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="display:inline;vertical-align:middle;margin-right:4px"><path d="M6 2H3a1.5 1.5 0 0 0-1.5 1.5v7A1.5 1.5 0 0 0 3 12h8a1.5 1.5 0 0 0 1.5-1.5V8M8.5 1.5h4v4M12.5 1.5l-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> <strong>Formulario externo</strong></p>
         <p style="margin-top:12px;">Cuando tengas tu Google Form listo, reemplaza este bloque con un iframe o bot&#243;n que redirija al formulario externo.</p>
         <p style="margin-top:12px;font-size:0.8rem;opacity:0.6;">Ejemplo: <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;">&lt;iframe src="https://docs.google.com/forms/..." width="100%" height="600"&gt;&lt;/iframe&gt;</code></p>
       </div>
