@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>The Challenge — 2da Edición · Welcome 2 The Future 2026</title>
-  <meta name="description" content="El concurso de emprendimiento estudiantil de Welcome to the Future. Presenta tu proyecto frente a Nazca. 15 de mayo de 2026, Tec de Monterrey CDMX."/>
+  <meta name="description" content="El concurso de emprendimiento estudiantil de Welcome 2 The Future. Presenta tu proyecto frente a Nazca. 15 de mayo de 2026, Tec de Monterrey CDMX."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet"/>
@@ -145,8 +145,8 @@
       color:rgba(255,255,255,0.5);
       letter-spacing:0.02em;
     }
-    .hero-meta-item{display:inline-flex;align-items:center;gap:6px;}
-    .hero-meta-item svg{flex-shrink:0;opacity:0.7;}
+    .hero-meta-item{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.75);}
+    .hero-meta-item svg{flex-shrink:0;color:var(--cyan);}
     .hero-meta-sep{color:rgba(255,255,255,0.2);}
     .scroll-indicator{
       position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
@@ -282,7 +282,7 @@
       line-height:1.7;
     }
     .nazca-logo-wrap{margin:0 auto 40px;display:flex;justify-content:center;}
-    .nazca-logo-wrap img{height:36px;opacity:0.75;filter:brightness(0) invert(1);}
+    .nazca-logo-wrap{flex-direction:column;align-items:center;}.nazca-logo-wrap img{height:64px;opacity:0.85;filter:brightness(0) invert(1);}
 
     /* ─── Section 4 · Premios ───────────────────────── */
     .prizes-grid{
@@ -556,12 +556,12 @@
 
   <div class="hero-content">
     <div class="eyebrow">2da Edici&#243;n &middot; Convocatoria Abierta</div>
-    <img src="/logo.png" alt="Welcome 2 The Future" class="hero-event-logo reveal"/>
+    <img src="/logo-w2tf.png" alt="Welcome 2 The Future" class="hero-event-logo reveal"/>
     <h1 class="hero-title">THE CHALLENGE</h1>
     <p class="hero-tagline">Una plataforma para las ideas que buscan ir m&#225;s lejos.</p>
     <button class="btn-primary" onclick="openModal()">Inscribirme ahora &#8599;</button>
     <div class="hero-meta">
-      <span class="hero-meta-item">
+      <span class="hero-meta-item" style="color:var(--cyan);">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M1 5.5h12M4.5 1v2.5M9.5 1v2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         5 de mayo &middot; Cierre de inscripciones
       </span>
@@ -602,13 +602,13 @@
     </div>
     <div class="feature-card reveal reveal-delay-3">
       <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="8" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 19c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="16" cy="8" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M18.5 19c0-2.5-1.6-4.6-3.8-5.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-      <div class="feature-title">1 a 5 personas</div>
-      <div class="feature-desc">Equipos peque&#241;os, impacto grande</div>
+      <div class="feature-title">1 a 7 personas</div>
+      <div class="feature-desc">Equipos con gran impacto</div>
     </div>
     <div class="feature-card reveal reveal-delay-4">
       <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2l2.4 5 5.6.8-4 4 .9 5.5L11 14.7l-4.9 2.6.9-5.5-4-4 5.6-.8L11 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
       <div class="feature-title">Aplicaci&#243;n gratis</div>
-      <div class="feature-desc">Sin barreras de entrada, sin excusas</div>
+      <div class="feature-desc">Sin barreras de entrada</div>
     </div>
   </div>
 
@@ -640,7 +640,7 @@
     <div class="audience-card reveal reveal-delay-4">
       <div class="audience-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="7" y="7" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M10 2v3M12 2v3M10 17v3M12 17v3M2 10h3M2 12h3M17 10h3M17 12h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
       <div class="audience-title">Tech-driven</div>
-      <div class="audience-desc">IA, IoT, transformaci&#243;n digital &#8212; si la tecnolog&#237;a es parte de tu soluci&#243;n, encajas perfectamente.</div>
+      <div class="audience-desc">IA, IoT, transformaci&#243;n digital &#8212; si la tecnolog&#237;a es parte de tu soluci&#243;n, encajas perfectamente. Cualquier tecnolog&#237;a es v&#225;lida.</div>
     </div>
   </div>
 
@@ -689,10 +689,9 @@
     </div>
   </div>
 
-  <p class="nazca-quote reveal">&#8220;Esto no es un proceso de inversi&#243;n. Es algo mejor: claridad real sobre tu proyecto de parte de quienes han evaluado miles.&#8221;</p>
-
   <div class="nazca-logo-wrap reveal">
     <img src="/logo-nazca2.png" alt="Nazca" />
+    <a href="https://nazca.vc/" target="_blank" rel="noopener" class="btn-outline" style="margin-top:20px;font-size:0.85rem;padding:10px 24px;">Conoce Nazca &#8599;</a>
   </div>
 
   <button class="btn-primary reveal" onclick="openModal()">Inscribirme ahora &#8594;</button>
@@ -701,8 +700,8 @@
 <!-- ─── Section 4 · Premios ──────────────────────────────── -->
 <div id="premios" class="section-wrap">
   <div class="section-eyebrow reveal">05 &middot; Beneficios</div>
-  <h2 class="section-title reveal">&#191;QU&#201; TE LLEVAS?</h2>
-  <p class="section-subtitle reveal">Ser finalista ya es un privilegio. Ganar, es otra cosa.</p>
+  <h2 class="section-title reveal">PREMIOS &amp; BENEFICIOS</h2>
+  <p class="section-subtitle reveal">Reconocimientos para el talento, la visi&#243;n y la ejecuci&#243;n.</p>
 
   <div class="prizes-grid">
     <div class="prize-card reveal">
@@ -711,7 +710,7 @@
       <ul class="prize-list">
         <li><span style="color:var(--cyan);display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Pitch en vivo frente al equipo de Nazca</span></li>
         <li><span style="color:var(--cyan);display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Feedback directo y detallado de inversionistas profesionales</span></li>
-        <li><span style="color:var(--cyan);display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Acceso completo al summit Welcome to the Future</span></li>
+        <li><span style="color:var(--cyan);display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Acceso completo y gratuito al summit Welcome 2 The Future</span></li>
         <li><span style="color:var(--cyan);display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Visibilidad frente a la comunidad de innovaci&#243;n y emprendimiento</span></li>
       </ul>
     </div>
@@ -719,9 +718,7 @@
       <div class="prize-icon" style="color:#FF9900"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 14c-3.3 0-6-2.7-6-6V4h12v4c0 3.3-2.7 6-6 6z" stroke="currentColor" stroke-width="1.5"/><path d="M5 6H3a2 2 0 0 0 0 4h2M17 6h2a2 2 0 0 0 0 4h-2M11 14v3M8 17h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M7 20h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
       <div class="prize-title">Si eres el Equipo Ganador</div>
       <ul class="prize-list">
-        <li><span style="color:#FF9900;display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="9" r="4" stroke="currentColor" stroke-width="1.4"/><path d="M5 5L3 1h8L9 5" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span><span>Acceso directo a las oficinas de Nazca &#8212; donde se han tomado las decisiones detr&#225;s de Kavak, Ben &amp; Frank y +90 empresas</span></li>
-        <li><span style="color:#FF9900;display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="9" r="4" stroke="currentColor" stroke-width="1.4"/><path d="M5 5L3 1h8L9 5" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span><span>Sesi&#243;n de trabajo uno a uno con el equipo de Nazca</span></li>
-        <li><span style="color:#FF9900;display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="9" r="4" stroke="currentColor" stroke-width="1.4"/><path d="M5 5L3 1h8L9 5" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span><span>La oportunidad de que tu proyecto est&#233; en el radar de quienes deciden en qu&#233; se invierte</span></li>
+        <li><span style="color:#FF9900;display:inline-flex"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="9" r="4" stroke="currentColor" stroke-width="1.4"/><path d="M5 5L3 1h8L9 5" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span><span>Gana una sesi&#243;n presencial uno a uno con el equipo de Nazca en sus oficinas, donde se han tomado las decisiones detr&#225;s de Kavak, Ben &amp; Frank y +90 empresas</span></li>
       </ul>
     </div>
   </div>
@@ -736,7 +733,7 @@
 
   <div class="timeline reveal">
     <div class="timeline-item">
-      <div class="timeline-date">30 MAR</div>
+      <div class="timeline-date">8 MAR</div>
       <div>
         <div class="timeline-dot"></div>
         <div class="timeline-label">Marzo 2026</div>
@@ -745,16 +742,16 @@
       </div>
     </div>
     <div class="timeline-item">
-      <div class="timeline-date">24 ABR</div>
+      <div class="timeline-date">5 MAY</div>
       <div>
         <div class="timeline-dot"></div>
-        <div class="timeline-label">Abril 2026</div>
+        <div class="timeline-label">Mayo 2026</div>
         <div class="timeline-title">Cierre de aplicaciones</div>
         <div class="timeline-desc">&#218;ltima oportunidad para enviar tu proyecto. No dejes para ma&#241;ana lo que puedes construir hoy.</div>
       </div>
     </div>
     <div class="timeline-item">
-      <div class="timeline-date">4 MAY</div>
+      <div class="timeline-date">6&#8211;8 MAY</div>
       <div>
         <div class="timeline-dot"></div>
         <div class="timeline-label">Mayo 2026</div>
@@ -768,7 +765,7 @@
         <div class="timeline-dot"></div>
         <div class="timeline-label">Mayo 2026</div>
         <div class="timeline-title">Anuncio de finalistas</div>
-        <div class="timeline-desc">Los equipos seleccionados son notificados. Confirma tu asistencia inmediatamente.</div>
+        <div class="timeline-desc">Seleccionaremos a 3 equipos finalistas para pitchear en el evento frente al equipo de Nazca. Los seleccionados ser&#225;n notificados directamente.</div>
       </div>
     </div>
     <div class="timeline-item">
@@ -798,7 +795,7 @@
     <div class="faq-card reveal reveal-delay-1">
       <div class="faq-icon" style="color:var(--cyan)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v10M9.5 9.5c0-1 1-1.5 2.5-1.5s2.5.5 2.5 1.5-1 1.5-2.5 1.5-2.5.5-2.5 1.5 1 1.5 2.5 1.5 2.5-.5 2.5-1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
       <div class="faq-q">&#191;Tiene costo?</div>
-      <div class="faq-a">No. Aplicar es completamente gratis. Si eres finalista, tu equipo entra al evento sin costo. Si no quedas, asiste al summit por $200 MXN con 20% de descuento por haber aplicado.</div>
+      <div class="faq-a">No. Aplicar es completamente gratis. Si eres finalista, tu equipo entra al evento sin costo. Si no quedas, asiste al summit por $250 MXN con 20% de descuento por haber aplicado.</div>
     </div>
     <div class="faq-card reveal reveal-delay-2">
       <div class="faq-icon" style="color:var(--magenta)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2a7 7 0 0 1 7 7c0 5.5-7 13-7 13S5 14.5 5 9a7 7 0 0 1 7-7z" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="9" r="2.5" fill="currentColor"/></svg></div>
@@ -822,7 +819,7 @@
 
 <!-- ─── CTA Final ─────────────────────────────────────────── -->
 <div class="cta-final">
-  <div class="section-eyebrow reveal">Cierre &middot; 24 de abril, 2026</div>
+  <div class="section-eyebrow reveal">Cierre &middot; 5 de mayo, 2026</div>
   <h2 class="cta-final-title reveal">
     <span>No esperes</span><br>
     <span>a estar listo.</span>
@@ -834,7 +831,7 @@
   </div>
   <div class="meta-badges reveal">
     <span class="meta-badge"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="5.5" width="12" height="7" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M7 5.5V12.5M1 8.5h12M4.5 5.5c0-1.5 2.5-4 2.5-4s2.5 2.5 2.5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> Aplicaci&#243;n gratuita</span>
-    <span class="meta-badge"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="5" cy="4.5" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M1 12c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="10.5" cy="5" r="1.7" stroke="currentColor" stroke-width="1.3"/><path d="M12.3 12c0-1.7-1.1-3.2-2.7-3.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> Equipos de 1 a 5</span>
+    <span class="meta-badge"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="5" cy="4.5" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M1 12c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="10.5" cy="5" r="1.7" stroke="currentColor" stroke-width="1.3"/><path d="M12.3 12c0-1.7-1.1-3.2-2.7-3.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> Equipos de 1 a 7</span>
     <span class="meta-badge"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 5.5h12M4.5 1v2.5M9.5 1v2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> Final 15 Mayo 2026</span>
     <span class="meta-badge"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1a4 4 0 0 1 4 4c0 3.5-4 8-4 8S3 8.5 3 5a4 4 0 0 1 4-4z" stroke="currentColor" stroke-width="1.3"/><circle cx="7" cy="5" r="1.3" fill="currentColor"/></svg> Tec CCM &middot; CDMX</span>
   </div>
@@ -857,7 +854,7 @@
 
     <div class="modal-eyebrow">2da Edici&#243;n &middot; The Challenge W2F</div>
     <h2 class="modal-title">Inscr&#237;bete al The Challenge</h2>
-    <p class="modal-date">Cierre de inscripciones: <strong>24 de abril, 2026</strong></p>
+    <p class="modal-date">Cierre de inscripciones: <strong>5 de mayo, 2026</strong></p>
 
     <div class="tab-row">
       <button class="tab-btn active" onclick="switchTab('form')" style="display:inline-flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="1" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 4.5h5M4.5 7h5M4.5 9.5h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> Formulario</button>
