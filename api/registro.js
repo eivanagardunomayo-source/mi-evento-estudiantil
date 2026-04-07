@@ -12,8 +12,10 @@ module.exports = async function handler(req, res) {
 
   try {
     const { nombre, email, institucion, carrera, tipo, boletos, referencia, comprobante } = req.body;
-    const precio = parseInt(process.env.PRECIO_BOLETO) || 200;
-    const monto = parseInt(boletos) * precio;
+    const precioTec = parseInt(process.env.PRECIO_BOLETO) || 200;
+    const precioExterno = parseInt(process.env.PRECIO_EXTERNO) || 300;
+    const precioUnit = tipo === 'externo' ? precioExterno : precioTec;
+    const monto = parseInt(boletos) * precioUnit;
     const fecha = new Date().toISOString().split('T')[0];
     const token = require('crypto').randomUUID();
     const from = `"Welcome 2 The Future" <${process.env.GMAIL_USER}>`;
