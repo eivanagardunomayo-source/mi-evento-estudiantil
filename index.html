@@ -2119,7 +2119,7 @@
       <a href="#speakers">Speakers</a>
       <a href="#startup-challenge">Challenge</a>
       <a href="#sponsors">Sponsors</a>
-      <a href="mailto:hola@w2tf.mx">Contacto</a>
+      <a href="mailto:belaeccm.tec@gmail.com">Contacto</a>
     </div>
   </div>
 </footer>
@@ -2302,7 +2302,7 @@
             <div class="sc-row"><span class="sc-key">Boletos</span><span class="sc-val" id="sc-qty">—</span></div>
             <div class="sc-row"><span class="sc-key">Referencia</span><span class="sc-val" id="sc-ref">—</span></div>
           </div>
-          <p style="font-size:0.76rem;color:rgba(255,255,255,0.25);margin-bottom:16px;">¿Dudas? Escríbenos a hola@w2tf.mx</p>
+          <p style="font-size:0.76rem;color:rgba(255,255,255,0.25);margin-bottom:16px;">¿Dudas? Escríbenos a belaeccm.tec@gmail.com</p>
           <button class="btn btn-primary" style="width:100%;" onclick="closeModal()">
             <span class="btn-shine"></span>
             ¡Nos vemos el 15 de mayo! 🚀
@@ -3084,8 +3084,9 @@ async function enviarRegistro(){
     });
   }
 
+  let apiOk = false;
   try {
-    await fetch('/api/registro', {
+    const res = await fetch('/api/registro', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -3094,7 +3095,17 @@ async function enviarRegistro(){
         comprobante: comprobanteBase64
       })
     });
-  } catch(err){ /* continuar aunque falle la red */ }
+    apiOk = res.ok;
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || 'Error al enviar');
+    }
+  } catch(err) {
+    btn.innerHTML = '<span class="btn-shine"></span>Confirmar registro';
+    btn.disabled = false;
+    alert('Hubo un problema al enviar tu registro: ' + (err.message || 'intenta de nuevo'));
+    return;
+  }
 
   // Fill success screen
   document.getElementById('sc-nombre').textContent = nombre;

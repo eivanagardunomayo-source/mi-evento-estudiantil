@@ -13,7 +13,7 @@ module.exports = async function handler(req, res) {
   try {
     const { nombre, email, celular, institucion, carrera, tipo, boletos, referencia, comprobante, monto: montoRaw } = req.body;
     const monto = parseInt(montoRaw) || (parseInt(boletos) * (tipo === 'externo' ? (parseInt(process.env.PRECIO_EXTERNO) || 300) : (parseInt(process.env.PRECIO_BOLETO) || 200)));
-    const fecha = new Date().toISOString().split('T')[0];
+    const fecha = new Date().toISOString();
     const token = require('crypto').randomUUID();
     const from = `"Welcome 2 The Future" <${process.env.GMAIL_USER}>`;
 
