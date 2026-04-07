@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Validación de Boleto · W2TF 2026</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#050714;font-family:'Helvetica Neue',Arial,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+    .card{width:100%;max-width:400px;border-radius:24px;padding:48px 36px;text-align:center;border:1px solid rgba(255,255,255,0.08);}
+    .card.ok   {background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.35);}
+    .card.fail {background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.35);}
+    .card.warn {background:rgba(234,179,8,0.08);border-color:rgba(234,179,8,0.35);}
+    .card.loading{background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.3);}
+    .icon{font-size:72px;margin-bottom:20px;display:block;}
+    .status{font-size:13px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:12px;}
+    .card.ok   .status{color:#34D399;}
+    .card.fail .status{color:#F87171;}
+    .card.warn .status{color:#FCD34D;}
+    .card.loading .status{color:#A78BFA;}
+    .nombre{font-size:28px;font-weight:800;color:#fff;margin-bottom:8px;}
+    .sub{color:#94A3B8;font-size:14px;line-height:1.6;margin-bottom:24px;}
+    .badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:8px;}
+    .badge{background:rgba(255,255,255,0.07);border-radius:999px;padding:6px 16px;font-size:12px;color:#CBD5E1;font-weight:600;}
+    .ref{font-size:11px;color:#475569;margin-top:6px;letter-spacing:0.05em;}
+    .time{font-size:11px;color:#EF4444;margin-top:8px;}
+    .spinner{width:48px;height:48px;border:3px solid rgba(124,58,237,0.2);border-top-color:#7C3AED;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 24px;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .brand{margin-top:32px;color:#334155;font-size:11px;letter-spacing:0.1em;}
+  </style>
+</head>
+<body>
+  <div id="card" class="card loading">
+    <div class="spinner"></div>
+    <div class="status">Verificando boleto…</div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const t = params.get('t');
+    const card = document.getElementById('card');
+
+    function fmt(isoDate) {
+      if (!isoDate) return '';
+      const d = new Date(isoDate);
+      return d.toLocaleString('es-MX', { dateStyle: 'short', timeStyle: 'short' });
+    }
+
+    async function validar() {
+      if (!t) {
+        card.className = 'card fail';
+        card.innerHTML = `<span class="icon">❌</span><div class="status">Boleto inválido</div><p class="sub">No se encontró un código de boleto en esta URL.</p><div class="brand">W2TF 2026</div>`;
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/validar?t=' + encodeURIComponent(t));
+        const data = await res.json();
+
+        if (data.ok) {
+          card.className = 'card ok';
+          card.innerHTML = `
+            <span class="icon">✅</span>
+            <div class="status">Acceso permitido</div>
+            <div class="nombre">${data.nombre}</div>
+            <div class="badges">
+              <span class="badge">${data.tipo || 'Asistente'}</span>
+              <span class="badge">${data.boletos} boleto${data.boletos > 1 ? 's' : ''}</span>
+            </div>
+            <div class="ref">${data.ref}</div>
+            <div class="brand">W2TF 2026 · BeLAE</div>`;
+
+        } else if (data.reason === 'already_used') {
+          card.className = 'card fail';
+          card.innerHTML = `
+            <span class="icon">🚫</span>
+            <div class="status">Boleto ya utilizado</div>
+            <div class="nombre">${data.nombre}</div>
+            <div class="sub">Este boleto ya fue escaneado en la entrada.</div>
+            <div class="time">Ingreso registrado: ${fmt(data.horaIngreso)}</div>
+            <div class="ref">${data.ref}</div>
+            <div class="brand">W2TF 2026 · BeLAE</div>`;
+
+        } else if (data.reason === 'not_confirmed') {
+          card.className = 'card warn';
+          card.innerHTML = `
+            <span class="icon">⏳</span>
+            <div class="status">Pago no confirmado</div>
+            <div class="nombre">${data.nombre || 'Registro pendiente'}</div>
+            <div class="sub">Este boleto aún no ha sido confirmado por el organizador.</div>
+            <div class="brand">W2TF 2026 · BeLAE</div>`;
+
+        } else {
+          card.className = 'card fail';
+          card.innerHTML = `
+            <span class="icon">❌</span>
+            <div class="status">Boleto no válido</div>
+            <div class="sub">Este código no corresponde a ningún boleto registrado.</div>
+            <div class="brand">W2TF 2026 · BeLAE</div>`;
+        }
+      } catch(e) {
+        card.className = 'card fail';
+        card.innerHTML = `<span class="icon">⚠️</span><div class="status">Error de conexión</div><p class="sub">No se pudo verificar el boleto. Intenta de nuevo.</p><div class="brand">W2TF 2026</div>`;
+      }
+    }
+
+    validar();
+  </script>
+</body>
+</html>

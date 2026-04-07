@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Admin · W2TF 2026</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#050714;--card:#0f1140;--border:rgba(255,255,255,0.08);--purple:#7C3AED;--cyan:#22D3EE;--green:#10B981;--yellow:#F59E0B;--red:#EF4444;--muted:#64748B;--text:#CBD5E1}
+    body{background:var(--bg);color:var(--text);font-family:'Helvetica Neue',Arial,sans-serif;min-height:100vh;font-size:14px;}
+
+    /* Login */
+    #login{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;}
+    .login-card{background:var(--card);border:1px solid rgba(124,58,237,0.3);border-radius:20px;padding:48px 40px;width:100%;max-width:360px;text-align:center;}
+    .login-card h1{color:#fff;font-size:22px;margin-bottom:6px;}
+    .login-card p{color:var(--muted);font-size:13px;margin-bottom:28px;}
+    .login-card input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 16px;color:#fff;font-size:14px;outline:none;margin-bottom:14px;}
+    .login-card input:focus{border-color:var(--purple);}
+    .btn{background:linear-gradient(135deg,var(--purple),#9333EA);color:#fff;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer;width:100%;}
+    .btn:hover{opacity:0.9;}
+    .btn-sm{background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.4);color:#A78BFA;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .btn-sm:hover{background:rgba(124,58,237,0.3);}
+    .btn-sm:disabled{opacity:0.4;cursor:not-allowed;}
+    .btn-sm.done{background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:#34D399;}
+
+    /* App */
+    #app{display:none;padding:24px;max-width:1100px;margin:0 auto;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px;}
+    .topbar h1{color:#fff;font-size:18px;font-weight:700;}
+    .topbar small{color:var(--muted);font-size:12px;}
+
+    /* Stats */
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:28px;}
+    .stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;}
+    .stat-num{font-size:28px;font-weight:800;color:#fff;}
+    .stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;}
+
+    /* Tabs */
+    .tabs{display:flex;gap:8px;margin-bottom:20px;}
+    .tab{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:8px 18px;font-size:13px;color:var(--muted);cursor:pointer;transition:all 0.2s;}
+    .tab.active{background:rgba(124,58,237,0.15);border-color:rgba(124,58,237,0.5);color:#A78BFA;font-weight:600;}
+
+    /* Table */
+    .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+    table{width:100%;border-collapse:collapse;}
+    thead th{padding:12px 16px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02);}
+    tbody tr{border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.15s;}
+    tbody tr:last-child{border-bottom:none;}
+    tbody tr:hover{background:rgba(255,255,255,0.025);}
+    td{padding:12px 16px;vertical-align:middle;}
+    .badge{display:inline-block;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:600;}
+    .badge-pending{background:rgba(234,179,8,0.15);color:#FCD34D;}
+    .badge-confirmed{background:rgba(16,185,129,0.15);color:#34D399;}
+    .badge-ingresado{background:rgba(124,58,237,0.15);color:#A78BFA;}
+    .nome{color:#fff;font-weight:600;}
+    .email{color:var(--muted);font-size:12px;}
+    .mono{font-family:monospace;font-size:12px;color:#94A3B8;}
+    .empty{text-align:center;padding:48px;color:var(--muted);}
+    .error-msg{color:#F87171;font-size:12px;margin-top:4px;}
+
+    @media(max-width:700px){
+      table{display:block;overflow-x:auto;}
+      .stats{grid-template-columns:repeat(2,1fr);}
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="login">
+  <div class="login-card">
+    <h1>🔐 Panel Admin</h1>
+    <p>Welcome 2 The Future 2026</p>
+    <input type="password" id="key-input" placeholder="Clave de acceso" autocomplete="current-password"/>
+    <div id="login-err" style="color:#F87171;font-size:12px;margin-bottom:12px;display:none;">Clave incorrecta</div>
+    <button class="btn" onclick="doLogin()">Entrar</button>
+  </div>
+</div>
+
+<!-- App -->
+<div id="app">
+  <div class="topbar">
+    <div>
+      <h1>Panel de Registros</h1>
+      <small id="last-update"></small>
+    </div>
+    <button class="btn-sm" onclick="loadData()">↺ Actualizar</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="s-total">—</div><div class="stat-label">Total</div></div>
+    <div class="stat"><div class="stat-num" id="s-pendientes">—</div><div class="stat-label">Pendientes</div></div>
+    <div class="stat"><div class="stat-num" id="s-confirmados">—</div><div class="stat-label">Confirmados</div></div>
+    <div class="stat"><div class="stat-num" id="s-ingresados">—</div><div class="stat-label">Ingresaron</div></div>
+    <div class="stat"><div class="stat-num" id="s-monto">—</div><div class="stat-label">Total MXN</div></div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-estado="todos" onclick="setTab(this)">Todos</div>
+    <div class="tab" data-estado="Pendiente" onclick="setTab(this)">Pendiente</div>
+    <div class="tab" data-estado="Confirmado" onclick="setTab(this)">Confirmado</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre / Email</th>
+          <th>Institución</th>
+          <th>Tipo</th>
+          <th>Boletos</th>
+          <th>Monto</th>
+          <th>Estado</th>
+          <th>Referencia</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div id="empty" class="empty" style="display:none;">Sin registros en esta categoría</div>
+  </div>
+</div>
+
+<script>
+  let adminKey = '';
+  let allData = [];
+  let currentTab = 'todos';
+
+  // Check URL param for key
+  const urlParams = new URLSearchParams(location.search);
+  if (urlParams.get('key')) {
+    adminKey = urlParams.get('key');
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadData();
+  }
+
+  function doLogin() {
+    const k = document.getElementById('key-input').value.trim();
+    if (!k) return;
+    adminKey = k;
+    // Verify by loading data
+    fetch('/api/admin?key=' + encodeURIComponent(k) + '&estado=todos')
+      .then(r => {
+        if (r.status === 401) throw new Error('401');
+        return r.json();
+      })
+      .then(data => {
+        if (data.error) throw new Error(data.error);
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        processData(data);
+      })
+      .catch(e => {
+        if (e.message === '401') {
+          document.getElementById('login-err').style.display = 'block';
+        }
+      });
+  }
+
+  document.getElementById('key-input')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  function loadData() {
+    fetch('/api/admin?key=' + encodeURIComponent(adminKey) + '&estado=todos')
+      .then(r => r.json())
+      .then(data => processData(data))
+      .catch(() => {});
+  }
+
+  function processData(data) {
+    allData = data.results || [];
+    document.getElementById('last-update').textContent = 'Actualizado: ' + new Date().toLocaleTimeString('es-MX');
+    updateStats();
+    renderTable();
+  }
+
+  function updateStats() {
+    const total = allData.length;
+    const pendientes = allData.filter(r => r.estado === 'Pendiente').length;
+    const confirmados = allData.filter(r => r.estado === 'Confirmado').length;
+    const ingresados = allData.filter(r => r.ingresado).length;
+    const monto = allData.filter(r => r.estado === 'Confirmado').reduce((s, r) => s + (r.monto || 0), 0);
+    document.getElementById('s-total').textContent = total;
+    document.getElementById('s-pendientes').textContent = pendientes;
+    document.getElementById('s-confirmados').textContent = confirmados;
+    document.getElementById('s-ingresados').textContent = ingresados;
+    document.getElementById('s-monto').textContent = '$' + monto.toLocaleString('es-MX');
+  }
+
+  function setTab(el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    currentTab = el.dataset.estado;
+    renderTable();
+  }
+
+  function renderTable() {
+    const filtered = currentTab === 'todos' ? allData : allData.filter(r => r.estado === currentTab);
+    const tbody = document.getElementById('tbody');
+    const empty = document.getElementById('empty');
+
+    if (!filtered.length) {
+      tbody.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    tbody.innerHTML = filtered.map(r => {
+      const badgeClass = r.estado === 'Pendiente' ? 'badge-pending' : (r.ingresado ? 'badge-ingresado' : 'badge-confirmed');
+      const badgeText = r.ingresado ? 'Ingresó' : r.estado;
+      const accion = r.estado === 'Pendiente'
+        ? `<button class="btn-sm" id="btn-${r.referencia}" onclick="confirmar('${r.referencia}', '${r.id}')">Confirmar y enviar boleto</button><div class="error-msg" id="err-${r.referencia}" style="display:none;"></div>`
+        : r.ingresado
+          ? `<span style="color:#A78BFA;font-size:12px;">✅ Ingresó ${r.horaIngreso ? new Date(r.horaIngreso).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}) : ''}</span>`
+          : `<span style="color:#34D399;font-size:12px;">Boleto enviado</span>`;
+
+      return `<tr>
+        <td><div class="nome">${r.nombre}</div><div class="email">${r.email}</div></td>
+        <td><div style="color:#cbd5e1">${r.institucion || '—'}</div><div class="email">${r.carrera || ''}</div></td>
+        <td><span style="color:#94A3B8">${r.tipo}</span></td>
+        <td style="color:#fff;font-weight:600;">${r.boletos}</td>
+        <td style="color:#10B981;font-weight:600;">$${(r.monto||0).toLocaleString()}</td>
+        <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+        <td class="mono">${r.referencia}</td>
+        <td>${accion}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  async function confirmar(ref, pageId) {
+    const btn = document.getElementById('btn-' + ref);
+    const errEl = document.getElementById('err-' + ref);
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+    errEl.style.display = 'none';
+
+    try {
+      const res = await fetch(`/api/confirmar?key=${encodeURIComponent(adminKey)}&ref=${encodeURIComponent(ref)}`);
+      const data = await res.json();
+
+      if (data.success) {
+        btn.textContent = '✅ Boleto enviado';
+        btn.className = 'btn-sm done';
+        // Refresh data
+        setTimeout(loadData, 1000);
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Confirmar y enviar boleto';
+        errEl.textContent = data.error || 'Error al enviar';
+        errEl.style.display = 'block';
+      }
+    } catch(e) {
+      btn.disabled = false;
+      btn.textContent = 'Confirmar y enviar boleto';
+      errEl.textContent = 'Error de conexión';
+      errEl.style.display = 'block';
+    }
+  }
+</script>
+</body>
+</html>

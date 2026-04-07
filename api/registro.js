@@ -17,11 +17,11 @@ module.exports = async function handler(req, res) {
     const precio = parseInt(process.env.PRECIO_BOLETO) || 200;
     const monto = parseInt(boletos) * precio;
     const fecha = new Date().toISOString().split('T')[0];
+    const token = require('crypto').randomUUID();
 
     // Comprobante: guardar como URL de data o texto descriptivo
     let comprobanteUrl = null;
     if (comprobante && comprobante.startsWith('data:')) {
-      // Lo usamos directamente como data URL en el email; para Notion sólo indicamos que existe
       comprobanteUrl = `Adjunto en email — ${referencia}`;
     }
 
@@ -29,17 +29,19 @@ module.exports = async function handler(req, res) {
     await notion.pages.create({
       parent: { database_id: process.env.NOTION_DB_ID },
       properties: {
-        'Nombre':     { title:     [{ text: { content: nombre } }] },
-        'Email':      { email:     email },
-        'Institución':{ rich_text: [{ text: { content: institucion || '' } }] },
-        'Carrera':    { rich_text: [{ text: { content: carrera  || '' } }] },
-        'Tipo':       { select:    { name: tipo || 'Tec' } },
-        '# Boletos':  { number:    parseInt(boletos) },
-        'Monto':      { number:    monto },
-        'Referencia': { rich_text: [{ text: { content: referencia } }] },
-        'Comprobante':{ url:       comprobanteUrl },
-        'Estado':     { select:    { name: 'Pendiente' } },
-        'Fecha':      { date:      { start: fecha } }
+        'Nombre':       { title:     [{ text: { content: nombre } }] },
+        'Email':        { email:     email },
+        'Institución':  { rich_text: [{ text: { content: institucion || '' } }] },
+        'Carrera':      { rich_text: [{ text: { content: carrera  || '' } }] },
+        'Tipo':         { select:    { name: tipo || 'Tec' } },
+        '# Boletos':    { number:    parseInt(boletos) },
+        'Monto':        { number:    monto },
+        'Referencia':   { rich_text: [{ text: { content: referencia } }] },
+        'Comprobante':  { url:       comprobanteUrl },
+        'Token':        { rich_text: [{ text: { content: token } }] },
+        'Ingresado':    { checkbox:  false },
+        'Estado':       { select:    { name: 'Pendiente' } },
+        'Fecha':        { date:      { start: fecha } }
       }
     });
 

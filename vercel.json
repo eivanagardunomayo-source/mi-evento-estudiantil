@@ -2,8 +2,9 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "functions": {
-    "api/registro.js": {
-      "maxDuration": 30
-    }
+    "api/registro.js":  { "maxDuration": 30 },
+    "api/confirmar.js": { "maxDuration": 30 },
+    "api/validar.js":   { "maxDuration": 10 },
+    "api/admin.js":     { "maxDuration": 15 }
   }
 }
