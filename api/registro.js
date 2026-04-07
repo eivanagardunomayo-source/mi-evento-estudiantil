@@ -11,11 +11,8 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { nombre, email, institucion, carrera, tipo, boletos, referencia, comprobante } = req.body;
-    const precioTec = parseInt(process.env.PRECIO_BOLETO) || 200;
-    const precioExterno = parseInt(process.env.PRECIO_EXTERNO) || 300;
-    const precioUnit = tipo === 'externo' ? precioExterno : precioTec;
-    const monto = parseInt(boletos) * precioUnit;
+    const { nombre, email, institucion, carrera, tipo, boletos, referencia, comprobante, monto: montoRaw } = req.body;
+    const monto = parseInt(montoRaw) || (parseInt(boletos) * (tipo === 'externo' ? (parseInt(process.env.PRECIO_EXTERNO) || 300) : (parseInt(process.env.PRECIO_BOLETO) || 200)));
     const fecha = new Date().toISOString().split('T')[0];
     const token = require('crypto').randomUUID();
     const from = `"Welcome 2 The Future" <${process.env.GMAIL_USER}>`;
