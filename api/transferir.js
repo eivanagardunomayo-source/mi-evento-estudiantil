@@ -1,6 +1,7 @@
 const { Client } = require('@notionhq/client');
 const transporter = require('./_mailer');
 const crypto = require('crypto');
+const generateTicketPDF = require('./_ticket-pdf');
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const base = process.env.BASE_URL || 'https://welcome2thefuture2026.vercel.app';
@@ -106,11 +107,23 @@ module.exports = async function handler(req, res) {
       const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=8&data=${encodeURIComponent(validarUrl)}`;
       const shortCode = nuevoToken.replace(/-/g, '').substring(0, 12).toUpperCase();
 
+      // Generar PDF adjunto para el nuevo titular
+      const pdfBuf = await generateTicketPDF({
+        nombre: nuevoNombre.trim(), ref: b.ref, tipo: b.tipo,
+        numBoleto: b.numBoleto, totalBoletos: b.totalBoletos,
+        token: nuevoToken, base
+      });
+
       await transporter.sendMail({
         from: `"Welcome 2 The Future" <${process.env.GMAIL_USER}>`,
         to:   nuevoEmail.trim(),
         subject: `Te transfirieron un boleto — W2TF 2026 · ${b.ref}`,
-        html: buildTransferEmail({ nuevoNombre: nuevoNombre.trim(), ref: b.ref, tipo: b.tipo, numBoleto: b.numBoleto, totalBoletos: b.totalBoletos, monto: b.monto, qrUrl, token: nuevoToken, shortCode, boletoUrl })
+        html: buildTransferEmail({ nuevoNombre: nuevoNombre.trim(), ref: b.ref, tipo: b.tipo, numBoleto: b.numBoleto, totalBoletos: b.totalBoletos, monto: b.monto, qrUrl, token: nuevoToken, shortCode, boletoUrl }),
+        attachments: [{
+          filename: 'boleto-w2tf2026.pdf',
+          content: pdfBuf,
+          contentType: 'application/pdf'
+        }]
       });
 
       return res.status(200).json({ success: true });

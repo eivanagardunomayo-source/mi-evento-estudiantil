@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@notionhq/client": "^2.2.15",
-    "nodemailer": "^6.9.13"
+    "nodemailer": "^6.9.13",
+    "pdfkit": "^0.18.0",
+    "qrcode": "^1.5.4"
   }
 }

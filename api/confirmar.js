@@ -1,6 +1,7 @@
 const { Client } = require('@notionhq/client');
 const transporter = require('./_mailer');
 const crypto = require('crypto');
+const generateTicketPDF = require('./_ticket-pdf');
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const base = process.env.BASE_URL || 'https://welcome2thefuture2026.vercel.app';
@@ -78,14 +79,31 @@ module.exports = async function handler(req, res) {
       return buildTicketBlock({ nombre, ref, tipo, montoPorBoleto, numBoleto: i + 1, totalBoletos: boletos, qrUrl, token });
     }).join('\n');
 
-    // Enviar email con todos los boletos
+    // Generar PDFs adjuntos (uno por boleto)
+    const pdfAttachments = await Promise.all(
+      tokens.map(async (token, i) => {
+        const buf = await generateTicketPDF({
+          nombre, ref, tipo, numBoleto: i + 1, totalBoletos: boletos, token, base
+        });
+        return {
+          filename: boletos === 1
+            ? `boleto-w2tf2026.pdf`
+            : `boleto-${i + 1}-de-${boletos}-w2tf2026.pdf`,
+          content: buf,
+          contentType: 'application/pdf'
+        };
+      })
+    );
+
+    // Enviar email con todos los boletos + PDFs adjuntos
     await transporter.sendMail({
       from,
       to: email,
       subject: boletos === 1
         ? `Tu boleto oficial — W2TF 2026 · ${ref}`
         : `Tus ${boletos} boletos oficiales — W2TF 2026 · ${ref}`,
-      html: buildEmail({ nombre, boletos, ticketBlocks })
+      html: buildEmail({ nombre, boletos, ticketBlocks }),
+      attachments: pdfAttachments
     });
 
     // Actualizar estado del registro a Confirmado
