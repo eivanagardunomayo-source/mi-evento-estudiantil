@@ -213,7 +213,7 @@ function buildTransferEmail({ nuevoNombre, ref, tipo, numBoleto, totalBoletos, m
   <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
     <tr>
       <td width="50%" style="padding-right:5px;">
-        <a href="${boletoUrl}&dl=1" style="display:block;background:linear-gradient(135deg,#7C3AED,#00CFFF);color:#ffffff;text-align:center;padding:14px 10px;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;font-family:Arial,sans-serif;letter-spacing:0.02em;">⬇&nbsp; Guardar PDF</a>
+        <a href="${base}/api/boleto-pdf?t=${token}" style="display:block;background:linear-gradient(135deg,#7C3AED,#00CFFF);color:#ffffff;text-align:center;padding:14px 10px;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;font-family:Arial,sans-serif;letter-spacing:0.02em;">⬇&nbsp; Guardar PDF</a>
       </td>
       <td width="50%" style="padding-left:5px;">
         <a href="${base}/transferir?t=${token}" style="display:block;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#CBD5E1;text-align:center;padding:14px 10px;border-radius:12px;font-size:14px;font-weight:600;text-decoration:none;font-family:Arial,sans-serif;">↗&nbsp; Transferir</a>
