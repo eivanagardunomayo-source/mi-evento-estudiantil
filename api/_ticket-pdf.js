@@ -54,7 +54,7 @@ module.exports = async function generateTicketPDF({
 
     // "✦ BOLETO OFICIAL ✦"
     doc.fontSize(7).fillColor('#ffffffcc').font('Helvetica')
-       .text('✦  BOLETO OFICIAL  ✦', 0, 113,
+       .text('BOLETO OFICIAL', 0, 113,
              { align: 'center', width: W, characterSpacing: 1.5 });
 
     // ── Strip número de boleto ───────────────────────────────────
