@@ -1,25 +1,27 @@
 const PDFDocument = require('pdfkit');
 const QRCode      = require('qrcode');
+const path        = require('path');
+const fs          = require('fs');
 
-/**
- * Genera el buffer PDF de un boleto individual.
- * @param {object} opts
- * @returns {Promise<Buffer>}
- */
+const ROOT = process.cwd();
+
 module.exports = async function generateTicketPDF({
   nombre, ref, tipo, numBoleto, totalBoletos, token, base
 }) {
   const validarUrl = `${base}/validar?t=${token}`;
   const shortCode  = token.replace(/-/g, '').substring(0, 12).toUpperCase();
 
-  // QR como buffer PNG (sin CORS, server-side)
   const qrBuffer = await QRCode.toBuffer(validarUrl, {
     width: 300, margin: 2,
     color: { dark: '#000000', light: '#ffffff' }
   });
 
+  // Cargar logos desde el filesystem
+  const logoBelae   = fs.readFileSync(path.join(ROOT, 'logo-belae.png'));
+  const logoOficial = fs.readFileSync(path.join(ROOT, 'logo-oficial.png'));
+
   return new Promise((resolve, reject) => {
-    const W = 306, H = 530; // 108mm × 187mm en puntos (72pt = 1in)
+    const W = 306, H = 580;
     const doc = new PDFDocument({ size: [W, H], margin: 0, compress: true });
 
     const chunks = [];
@@ -31,31 +33,41 @@ module.exports = async function generateTicketPDF({
     doc.rect(0, 0, W, H).fill('#06061a');
 
     // ── Header degradado ────────────────────────────────────────
-    const hGrad = doc.linearGradient(0, 0, W, 82);
+    const HEADER_H = 130;
+    const hGrad = doc.linearGradient(0, 0, W, HEADER_H);
     hGrad.stop(0, '#7A00FF').stop(1, '#00CFFF');
-    doc.rect(0, 0, W, 82).fill(hGrad);
+    doc.rect(0, 0, W, HEADER_H).fill(hGrad);
 
-    // Texto header
-    doc.fontSize(6.5).fillColor('#ffffffcc').font('Helvetica')
-       .text('B E L A E  ·  T E C  D E  M O N T E R R E Y', 0, 14,
-             { align: 'center', width: W });
-    doc.fontSize(14.5).fillColor('#ffffff').font('Helvetica-Bold')
-       .text('WELCOME 2 THE FUTURE', 0, 26, { align: 'center', width: W });
-    doc.fontSize(13).fillColor('#ffffff').font('Helvetica')
-       .text('2  0  2  6', 0, 46, { align: 'center', width: W });
+    // Logo BeLAE (pequeño, arriba al centro)
+    doc.image(logoBelae, 0, 8, {
+      fit: [W, 28],
+      align: 'center',
+      valign: 'center'
+    });
+
+    // Logo W2TF oficial (grande, centro)
+    doc.image(logoOficial, 0, 42, {
+      fit: [W, 64],
+      align: 'center',
+      valign: 'center'
+    });
+
+    // "✦ BOLETO OFICIAL ✦"
     doc.fontSize(7).fillColor('#ffffffcc').font('Helvetica')
-       .text('✦  BOLETO OFICIAL  ✦', 0, 66, { align: 'center', width: W, characterSpacing: 1.5 });
+       .text('✦  BOLETO OFICIAL  ✦', 0, 113,
+             { align: 'center', width: W, characterSpacing: 1.5 });
 
     // ── Strip número de boleto ───────────────────────────────────
-    doc.rect(0, 82, W, 0.8).fill('#00CFFF');
-    doc.save().fillOpacity(0.06).rect(0, 82, W, 22).fill('#00CFFF').restore();
-    doc.rect(0, 103, W, 0.8).fill('#00CFFF');
+    const STRIP_Y = HEADER_H;
+    doc.rect(0, STRIP_Y, W, 0.8).fill('#00CFFF');
+    doc.save().fillOpacity(0.06).rect(0, STRIP_Y, W, 22).fill('#00CFFF').restore();
+    doc.rect(0, STRIP_Y + 22, W, 0.8).fill('#00CFFF');
     doc.fontSize(7.5).fillColor('#00CFFF').font('Helvetica-Bold')
-       .text(`BOLETO ${numBoleto} DE ${totalBoletos}`, 0, 90,
+       .text(`BOLETO ${numBoleto} DE ${totalBoletos}`, 0, STRIP_Y + 8,
              { align: 'center', width: W, characterSpacing: 3 });
 
     // ── Cuerpo ───────────────────────────────────────────────────
-    let y = 116;
+    let y = STRIP_Y + 36;
 
     doc.fontSize(6.5).fillColor('#475569').font('Helvetica')
        .text('TITULAR DEL BOLETO', 22, y, { characterSpacing: 1.5 });
@@ -65,18 +77,17 @@ module.exports = async function generateTicketPDF({
     doc.fontSize(nameSize).fillColor('#ffffff').font('Helvetica-Bold')
        .text(nombre, 22, y, { width: 262 });
 
-    // Calcular altura del nombre (puede ocupar 1 o 2 líneas)
     const nameH = doc.currentLineHeight(true) *
       Math.ceil(doc.widthOfString(nombre) / 262) + 2;
     y += Math.max(nameH, nameSize) + 12;
 
     // ── Tabla de info ────────────────────────────────────────────
     const rows = [
-      { key: 'Tipo de acceso', val: tipo || 'Asistente', color: '#00CFFF' },
-      { key: 'Referencia',     val: ref,                 color: '#A78BFA' },
-      { key: 'Fecha',          val: '15 de mayo, 2026',  color: '#ffffff' },
-      { key: 'Hora',           val: '2:30 PM',           color: '#ffffff' },
-      { key: 'Lugar',          val: 'Tec de Monterrey CCM', color: '#ffffff' },
+      { key: 'Tipo de acceso', val: tipo || 'Asistente',       color: '#00CFFF' },
+      { key: 'Referencia',     val: ref,                        color: '#A78BFA' },
+      { key: 'Fecha',          val: '15 de mayo, 2026',         color: '#ffffff' },
+      { key: 'Hora',           val: '2:30 PM',                  color: '#ffffff' },
+      { key: 'Lugar',          val: 'Tec de Monterrey CCM',     color: '#ffffff' },
     ];
 
     rows.forEach(({ key, val, color }, i) => {
@@ -105,9 +116,7 @@ module.exports = async function generateTicketPDF({
     const qrSize = 110;
     const qrX    = (W - qrSize) / 2;
 
-    // Fondo blanco con padding
-    doc.rect(qrX - 7, y - 7, qrSize + 14, qrSize + 14)
-       .fill('#ffffff');
+    doc.rect(qrX - 7, y - 7, qrSize + 14, qrSize + 14).fill('#ffffff');
     doc.image(qrBuffer, qrX, y, { width: qrSize, height: qrSize });
 
     doc.fontSize(7.5).fillColor('#475569').font('Helvetica')
