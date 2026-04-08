@@ -36,6 +36,42 @@
     }
     .hint{font-size:11px;color:#475569;text-align:center;margin-bottom:20px;max-width:400px;line-height:1.7;display:none;}
 
+    /* ── GUÍA PDF ── */
+    .pdf-guide{
+      position:fixed;inset:0;z-index:9999;
+      background:rgba(5,7,20,0.88);
+      display:flex;align-items:flex-end;justify-content:center;
+      opacity:0;pointer-events:none;
+      transition:opacity .25s;
+      backdrop-filter:blur(4px);
+    }
+    .pdf-guide.show{opacity:1;pointer-events:auto;}
+    .pdf-guide-box{
+      width:100%;max-width:440px;
+      background:#0f1140;
+      border:1px solid rgba(122,0,255,0.3);
+      border-radius:24px 24px 0 0;
+      padding:28px 24px 40px;
+    }
+    .pdf-guide-title{color:#fff;font-size:17px;font-weight:800;margin-bottom:4px;}
+    .pdf-guide-sub{color:#64748B;font-size:12px;margin-bottom:20px;}
+    .pdf-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;}
+    .pdf-step-num{
+      min-width:26px;height:26px;border-radius:50%;
+      background:linear-gradient(135deg,#7C3AED,#00CFFF);
+      color:#fff;font-size:12px;font-weight:800;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .pdf-step-text{color:#CBD5E1;font-size:13px;line-height:1.5;padding-top:4px;}
+    .pdf-step-text strong{color:#fff;}
+    .pdf-btn-ok{
+      width:100%;margin-top:20px;
+      background:linear-gradient(135deg,#7C3AED,#00CFFF);
+      color:#fff;border:none;border-radius:12px;
+      padding:14px;font-size:15px;font-weight:700;
+      cursor:pointer;font-family:inherit;
+    }
+
     /* ── TICKET ── */
     .ticket{
       width:100%;max-width:420px;
@@ -135,6 +171,10 @@
 </div>
 <p class="hint" id="hint"></p>
 
+<div class="pdf-guide" id="pdf-guide">
+  <div class="pdf-guide-box" id="pdf-guide-box"></div>
+</div>
+
 <div id="wrap">
   <div class="state"><div class="spinner"></div><p>Cargando boleto…</p></div>
 </div>
@@ -146,10 +186,49 @@ const autoSave = params.get('dl') === '1';
 const wrap     = document.getElementById('wrap');
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 const isIOS    = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+const guide    = document.getElementById('pdf-guide');
+const guideBox = document.getElementById('pdf-guide-box');
+
+function buildGuideContent() {
+  if (isIOS) {
+    return `
+      <div class="pdf-guide-title">Guardar tu boleto como PDF</div>
+      <div class="pdf-guide-sub">Sigue estos 3 pasos en la vista previa que se abrirá:</div>
+      <div class="pdf-step"><div class="pdf-step-num">1</div><div class="pdf-step-text">Se abrirá una <strong>vista previa</strong> de tu boleto</div></div>
+      <div class="pdf-step"><div class="pdf-step-num">2</div><div class="pdf-step-text">Toca el ícono <strong>↑ Compartir</strong> (en la esquina inferior)</div></div>
+      <div class="pdf-step"><div class="pdf-step-num">3</div><div class="pdf-step-text">Elige <strong>"Guardar en Archivos"</strong> → Guardar</div></div>
+      <button class="pdf-btn-ok" id="pdf-btn-ok">Entendido, abrir vista previa →</button>`;
+  } else if (isMobile) {
+    return `
+      <div class="pdf-guide-title">Guardar tu boleto como PDF</div>
+      <div class="pdf-guide-sub">Sigue estos pasos en el diálogo que se abrirá:</div>
+      <div class="pdf-step"><div class="pdf-step-num">1</div><div class="pdf-step-text">Se abrirá el diálogo de <strong>impresión</strong></div></div>
+      <div class="pdf-step"><div class="pdf-step-num">2</div><div class="pdf-step-text">Toca <strong>"Guardar como PDF"</strong> como destino</div></div>
+      <div class="pdf-step"><div class="pdf-step-num">3</div><div class="pdf-step-text">Elige dónde guardar y toca <strong>Guardar</strong></div></div>
+      <button class="pdf-btn-ok" id="pdf-btn-ok">Entendido, continuar →</button>`;
+  } else {
+    return `
+      <div class="pdf-guide-title">Guardar tu boleto como PDF</div>
+      <div class="pdf-guide-sub">En el diálogo de impresión:</div>
+      <div class="pdf-step"><div class="pdf-step-num">1</div><div class="pdf-step-text">Selecciona <strong>"Guardar como PDF"</strong> como destino</div></div>
+      <div class="pdf-step"><div class="pdf-step-num">2</div><div class="pdf-step-text">Activa <strong>"Gráficos en segundo plano"</strong> en Más opciones</div></div>
+      <div class="pdf-step"><div class="pdf-step-num">3</div><div class="pdf-step-text">Clic en <strong>Guardar</strong></div></div>
+      <button class="pdf-btn-ok" id="pdf-btn-ok">Entendido, abrir diálogo →</button>`;
+  }
+}
 
 function accionPrincipal() {
-  window.print();
+  guideBox.innerHTML = buildGuideContent();
+  guide.classList.add('show');
+  document.getElementById('pdf-btn-ok').addEventListener('click', () => {
+    guide.classList.remove('show');
+    setTimeout(() => window.print(), 100);
+  });
 }
+
+guide.addEventListener('click', (e) => {
+  if (e.target === guide) guide.classList.remove('show');
+});
 
 async function init() {
   if (!token) { showError('No se encontró el boleto.'); return; }
@@ -157,33 +236,25 @@ async function init() {
     const res  = await fetch('/api/validar?t=' + encodeURIComponent(token));
     const data = await res.json();
     if (!data.ok && !data.viewOnly) {
-      showError(
-        data.reason === 'not_confirmed' ? 'Este boleto aún no ha sido confirmado.' :
-        data.reason === 'not_found'     ? 'Boleto no encontrado.' :
-        'No se pudo cargar el boleto.'
-      );
+      if (data.reason === 'transferred') {
+        showTransferred(data.transferredTo);
+      } else {
+        showError(
+          data.reason === 'not_confirmed' ? 'Este boleto aún no ha sido confirmado.' :
+          data.reason === 'not_found'     ? 'Boleto no encontrado.' :
+          'No se pudo cargar el boleto.'
+        );
+      }
       return;
     }
     renderTicket(data);
 
     // Botón principal
-    const icon  = document.getElementById('btn-icon');
-    const label = document.getElementById('btn-label');
-    icon.textContent  = '⬇';
-    label.textContent = 'Guardar PDF';
+    document.getElementById('btn-icon').textContent  = '⬇';
+    document.getElementById('btn-label').textContent = 'Guardar PDF';
 
     document.getElementById('btn-transfer').href = '/transferir?t=' + encodeURIComponent(token);
     document.getElementById('actions').style.display = 'flex';
-
-    const hint = document.getElementById('hint');
-    hint.style.display = 'block';
-    if (isIOS) {
-      hint.innerHTML = 'Toca <strong style="color:#CBD5E1;">Guardar PDF</strong> → en la vista previa toca el ícono de compartir ↑ → <em>Guardar en Archivos</em>';
-    } else if (isMobile) {
-      hint.innerHTML = 'Toca <strong style="color:#CBD5E1;">Guardar PDF</strong> → elige <em>Guardar como PDF</em> en la impresora';
-    } else {
-      hint.innerHTML = 'Toca <strong style="color:#CBD5E1;">Guardar PDF</strong> → activa <em>"Gráficos en segundo plano"</em> → Guardar';
-    }
 
     if (autoSave) {
       setTimeout(() => window.print(), 1000);
@@ -231,6 +302,14 @@ function renderTicket(d) {
 
 function showError(msg) {
   wrap.innerHTML = `<div class="state"><div style="font-size:46px;margin-bottom:14px;">❌</div><p style="color:#F87171;font-weight:700;margin-bottom:8px;font-size:16px;">Error</p><p style="font-size:13px;">${msg}</p></div>`;
+}
+
+function showTransferred(nombre) {
+  wrap.innerHTML = `<div class="state">
+    <div style="font-size:48px;margin-bottom:16px;">↗</div>
+    <p style="color:#A78BFA;font-weight:800;margin-bottom:8px;font-size:17px;">Boleto transferido</p>
+    <p style="font-size:13px;line-height:1.6;">Este boleto fue transferido a<br/><strong style="color:#fff;font-size:15px;">${nombre}</strong></p>
+  </div>`;
 }
 
 init();

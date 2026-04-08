@@ -297,6 +297,9 @@ function renderResult(d) {
   } else if (d.reason === 'not_confirmed') {
     card.className = 'result-card warn';
     card.innerHTML = `<div class="r-icon">⚠️</div><div><div class="r-status">Pago no confirmado</div><div class="r-nombre">${d.nombre || '—'}</div><div class="r-detail">El pago aún no ha sido aprobado</div></div>`;
+  } else if (d.reason === 'transferred') {
+    card.className = 'result-card warn';
+    card.innerHTML = `<div class="r-icon">↗</div><div><div class="r-status">Boleto transferido</div><div class="r-nombre">${d.transferredTo || '—'}</div><div class="r-detail">Este boleto fue transferido a ${d.transferredTo || 'otra persona'}</div></div>`;
   } else if (d.reason === 'not_found') {
     card.className = 'result-card fail';
     card.innerHTML = `<div class="r-icon">❌</div><div><div class="r-status">Código inválido</div><div class="r-detail">No corresponde a ningún boleto</div></div>`;

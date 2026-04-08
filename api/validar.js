@@ -40,6 +40,10 @@ module.exports = async function handler(req, res) {
     const totalBoletos = props.TotalBoletos?.number || 1;
     const horaIngreso  = props['Hora Ingreso']?.date?.start || null;
 
+    if (estado === 'Transferido') {
+      return res.status(200).json({ ok: false, reason: 'transferred', transferredTo: nombre });
+    }
+
     if (estado !== 'Confirmado') {
       return res.status(200).json({ ok: false, reason: 'not_confirmed', nombre });
     }

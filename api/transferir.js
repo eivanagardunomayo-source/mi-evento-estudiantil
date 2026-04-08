@@ -67,16 +67,36 @@ module.exports = async function handler(req, res) {
       if (b.estado !== 'Confirmado') return res.status(400).json({ error: 'El boleto aún no ha sido confirmado' });
       if (b.ingresado) return res.status(400).json({ error: 'Este boleto ya fue utilizado y no puede transferirse' });
 
-      // Generar nuevo token para invalidar el anterior
+      // Generar nuevo token para el nuevo titular
       const nuevoToken = crypto.randomUUID();
+      const fecha = new Date().toISOString().split('T')[0];
 
-      // Actualizar titular y token en Notion
+      // Marcar página vieja como Transferida, guardar nombre del nuevo titular
+      // para poder mostrar "transferido a X" si alguien intenta usar el token viejo
       await notion.pages.update({
         page_id: b.pageId,
         properties: {
           'Nombre': { title: [{ text: { content: nuevoNombre.trim() } }] },
-          'Email':  { email: nuevoEmail.trim() },
-          'Token':  { rich_text: [{ text: { content: nuevoToken } }] }
+          'Estado': { select: { name: 'Transferido' } }
+        }
+      });
+
+      // Crear nueva página para el nuevo titular con nuevo token
+      await notion.pages.create({
+        parent: { database_id: process.env.NOTION_DB_ID },
+        properties: {
+          'Nombre':       { title:     [{ text: { content: nuevoNombre.trim() } }] },
+          'Email':        { email:     nuevoEmail.trim() },
+          'Tipo':         { select:    { name: b.tipo || 'Tec' } },
+          'Referencia':   { rich_text: [{ text: { content: b.ref } }] },
+          'Token':        { rich_text: [{ text: { content: nuevoToken } }] },
+          'EsBoleto':     { checkbox:  true },
+          'NumBoleto':    { number:    b.numBoleto },
+          'TotalBoletos': { number:    b.totalBoletos },
+          'Monto':        { number:    b.monto },
+          'Ingresado':    { checkbox:  false },
+          'Estado':       { select:    { name: 'Confirmado' } },
+          'Fecha':        { date:      { start: fecha } }
         }
       });
 
