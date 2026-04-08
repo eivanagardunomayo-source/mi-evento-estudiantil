@@ -88,8 +88,11 @@ function buildEmailComprador({ nombre, boletos, monto, referencia }) {
 <body style="margin:0;padding:0;background:#050714;font-family:'Helvetica Neue',Arial,sans-serif;">
 <div style="max-width:560px;margin:0 auto;padding:40px 20px;">
 
+  <div style="text-align:center;margin-bottom:20px;">
+    <img src="https://welcome2thefuture2026.vercel.app/logo-belae.png" width="120" alt="BeLAE" style="display:inline-block;max-width:120px;"/>
+  </div>
   <div style="text-align:center;margin-bottom:36px;">
-    <img src="https://welcome2thefuture2026.vercel.app/logo-oficial.png" width="140" alt="W2TF 2026" style="display:inline-block;max-width:140px;"/>
+    <img src="https://welcome2thefuture2026.vercel.app/logo-oficial.png" width="200" alt="W2TF 2026" style="display:inline-block;max-width:200px;"/>
   </div>
 
   <div style="background:#0f1140;border:1px solid rgba(122,0,255,0.25);border-radius:20px;padding:40px;margin-bottom:20px;">
@@ -127,9 +130,6 @@ function buildEmailComprador({ nombre, boletos, monto, referencia }) {
     </div>
   </div>
 
-  <div style="text-align:center;margin-bottom:14px;">
-    <img src="https://welcome2thefuture2026.vercel.app/logo-belae.png" width="80" alt="BeLAE" style="display:inline-block;max-width:80px;opacity:0.7;"/>
-  </div>
   <p style="text-align:center;color:#64748B;font-size:11px;margin:0;">
     ¿Dudas? Escríbenos a <a href="mailto:belaeccm.tec@gmail.com" style="color:#00CFFF;">belaeccm.tec@gmail.com</a><br/>
     © 2026 BeLAE · Welcome 2 The Future
