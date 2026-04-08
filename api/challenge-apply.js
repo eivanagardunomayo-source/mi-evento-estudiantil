@@ -23,49 +23,37 @@ module.exports = async function handler(req, res) {
 
   const fecha = new Date().toISOString().split('T')[0];
 
+  // ── Guardar en Notion (crítico — si falla, devuelve error) ──
   try {
-    // ── Guardar en Notion ─────────────────────────────────────
     await notion.pages.create({
       parent: { database_id: DB_ID },
       properties: {
-        'Nombre del proyecto':    { title:       [{ text: { content: d.nombreProyecto || '' } }] },
-        'Integrantes y roles':    { rich_text:   [{ text: { content: integrantesText } }] },
-        'Correo de contacto':     { email:       d.email || '' },
+        'Nombre del proyecto':    { title:        [{ text: { content: d.nombreProyecto || '' } }] },
+        'Integrantes y roles':    { rich_text:    [{ text: { content: integrantesText } }] },
+        'Correo de contacto':     { email:        d.email || '' },
         'Teléfono':               { phone_number: d.telefono || '' },
-        'Carrera / Universidad':  { rich_text:   [{ text: { content: d.carrera || '' } }] },
-        'LinkedIn fundador':      { url:         d.linkedin || null },
-        'Ciudad':                 { rich_text:   [{ text: { content: d.ciudad || '' } }] },
-        'P1 - Problema':          { rich_text:   [{ text: { content: d.p1 || '' } }] },
-        'P2 - Solución':          { rich_text:   [{ text: { content: d.p2 || '' } }] },
-        'P3 - Diferenciación':    { rich_text:   [{ text: { content: d.p3 || '' } }] },
-        'P4 - Validación':        { rich_text:   [{ text: { content: d.p4 || '' } }] },
-        'P5 - Modelo de negocio': { rich_text:   [{ text: { content: d.p5 || '' } }] },
-        'P6 - Logros / Tracción': { rich_text:   [{ text: { content: d.p6 || '' } }] },
-        'P7 - Tecnología':        { rich_text:   [{ text: { content: d.p7 || '' } }] },
-        'P8 - Riesgo principal':  { rich_text:   [{ text: { content: d.p8 || '' } }] },
-        'P9 - Motivación':        { rich_text:   [{ text: { content: d.p9 || '' } }] },
-        'Etapa':                  { select:      { name: d.etapa || 'Idea' } },
-        'Industria':              { select:      { name: d.industria || 'Otro' } },
-        'Pitch Deck URL':         { url:         d.deckUrl || null },
-        'Fecha de aplicación':    { date:        { start: fecha } },
-        'Status':                 { select:      { name: 'Nueva' } },
+        'Carrera / Universidad':  { rich_text:    [{ text: { content: d.carrera || '' } }] },
+        'LinkedIn fundador':      { url:          d.linkedin || null },
+        'Ciudad':                 { rich_text:    [{ text: { content: d.ciudad || '' } }] },
+        'P1 - Problema':          { rich_text:    [{ text: { content: d.p1 || '' } }] },
+        'P2 - Solución':          { rich_text:    [{ text: { content: d.p2 || '' } }] },
+        'P3 - Diferenciación':    { rich_text:    [{ text: { content: d.p3 || '' } }] },
+        'P4 - Validación':        { rich_text:    [{ text: { content: d.p4 || '' } }] },
+        'P5 - Modelo de negocio': { rich_text:    [{ text: { content: d.p5 || '' } }] },
+        'P6 - Logros / Tracción': { rich_text:    [{ text: { content: d.p6 || '' } }] },
+        'P7 - Tecnología':        { rich_text:    [{ text: { content: d.p7 || '' } }] },
+        'P8 - Riesgo principal':  { rich_text:    [{ text: { content: d.p8 || '' } }] },
+        'P9 - Motivación':        { rich_text:    [{ text: { content: d.p9 || '' } }] },
+        'Etapa':                  { select:       { name: d.etapa || 'Idea' } },
+        'Industria':              { select:       { name: d.industria || 'Otro' } },
+        'Pitch Deck URL':         { url:          d.deckUrl || null },
+        'Fecha de aplicación':    { date:         { start: fecha } },
+        'Status':                 { select:       { name: 'Nueva' } },
       }
     });
-
-    // ── Email de confirmación al aplicante ────────────────────
-    await transporter.sendMail({
-      from: `"Welcome 2 The Future" <${process.env.GMAIL_USER}>`,
-      to: d.email,
-      subject: `Aplicación recibida — The Challenge · W2TF 2026`,
-      html: buildConfirmEmail(d)
-    });
-
-    return res.status(200).json({ success: true });
-
   } catch (err) {
-    console.error('Error en challenge-apply:', err?.message, err?.body);
-
-    // Fallback: enviar los datos al admin por email para no perderlos
+    console.error('Error Notion challenge-apply:', err?.message, err?.body);
+    // Fallback: enviar datos al admin para no perderlos
     try {
       await transporter.sendMail({
         from: `"W2TF Error" <${process.env.GMAIL_USER}>`,
@@ -74,9 +62,23 @@ module.exports = async function handler(req, res) {
         text: JSON.stringify(d, null, 2)
       });
     } catch (_) {}
-
-    return res.status(500).json({ error: err?.message || 'Error interno' });
+    return res.status(500).json({ error: err?.message || 'Error al guardar la aplicación' });
   }
+
+  // ── Email de confirmación (no crítico — si falla, igual devuelve éxito) ──
+  try {
+    await transporter.sendMail({
+      from: `"Welcome 2 The Future" <${process.env.GMAIL_USER}>`,
+      to: d.email,
+      subject: `Aplicación recibida — The Challenge · W2TF 2026`,
+      html: buildConfirmEmail(d)
+    });
+  } catch (emailErr) {
+    console.error('Error email challenge-apply:', emailErr?.message);
+    // No bloqueamos el éxito por el email
+  }
+
+  return res.status(200).json({ success: true });
 };
 
 function buildConfirmEmail(d) {
