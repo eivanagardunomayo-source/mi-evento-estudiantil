@@ -859,6 +859,23 @@
       opacity:0;transform:translateY(4px);transition:opacity 0.3s,transform 0.3s;
     }
     .savings-pill.show{opacity:1;transform:translateY(0);}
+    .savings-breakdown{
+      margin-top:10px;
+      background:rgba(0,220,100,0.05);
+      border:1px solid rgba(0,220,100,0.15);
+      border-radius:12px;padding:10px 14px;
+      display:none;
+    }
+    .sb-row{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:5px 0;font-size:0.76rem;
+    }
+    .sb-row+.sb-row{border-top:1px solid rgba(255,255,255,0.05);}
+    .sb-key{color:rgba(255,255,255,0.45);}
+    .sb-val{color:#34D399;font-weight:700;}
+    .sb-total-row .sb-key{color:rgba(255,255,255,0.7);font-weight:600;}
+    .sb-total-row .sb-val{font-size:0.9rem;}
+    .sb-divider{border:none;border-top:1px solid rgba(255,255,255,0.07);margin:4px 0;}
     /* group explainer */
     .group-explainer{
       font-size:0.73rem;color:rgba(255,255,255,0.3);
@@ -2206,6 +2223,21 @@
           </div>
           <div class="modal-total-price" id="modal-total-price">$200 <span style="font-size:0.9rem;font-weight:600;">MXN</span></div>
         </div>
+        <div class="savings-breakdown" id="savings-breakdown">
+          <div class="sb-row" id="sb-row-preventa" style="display:none;">
+            <span class="sb-key">🏷 Precio preventa</span>
+            <span class="sb-val" id="sb-preventa-val">−$0</span>
+          </div>
+          <div class="sb-row" id="sb-row-volumen" style="display:none;">
+            <span class="sb-key">👥 Descuento por grupo</span>
+            <span class="sb-val" id="sb-volumen-val">−$0</span>
+          </div>
+          <hr class="sb-divider"/>
+          <div class="sb-row sb-total-row">
+            <span class="sb-key">✅ Total ahorrado</span>
+            <span class="sb-val" id="sb-total-val">−$0</span>
+          </div>
+        </div>
 
         <p class="form-section-label">Tus datos</p>
         <div class="form-row">
@@ -2580,55 +2612,55 @@ function isPreventaActive(){
 
 /* ── Pricing engine ── */
 function calcPrecio(){
-  const preventa = isPreventaActive();
+  const preventa  = isPreventaActive();
+  const REGULAR   = 250; // precio referencia Tec (post-preventa, sin grupo)
 
   if(selectedTipo === 'externo'){
-    // Externos: precio fijo siempre, sin descuento
-    return { base:300, perUnit:300, total:300*ticketQty, savings:0, disc:0, label:'Precio externo' };
+    return { regular:300, perUnit:300, total:300*ticketQty,
+             savingPreventa:0, savingVolumen:0, totalSaving:0, disc:0 };
   }
 
-  // Tec — preventa activa
-  if(preventa){
-    const base    = 200;
-    const perUnit = ticketQty >= 10 ? 150 : 200;
-    const total   = perUnit * ticketQty;
-    const savings = (base - perUnit) * ticketQty;
-    return { base, perUnit, total, savings, disc: ticketQty>=10 ? 0.25 : 0, label:'Preventa Tec' };
-  }
+  // Tec
+  const prevBase = 200; // precio preventa sin descuento de grupo
+  const perUnit  = preventa
+    ? (ticketQty >= 10 ? 150 : 200)
+    : (ticketQty >= 10 ? 180 : 250);
 
-  // Tec — venta general
-  const base    = 250;
-  const perUnit = ticketQty >= 10 ? 180 : 250;
-  const total   = perUnit * ticketQty;
-  const savings = (base - perUnit) * ticketQty;
-  return { base, perUnit, total, savings, disc: ticketQty >= 10 ? 0.28 : 0, label:'Venta general Tec' };
+  const total          = perUnit * ticketQty;
+  const savingPreventa = preventa ? (REGULAR - prevBase) * ticketQty : 0;        // $50 × qty
+  const savingVolumen  = ticketQty >= 10
+    ? (preventa ? (prevBase - 150) : (REGULAR - 180)) * ticketQty                // prev:50×q / post:70×q
+    : 0;
+  const totalSaving    = (REGULAR - perUnit) * ticketQty;
+  const disc           = savingVolumen > 0 ? (preventa ? 0.25 : 0.28) : 0;
+
+  return { regular:REGULAR, perUnit, total, savingPreventa, savingVolumen, totalSaving, disc };
 }
 
 function updatePriceUI(){
-  const { base, perUnit, total, savings, disc } = calcPrecio();
+  const { regular, perUnit, total, savingPreventa, savingVolumen, totalSaving, disc } = calcPrecio();
   const preventa = isPreventaActive();
   const externo  = selectedTipo === 'externo';
 
-  // per-ticket tag
+  // per-ticket tag — mostrar tachado si hay ahorro total
   const tag = document.getElementById('ticket-price-tag');
-  tag.innerHTML = disc > 0
-    ? `<span class="orig">$${base}</span><span class="now">$${perUnit} c/u</span>`
+  tag.innerHTML = (!externo && totalSaving > 0)
+    ? `<span class="orig">$${regular}</span><span class="now">$${perUnit} c/u</span>`
     : `<span class="now">$${perUnit} c/u</span>`;
 
-  // breakdown
+  // breakdown qty
   document.getElementById('qty-breakdown').textContent =
-    ticketQty + ' boleto' + (ticketQty>1?'s':'') + ' × $' + perUnit
-    + (disc > 0 ? ` (−${Math.round(disc*100)}%)` : '');
+    ticketQty + ' boleto' + (ticketQty>1?'s':'') + ' × $' + perUnit;
 
-  // total
+  // total price
   document.getElementById('modal-total-price').innerHTML =
     '$' + total.toLocaleString('es-MX') + ' <span style="font-size:0.9rem;font-weight:600;">MXN</span>';
 
-  // savings pill
+  // savings pill (resumen compacto)
   const pill = document.getElementById('savings-pill');
   const box  = document.getElementById('modal-total-box');
-  if(savings > 0){
-    document.getElementById('savings-text').textContent = 'Ahorras $' + savings.toLocaleString('es-MX');
+  if(!externo && totalSaving > 0){
+    document.getElementById('savings-text').textContent = 'Ahorras $' + totalSaving.toLocaleString('es-MX');
     pill.classList.add('show');
     box.classList.add('has-discount');
   } else {
@@ -2636,11 +2668,34 @@ function updatePriceUI(){
     box.classList.remove('has-discount');
   }
 
+  // savings breakdown detallado
+  const sbEl  = document.getElementById('savings-breakdown');
+  if(!externo && totalSaving > 0){
+    sbEl.style.display = 'block';
+    const sbPrevRow = document.getElementById('sb-row-preventa');
+    const sbVolRow  = document.getElementById('sb-row-volumen');
+    if(savingPreventa > 0){
+      sbPrevRow.style.display = 'flex';
+      document.getElementById('sb-preventa-val').textContent = '−$' + savingPreventa.toLocaleString('es-MX');
+    } else {
+      sbPrevRow.style.display = 'none';
+    }
+    if(savingVolumen > 0){
+      sbVolRow.style.display = 'flex';
+      document.getElementById('sb-volumen-val').textContent = '−$' + savingVolumen.toLocaleString('es-MX');
+    } else {
+      sbVolRow.style.display = 'none';
+    }
+    document.getElementById('sb-total-val').textContent = '−$' + totalSaving.toLocaleString('es-MX');
+  } else {
+    sbEl.style.display = 'none';
+  }
+
   // discount tier badges — solo visible para Tec
   const tiersEl = document.getElementById('discount-tiers');
   tiersEl.style.display = externo ? 'none' : 'flex';
 
-  const explainerEl = document.getElementById('group-explainer');
+  const explainerEl  = document.getElementById('group-explainer');
   const explainerTxt = document.getElementById('group-explainer-text');
 
   if(externo){
@@ -2649,26 +2704,24 @@ function updatePriceUI(){
   } else if(preventa){
     document.getElementById('dtier-10-label').textContent = '10+ boletos: $150 c/u';
     document.getElementById('dtier-10').classList.toggle('active', ticketQty >= 10);
-
     if(ticketQty >= 10){
       explainerEl.className = 'group-explainer highlight';
-      explainerTxt.innerHTML = '🎉 ¡Precio grupal activo! A partir del <strong>10° boleto</strong> cada persona paga solo <strong>$150 MXN</strong>.';
+      explainerTxt.innerHTML = '🎉 ¡Precio grupal activo! Cada persona paga solo <strong>$150 MXN</strong>.';
     } else {
       explainerEl.className = 'group-explainer';
       const faltan = 10 - ticketQty;
-      explainerTxt.innerHTML = `¿Vienes con amigos? Si compran <strong>10 boletos o más</strong>, cada uno paga <strong>$150 MXN</strong> — te faltan <strong>${faltan}</strong> para activar el precio grupal.`;
+      explainerTxt.innerHTML = `¿Vienes con amigos? Con <strong>10 boletos o más</strong> cada uno paga <strong>$150 MXN</strong> — te faltan <strong>${faltan}</strong> para activar el precio grupal.`;
     }
   } else {
     document.getElementById('dtier-10-label').textContent = '10+ boletos: $180 c/u';
     document.getElementById('dtier-10').classList.toggle('active', ticketQty >= 10);
-
     if(ticketQty >= 10){
       explainerEl.className = 'group-explainer highlight';
-      explainerTxt.innerHTML = '🎉 ¡Precio grupal activo! A partir del <strong>10° boleto</strong> cada persona paga <strong>$180 MXN</strong>.';
+      explainerTxt.innerHTML = '🎉 ¡Precio grupal activo! Cada persona paga <strong>$180 MXN</strong>.';
     } else {
       explainerEl.className = 'group-explainer';
       const faltan = 10 - ticketQty;
-      explainerTxt.innerHTML = `¿Vienes con amigos? Si compran <strong>10 boletos o más</strong>, el precio por persona baja a <strong>$180 MXN</strong> — te faltan <strong>${faltan}</strong> para activar el descuento.`;
+      explainerTxt.innerHTML = `¿Vienes con amigos? Con <strong>10 boletos o más</strong> el precio baja a <strong>$180 MXN</strong> — te faltan <strong>${faltan}</strong>.`;
     }
   }
 }
