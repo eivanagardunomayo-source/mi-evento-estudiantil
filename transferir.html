@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Transferir boleto · W2TF 2026</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#050714;font-family:'Helvetica Neue',Arial,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+    .wrap{width:100%;max-width:420px;}
+    .logo{text-align:center;margin-bottom:28px;}
+    .logo img{width:120px;}
+    .card{background:#0f1140;border:1px solid rgba(122,0,255,0.25);border-radius:20px;padding:32px;margin-bottom:16px;}
+    .step-label{color:#00CFFF;font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:12px;}
+    h2{color:#fff;font-size:20px;font-weight:800;margin-bottom:6px;}
+    .sub{color:#64748B;font-size:13px;line-height:1.6;margin-bottom:24px;}
+    .ticket-preview{background:rgba(255,255,255,0.04);border-radius:12px;padding:16px;margin-bottom:24px;}
+    .tp-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:13px;}
+    .tp-row:last-child{border-bottom:none;}
+    .tp-key{color:#64748B;}
+    .tp-val{color:#fff;font-weight:600;text-align:right;}
+    .tp-val.purple{color:#A78BFA;}
+    label{display:block;font-size:12px;color:#94A3B8;margin-bottom:6px;font-weight:500;}
+    input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 16px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;font-family:inherit;}
+    input:focus{border-color:#7C3AED;}
+    input::placeholder{color:#475569;}
+    .btn{width:100%;background:linear-gradient(135deg,#7C3AED,#9333EA);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s;}
+    .btn:hover{opacity:.9;}
+    .btn:disabled{opacity:.5;cursor:not-allowed;}
+    .warn{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:12px 16px;color:#F87171;font-size:12px;line-height:1.6;margin-bottom:20px;}
+    .success{text-align:center;padding:20px 0;}
+    .success .icon{font-size:56px;margin-bottom:16px;}
+    .success h2{color:#34D399;margin-bottom:8px;}
+    .success p{color:#64748B;font-size:13px;line-height:1.6;}
+    .err-state{text-align:center;padding:20px 0;}
+    .err-state .icon{font-size:56px;margin-bottom:16px;}
+    .spinner{width:36px;height:36px;border:3px solid rgba(124,58,237,0.2);border-top-color:#7C3AED;border-radius:50%;animation:spin .8s linear infinite;margin:24px auto;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">
+    <img src="/logo-belae.png" alt="BeLAE"/>
+  </div>
+
+  <div class="card" id="card">
+    <div class="spinner"></div>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const token  = params.get('t');
+const card   = document.getElementById('card');
+
+async function init() {
+  if (!token) { showError('No se encontró el token del boleto.'); return; }
+  try {
+    const res  = await fetch('/api/transferir?t=' + encodeURIComponent(token));
+    const data = await res.json();
+    if (!res.ok) { showError(data.error); return; }
+    showForm(data);
+  } catch {
+    showError('Error de conexión. Intenta de nuevo.');
+  }
+}
+
+function showForm(b) {
+  card.innerHTML = `
+    <div class="step-label">Transferir boleto</div>
+    <h2>¿A quién le mandas este boleto?</h2>
+    <p class="sub">Cuando confirmes, el boleto quedará a nombre de la nueva persona y le llegará por email.</p>
+
+    <div class="ticket-preview">
+      <div class="tp-row"><span class="tp-key">Boleto actual</span><span class="tp-val">${b.nombre}</span></div>
+      <div class="tp-row"><span class="tp-key">Referencia</span><span class="tp-val purple">${b.ref}</span></div>
+      <div class="tp-row"><span class="tp-key">Tipo</span><span class="tp-val">${b.tipo}</span></div>
+      <div class="tp-row"><span class="tp-key">Número</span><span class="tp-val">Boleto ${b.numBoleto} de ${b.totalBoletos}</span></div>
+    </div>
+
+    <div class="warn">⚠️ Una vez transferido, este boleto dejará de estar a tu nombre. Solo puedes transferirlo antes de que sea escaneado en la entrada.</div>
+
+    <label>Nombre completo del nuevo titular</label>
+    <input type="text" id="inp-nombre" placeholder="Nombre Apellido" autocomplete="name"/>
+
+    <label>Email del nuevo titular</label>
+    <input type="email" id="inp-email" placeholder="correo@ejemplo.com" autocomplete="email"/>
+
+    <button class="btn" id="btn-transferir" onclick="transferir()">Transferir boleto →</button>
+  `;
+}
+
+async function transferir() {
+  const nombre = document.getElementById('inp-nombre').value.trim();
+  const email  = document.getElementById('inp-email').value.trim();
+  if (!nombre || !email) { alert('Completa nombre y email'); return; }
+  if (!email.includes('@')) { alert('Email inválido'); return; }
+
+  const btn = document.getElementById('btn-transferir');
+  btn.disabled = true;
+  btn.textContent = 'Transfiriendo…';
+
+  try {
+    const res  = await fetch('/api/transferir', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token, nuevoNombre: nombre, nuevoEmail: email })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showSuccess(nombre, email);
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Transferir boleto →';
+      alert(data.error || 'Error al transferir');
+    }
+  } catch {
+    btn.disabled = false;
+    btn.textContent = 'Transferir boleto →';
+    alert('Error de conexión. Intenta de nuevo.');
+  }
+}
+
+function showSuccess(nombre, email) {
+  card.innerHTML = `
+    <div class="success">
+      <div class="icon">✅</div>
+      <h2>¡Boleto transferido!</h2>
+      <p>El boleto ahora está a nombre de <strong style="color:#fff;">${nombre}</strong>.<br/>Le enviamos su boleto a <strong style="color:#00CFFF;">${email}</strong>.</p>
+    </div>
+  `;
+}
+
+function showError(msg) {
+  card.innerHTML = `
+    <div class="err-state">
+      <div class="icon">❌</div>
+      <h2 style="color:#F87171;margin-bottom:8px;">No se puede transferir</h2>
+      <p style="color:#64748B;font-size:13px;">${msg}</p>
+    </div>
+  `;
+}
+
+init();
+</script>
+</body>
+</html>

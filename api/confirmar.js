@@ -188,7 +188,8 @@ function buildTicketBlock({ nombre, ref, tipo, montoPorBoleto, numBoleto, totalB
             <span style="color:#A78BFA;font-size:11px;font-weight:700;letter-spacing:0.1em;font-family:'Courier New',monospace;">${shortCode}</span>
           </td>
           <td style="text-align:right;">
-            <span style="color:#64748B;font-size:10px;font-family:Arial,sans-serif;">Uso personal · No transferible</span>
+            <a href="${base}/boleto?t=${token}" style="color:#00CFFF;font-size:10px;font-family:Arial,sans-serif;text-decoration:none;display:block;margin-bottom:4px;">⬇ Guardar boleto</a>
+            <a href="${base}/transferir?t=${token}" style="color:#A78BFA;font-size:10px;font-family:Arial,sans-serif;text-decoration:none;display:block;">↗ Transferir</a>
           </td>
         </tr>
       </table>
