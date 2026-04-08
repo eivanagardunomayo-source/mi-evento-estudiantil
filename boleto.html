@@ -6,127 +6,227 @@
   <title>Mi Boleto · W2TF 2026</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
-    :root{
-      --bg:#050714;--purple:#7C3AED;--cyan:#22D3EE;
-      --card-bg:#0a0120;--text:#CBD5E1;--muted:#64748B;
+    body{
+      background:#050714;
+      font-family:'Helvetica Neue',Arial,sans-serif;
+      min-height:100vh;
+      display:flex;flex-direction:column;align-items:center;
+      padding:24px 16px 56px;
     }
-    body{background:var(--bg);font-family:'Helvetica Neue',Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:28px 20px 48px;}
 
-    /* Botones acción — se ocultan al imprimir */
-    .actions{display:flex;gap:10px;margin-bottom:28px;width:100%;max-width:380px;}
-    .btn-save{flex:1;background:linear-gradient(135deg,var(--purple),#9333EA);color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;-webkit-tap-highlight-color:transparent;}
-    .btn-transfer{flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);color:var(--text);border-radius:12px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;-webkit-tap-highlight-color:transparent;}
-    .btn-save:active,.btn-transfer:active{opacity:.75;}
-    .hint{font-size:11px;color:var(--muted);text-align:center;margin-bottom:28px;max-width:340px;line-height:1.6;}
+    /* ── ACCIONES (se ocultan al imprimir) ── */
+    .actions{
+      width:100%;max-width:440px;
+      display:none; /* se muestra via JS */
+      gap:10px;
+      margin-bottom:18px;
+    }
+    .btn-pdf{
+      flex:1;
+      background:linear-gradient(135deg,#7C3AED,#00CFFF);
+      color:#fff;border:none;border-radius:14px;
+      padding:15px 10px;font-size:15px;font-weight:700;
+      cursor:pointer;font-family:inherit;
+      display:flex;align-items:center;justify-content:center;gap:7px;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .btn-transfer{
+      flex:1;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.15);
+      color:#CBD5E1;border-radius:14px;
+      padding:15px 10px;font-size:15px;font-weight:600;
+      text-decoration:none;
+      display:flex;align-items:center;justify-content:center;gap:7px;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .hint{
+      font-size:12px;color:#475569;text-align:center;
+      margin-bottom:22px;max-width:400px;line-height:1.7;
+      display:none;
+    }
 
-    /* ===== TICKET CARD ===== */
-    .ticket{width:100%;max-width:380px;border-radius:24px;overflow:hidden;box-shadow:0 24px 80px rgba(122,0,255,0.35),0 8px 32px rgba(0,207,255,0.15);border:1px solid rgba(122,0,255,0.4);}
+    /* ── TICKET ── */
+    .ticket{
+      width:100%;max-width:440px;
+      border-radius:28px;overflow:hidden;
+      background:#06061a;
+      border:1px solid rgba(122,0,255,0.45);
+      box-shadow:
+        0 0 0 1px rgba(0,207,255,0.08),
+        0 32px 80px rgba(122,0,255,0.4),
+        0 8px 24px rgba(0,207,255,0.18);
+    }
 
-    /* Header gradient */
-    .t-header{background:linear-gradient(135deg,#7A00FF 0%,#00CFFF 100%);padding:28px 24px 22px;text-align:center;}
-    .t-header img.logo-w2tf{width:180px;max-width:100%;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto;}
-    .t-header .boleto-title{color:#fff;font-size:17px;font-weight:900;letter-spacing:0.1em;}
+    /* Header con logos */
+    .t-logos{
+      background:linear-gradient(160deg,#7A00FF 0%,#4f22e8 40%,#00CFFF 100%);
+      padding:28px 28px 22px;
+      text-align:center;
+      position:relative;
+    }
+    .t-logos::after{
+      content:'';
+      position:absolute;inset:0;
+      background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events:none;
+    }
+    .logo-belae-sm{height:28px;margin-bottom:14px;opacity:0.9;}
+    .logo-w2tf-main{width:200px;max-width:80%;margin-bottom:14px;}
+    .ticket-badge{
+      display:inline-block;
+      background:rgba(255,255,255,0.15);
+      border:1px solid rgba(255,255,255,0.3);
+      border-radius:999px;
+      padding:5px 18px;
+      color:#fff;font-size:11px;font-weight:800;
+      letter-spacing:0.2em;text-transform:uppercase;
+    }
 
-    /* Número de boleto */
-    .t-num{background:rgba(0,207,255,0.1);border-bottom:1px solid rgba(0,207,255,0.15);padding:10px 24px;text-align:center;}
-    .t-num span{color:#00CFFF;font-size:11px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;}
+    /* Banda de número */
+    .t-num{
+      background:rgba(0,207,255,0.08);
+      border-top:1px solid rgba(0,207,255,0.15);
+      border-bottom:1px solid rgba(0,207,255,0.15);
+      padding:10px 28px;text-align:center;
+    }
+    .t-num span{color:#00CFFF;font-size:11px;font-weight:800;letter-spacing:0.25em;text-transform:uppercase;}
 
     /* Cuerpo */
-    .t-body{background:var(--card-bg);padding:22px 22px 0;}
-    .t-label{color:var(--muted);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:2px;}
-    .t-name{color:#fff;font-size:26px;font-weight:900;margin-bottom:20px;line-height:1.15;}
+    .t-body{padding:24px 28px 8px;}
+    .t-holder-label{color:#475569;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:4px;}
+    .t-holder-name{color:#fff;font-size:28px;font-weight:900;margin-bottom:22px;line-height:1.1;letter-spacing:-0.01em;}
 
-    .t-info{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px;}
-    .t-info td{padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06);}
-    .t-info td:first-child{color:var(--muted);}
-    .t-info td:last-child{color:#fff;text-align:right;font-weight:600;}
-    .t-info .cyan{color:#00CFFF!important;}
-    .t-info .purple{color:#A78BFA!important;}
-    .t-info tr:last-child td{border-bottom:none;}
+    .t-grid{
+      display:table;width:100%;border-collapse:collapse;
+      font-size:12.5px;margin-bottom:6px;
+    }
+    .t-row{display:table-row;}
+    .t-row td{display:table-cell;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06);}
+    .t-row:last-child td{border-bottom:none;}
+    .t-key{color:#475569;width:50%;}
+    .t-val{color:#fff;text-align:right;font-weight:600;}
+    .t-val.cyan{color:#00CFFF;}
+    .t-val.purple{color:#A78BFA;}
+
+    /* Separador */
+    .t-sep{
+      margin:20px 0 0;
+      border:none;
+      border-top:2px dashed rgba(255,255,255,0.08);
+      position:relative;
+    }
+    .t-sep::before,.t-sep::after{
+      content:'';position:absolute;top:-9px;
+      width:18px;height:18px;border-radius:50%;
+      background:#050714;border:1px solid rgba(122,0,255,0.3);
+    }
+    .t-sep::before{left:-30px;}
+    .t-sep::after{right:-30px;}
 
     /* QR */
-    .t-qr{text-align:center;padding:0 22px 20px;}
-    .t-qr .qr-wrap{background:#fff;border-radius:14px;padding:10px;display:inline-block;margin-bottom:8px;}
-    .t-qr img{display:block;width:160px;height:160px;}
-    .t-qr .qr-hint{color:var(--muted);font-size:10px;line-height:1.5;}
+    .t-qr{padding:22px 28px 20px;text-align:center;}
+    .t-qr .qr-box{
+      display:inline-block;
+      background:#fff;
+      border-radius:16px;
+      padding:10px;
+      box-shadow:0 4px 24px rgba(0,207,255,0.25);
+      margin-bottom:10px;
+    }
+    .t-qr img{display:block;width:170px;height:170px;}
+    .t-qr-label{color:#475569;font-size:10px;letter-spacing:0.08em;line-height:1.6;}
 
-    /* Línea de corte */
-    .t-cut{margin:0 18px;border-top:2px dashed rgba(255,255,255,0.1);}
-
-    /* Stub inferior */
-    .t-stub{background:var(--card-bg);padding:12px 22px 22px;display:flex;align-items:center;justify-content:space-between;}
+    /* Stub footer */
+    .t-foot{
+      background:rgba(122,0,255,0.05);
+      border-top:1px solid rgba(122,0,255,0.15);
+      padding:12px 28px;
+      display:flex;align-items:center;justify-content:space-between;
+    }
     .t-code{color:#A78BFA;font-size:11px;font-weight:700;letter-spacing:0.1em;font-family:'Courier New',monospace;}
-    .t-personal{color:var(--muted);font-size:10px;}
-
-    /* Logos footer */
-    .footer-logos{margin-top:28px;display:flex;align-items:center;justify-content:center;gap:20px;opacity:.6;}
-    .footer-logos img{height:32px;width:auto;}
+    .t-personal{color:#334155;font-size:10px;}
 
     /* Loading / error */
-    .loading,.error{text-align:center;padding:48px 0;color:var(--muted);}
-    .spinner{width:40px;height:40px;border:3px solid rgba(124,58,237,0.2);border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
+    .state{text-align:center;padding:48px 20px;color:#475569;max-width:440px;width:100%;}
+    .spinner{width:40px;height:40px;border:3px solid rgba(124,58,237,0.15);border-top-color:#7C3AED;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* ===== PRINT / GUARDAR ===== */
-    @media print {
-      body{background:#050714!important;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-      .actions,.hint,.footer-logos{display:none!important;}
-      .ticket{max-width:100%;box-shadow:none;border:1px solid rgba(122,0,255,0.3);}
-      @page{margin:12mm;size:A5 portrait;}
+    /* ===== PRINT ===== */
+    @media print{
+      html,body{
+        background:#050714!important;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+        padding:0;margin:0;
+        display:block;
+      }
+      .actions,.hint{display:none!important;}
+      .ticket{
+        max-width:100%;border-radius:0;
+        box-shadow:none;
+        border:none;
+        page-break-inside:avoid;
+      }
+      .t-sep::before,.t-sep::after{background:#050714!important;}
+      @page{margin:0;size:A5 portrait;}
     }
   </style>
 </head>
 <body>
 
-<div class="actions" id="actions" style="display:none;">
-  <button class="btn-save" onclick="guardar()">⬇ Guardar boleto</button>
-  <a class="btn-transfer" id="btn-transfer" href="#">↗ Transferir</a>
+<div class="actions" id="actions">
+  <button class="btn-pdf" onclick="window.print()">
+    <span style="font-size:18px;">⬇</span> Guardar PDF
+  </button>
+  <a class="btn-transfer" id="btn-transfer" href="#">
+    <span style="font-size:16px;">↗</span> Transferir
+  </a>
 </div>
-<p class="hint" id="hint" style="display:none;"></p>
+<p class="hint" id="hint"></p>
 
-<div id="ticket-wrap">
-  <div class="loading"><div class="spinner"></div><p>Cargando boleto…</p></div>
-</div>
-
-<div class="footer-logos" id="footer-logos" style="display:none;">
-  <img src="/logo-belae.png" alt="BeLAE"/>
-  <img src="/logo-oficial.png" alt="W2TF"/>
+<div id="wrap">
+  <div class="state"><div class="spinner"></div><p>Cargando boleto…</p></div>
 </div>
 
 <script>
-const params = new URLSearchParams(location.search);
-const token  = params.get('t');
-const wrap   = document.getElementById('ticket-wrap');
-
-// Detect iOS
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-const isAndroid = /Android/.test(navigator.userAgent);
+const params  = new URLSearchParams(location.search);
+const token   = params.get('t');
+const autoSave = params.get('dl') === '1';
+const wrap    = document.getElementById('wrap');
+const isIOS   = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const isAnd   = /Android/.test(navigator.userAgent);
 
 async function init() {
   if (!token) { showError('No se encontró el boleto.'); return; }
   try {
     const res  = await fetch('/api/validar?t=' + encodeURIComponent(token));
     const data = await res.json();
-    if (!res.ok || (!data.ok && !data.viewOnly)) {
-      showError(data.reason === 'not_confirmed' ? 'Este boleto aún no ha sido confirmado.' : 'Boleto no encontrado.');
+    if (!data.ok && !data.viewOnly) {
+      showError(
+        data.reason === 'not_confirmed' ? 'Este boleto aún no ha sido confirmado.' :
+        data.reason === 'not_found'     ? 'Boleto no encontrado.'                 :
+        'No se pudo cargar el boleto.'
+      );
       return;
     }
-    // validar sin staffpin devuelve viewOnly:true con los datos
-    const d = data;
-    renderTicket(d);
-    // Mostrar acciones y footer
-    document.getElementById('actions').style.display = 'flex';
-    document.getElementById('footer-logos').style.display = 'flex';
+    renderTicket(data);
     document.getElementById('btn-transfer').href = '/transferir?t=' + encodeURIComponent(token);
-    // Hint de guardado
+    document.getElementById('actions').style.display = 'flex';
+
     const hint = document.getElementById('hint');
     hint.style.display = 'block';
     if (isIOS) {
-      hint.textContent = 'iPhone: toca "Guardar boleto" → luego Compartir → Guardar en Archivos';
-    } else if (isAndroid) {
-      hint.textContent = 'Android: toca "Guardar boleto" → en el menú de impresión elige Guardar como PDF';
+      hint.innerHTML = 'En iPhone: toca <strong style="color:#CBD5E1;">Guardar PDF</strong> → Safari abrirá el diálogo → toca el ícono de compartir y elige <em>Guardar en Archivos</em>';
+    } else if (isAnd) {
+      hint.innerHTML = 'Toca <strong style="color:#CBD5E1;">Guardar PDF</strong> → en el diálogo de impresión elige <em>Guardar como PDF</em>';
     } else {
-      hint.textContent = 'Toca "Guardar boleto" y elige "Guardar como PDF" en el diálogo de impresión';
+      hint.innerHTML = 'Toca <strong style="color:#CBD5E1;">Guardar PDF</strong> → elige <em>Guardar como PDF</em> en el diálogo';
+    }
+
+    // Auto-print si viene del email (dl=1)
+    if (autoSave) {
+      setTimeout(() => window.print(), 1200);
     }
   } catch {
     showError('Error de conexión. Intenta de nuevo.');
@@ -134,44 +234,58 @@ async function init() {
 }
 
 function renderTicket(d) {
-  const validarUrl = location.origin + '/validar?t=' + encodeURIComponent(token);
-  const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=10&data=' + encodeURIComponent(validarUrl);
+  const origin    = location.origin;
+  const validarUrl = origin + '/validar?t=' + encodeURIComponent(token);
+  const qrUrl     = 'https://api.qrserver.com/v1/create-qr-code/?size=340x340&margin=10&data=' + encodeURIComponent(validarUrl);
   const shortCode = token.replace(/-/g,'').substring(0,12).toUpperCase();
 
   wrap.innerHTML = `
-    <div class="ticket" id="ticket">
-      <div class="t-header">
-        <img class="logo-w2tf" src="/logo-oficial.png" alt="Welcome 2 The Future 2026"/>
-        <div class="boleto-title">✦ BOLETO OFICIAL ✦</div>
-      </div>
-      <div class="t-num"><span>BOLETO ${d.numBoleto} DE ${d.totalBoletos}</span></div>
-      <div class="t-body">
-        <div class="t-label">Titular del boleto</div>
-        <div class="t-name">${d.nombre}</div>
-        <table class="t-info">
-          <tr><td>Tipo de acceso</td><td class="cyan">${d.tipo || 'Asistente'}</td></tr>
-          <tr><td>Referencia</td><td class="purple">${d.ref}</td></tr>
-          <tr><td>Fecha</td><td>15 de mayo, 2026</td></tr>
-          <tr><td>Hora</td><td>2:30 PM</td></tr>
-          <tr><td>Lugar</td><td>Tec de Monterrey CCM</td></tr>
-        </table>
-      </div>
-      <div class="t-qr">
-        <div class="qr-wrap"><img src="${qrUrl}" alt="QR Boleto"/></div>
-        <div class="qr-hint">Presenta este código QR<br/>al ingresar al evento</div>
-      </div>
-      <div class="t-cut"></div>
-      <div class="t-stub">
-        <span class="t-code">${shortCode}</span>
-        <span class="t-personal">Uso personal · No transferible</span>
-      </div>
-    </div>`;
+<div class="ticket">
+
+  <div class="t-logos">
+    <img class="logo-belae-sm" src="/logo-belae.png" alt="BeLAE"/>
+    <br/>
+    <img class="logo-w2tf-main" src="/logo-oficial.png" alt="Welcome 2 The Future"/>
+    <br/>
+    <span class="ticket-badge">✦ Boleto Oficial ✦</span>
+  </div>
+
+  <div class="t-num">
+    <span>BOLETO ${d.numBoleto} DE ${d.totalBoletos}</span>
+  </div>
+
+  <div class="t-body">
+    <div class="t-holder-label">Titular del boleto</div>
+    <div class="t-holder-name">${d.nombre}</div>
+
+    <table class="t-grid">
+      <tr class="t-row"><td class="t-key">Tipo de acceso</td><td class="t-val cyan">${d.tipo || 'Asistente'}</td></tr>
+      <tr class="t-row"><td class="t-key">Referencia</td><td class="t-val purple">${d.ref}</td></tr>
+      <tr class="t-row"><td class="t-key">Fecha</td><td class="t-val">15 de mayo, 2026</td></tr>
+      <tr class="t-row"><td class="t-key">Hora</td><td class="t-val">2:30 PM</td></tr>
+      <tr class="t-row"><td class="t-key">Lugar</td><td class="t-val">Tec de Monterrey CCM</td></tr>
+    </table>
+
+    <hr class="t-sep"/>
+  </div>
+
+  <div class="t-qr">
+    <div class="qr-box">
+      <img src="${qrUrl}" alt="QR Boleto"/>
+    </div>
+    <div class="t-qr-label">Escanea este código al ingresar al evento</div>
+  </div>
+
+  <div class="t-foot">
+    <span class="t-code">${shortCode}</span>
+    <span class="t-personal">Uso personal · No transferible</span>
+  </div>
+
+</div>`;
 }
 
-function guardar() { window.print(); }
-
 function showError(msg) {
-  wrap.innerHTML = `<div class="error"><div style="font-size:48px;margin-bottom:16px;">❌</div><p style="color:#F87171;font-weight:700;margin-bottom:8px;">Error</p><p>${msg}</p></div>`;
+  wrap.innerHTML = `<div class="state"><div style="font-size:48px;margin-bottom:16px;">❌</div><p style="color:#F87171;font-weight:700;margin-bottom:8px;font-size:16px;">Error</p><p style="font-size:13px;">${msg}</p></div>`;
 }
 
 init();
