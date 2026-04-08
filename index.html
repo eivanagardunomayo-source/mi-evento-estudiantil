@@ -2237,13 +2237,15 @@
               <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" style="margin-top:8px;">
                 <div class="upload-icon">📎</div>
                 <p class="upload-text"><strong>Clic</strong> o arrastra aquí</p>
-                <p class="upload-text" style="font-size:0.72rem;margin-top:2px;">PDF, JPG, PNG · máx 10 MB</p>
+                <p class="upload-text" style="font-size:0.72rem;margin-top:2px;">PDF, JPG, PNG, HEIC · las imágenes se comprimen automáticamente</p>
                 <p class="upload-fname" id="file-name"></p>
               </div>
-              <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" onchange="handleFile(this.files[0])"/>
+              <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,.heif" style="display:none;" onchange="handleFile(this.files[0])"/>
             </div>
           </div>
         </div>
+
+        <div id="reg-error" style="display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:12px 16px;margin-bottom:12px;color:#fca5a5;font-size:0.82rem;line-height:1.5;"></div>
 
         <button class="btn btn-primary" style="width:100%;" id="confirm-btn" onclick="enviarRegistro()">
           <span class="btn-shine"></span>
@@ -2809,8 +2811,22 @@ function handleFile(file){
   selectedFile = file;
   const zone = document.getElementById('upload-zone');
   const fn   = document.getElementById('file-name');
+  const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+  const isImg = file.type.startsWith('image/') || /\.(jpe?g|png|webp|heic|heif|gif)$/i.test(file.name);
+  const sizeMB = file.size / (1024 * 1024);
+
+  // PDFs > 8MB no pueden comprimirse del lado del cliente
+  if(isPdf && sizeMB > 8){
+    zone.classList.remove('has-file');
+    fn.textContent = '⚠️ PDF muy grande. Toma una captura de pantalla y súbela como imagen.';
+    fn.style.display = 'block';
+    fn.style.color = '#f87171';
+    selectedFile = null;
+    return;
+  }
   zone.classList.add('has-file');
-  fn.textContent = '✓ ' + file.name + ' (' + (file.size/1024).toFixed(0) + ' KB)';
+  fn.style.color = '';
+  fn.textContent = '✓ ' + file.name + ' (' + sizeMB.toFixed(1) + ' MB)' + (isImg && sizeMB > 1 ? ' — se comprimirá automáticamente' : '');
   fn.style.display = 'block';
 }
 
@@ -3037,6 +3053,10 @@ document.addEventListener('click', ()=>{
 })();
 
 async function enviarRegistro(){
+  // Ocultar error previo
+  const errEl = document.getElementById('reg-error');
+  if (errEl) errEl.style.display = 'none';
+
   if(!selectedFile){
     const zone = document.getElementById('upload-zone');
     zone.style.borderColor = 'rgba(255,70,70,0.5)';
@@ -3056,37 +3076,61 @@ async function enviarRegistro(){
   btn.innerHTML = '<span class="btn-shine"></span>Enviando...';
   btn.disabled = true;
 
-  // Convertir archivo a base64 (con compresión para imágenes grandes de móvil)
+  // Preparar comprobante: comprimir imágenes, validar PDFs
   let comprobanteBase64 = null;
   if (selectedFile) {
-    comprobanteBase64 = await new Promise((resolve) => {
-      if (!selectedFile.type.startsWith('image/')) {
-        // PDF u otro: leer directo sin comprimir
+    const isPdf = selectedFile.type === 'application/pdf' || selectedFile.name.toLowerCase().endsWith('.pdf');
+    const isImg = selectedFile.type.startsWith('image/') || /\.(jpe?g|png|webp|heic|heif|gif)$/i.test(selectedFile.name);
+
+    if (isImg) {
+      // Comprimir imagen: máx 1200px, JPEG 70% → siempre < 400 KB
+      comprobanteBase64 = await new Promise((resolve) => {
+        const img = new Image();
+        const url = URL.createObjectURL(selectedFile);
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+          const MAX = 1200;
+          let w = img.width, h = img.height;
+          if (w > MAX || h > MAX) {
+            if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+            else       { w = Math.round(w * MAX / h); h = MAX; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.70));
+        };
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+          // Fallback: leer sin comprimir (archivos HEIC en Safari, etc.)
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => resolve(null);
+          reader.readAsDataURL(selectedFile);
+        };
+        img.src = url;
+      });
+    } else if (isPdf) {
+      // PDF: leer directo (ya validado < 8 MB en handleFile)
+      comprobanteBase64 = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);
         reader.onerror = () => resolve(null);
         reader.readAsDataURL(selectedFile);
-        return;
+      });
+    }
+
+    // Guarda de seguridad final: si aún pesa > 3.8 MB en base64, rechazar con mensaje claro
+    if (comprobanteBase64 && comprobanteBase64.length > 3.8 * 1024 * 1024) {
+      btn.innerHTML = '<span class="btn-shine"></span>Confirmar registro';
+      btn.disabled = false;
+      const errEl = document.getElementById('reg-error');
+      if (errEl) {
+        errEl.textContent = 'El archivo es demasiado grande. Toma una captura de pantalla (JPG/PNG) y súbela.';
+        errEl.style.display = 'block';
       }
-      // Imagen: comprimir a máx 1400px y calidad 0.75 para evitar 413
-      const img = new Image();
-      const url = URL.createObjectURL(selectedFile);
-      img.onload = () => {
-        URL.revokeObjectURL(url);
-        const MAX = 1400;
-        let w = img.width, h = img.height;
-        if (w > MAX || h > MAX) {
-          if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
-          else       { w = Math.round(w * MAX / h); h = MAX; }
-        }
-        const canvas = document.createElement('canvas');
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL('image/jpeg', 0.75));
-      };
-      img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
-      img.src = url;
-    });
+      return;
+    }
   }
 
   let apiOk = false;
@@ -3108,7 +3152,12 @@ async function enviarRegistro(){
   } catch(err) {
     btn.innerHTML = '<span class="btn-shine"></span>Confirmar registro';
     btn.disabled = false;
-    alert('Hubo un problema al enviar tu registro: ' + (err.message || 'intenta de nuevo'));
+    const errEl2 = document.getElementById('reg-error');
+    if (errEl2) {
+      errEl2.textContent = 'Hubo un problema al enviar tu registro. Intenta de nuevo o escríbenos a belaeccm.tec@gmail.com';
+      errEl2.style.display = 'block';
+      errEl2.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
     return;
   }
 
