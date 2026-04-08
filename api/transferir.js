@@ -189,17 +189,23 @@ function buildTransferEmail({ nuevoNombre, ref, tipo, numBoleto, totalBoletos, m
     </tr>
     <tr><td style="padding:0 16px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:2px dashed rgba(255,255,255,0.12);padding:0;"></td></tr></table></td></tr>
     <tr>
-      <td style="padding:12px 24px;">
-        <table width="100%" cellpadding="0" cellspacing="0">
-          <tr>
-            <td><span style="color:#A78BFA;font-size:11px;font-weight:700;letter-spacing:0.1em;font-family:'Courier New',monospace;">${shortCode}</span></td>
-            <td style="text-align:right;"><a href="${boletoUrl}" style="color:#00CFFF;font-size:10px;font-family:Arial,sans-serif;text-decoration:none;">Ver y guardar boleto →</a></td>
-          </tr>
-        </table>
+      <td style="padding:10px 24px 16px;">
+        <span style="color:#A78BFA;font-size:11px;font-weight:700;letter-spacing:0.1em;font-family:'Courier New',monospace;">${shortCode}</span>
       </td>
     </tr>
   </table>
   </td></tr>
+  </table>
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+    <tr>
+      <td width="50%" style="padding-right:5px;">
+        <a href="${boletoUrl}&dl=1" style="display:block;background:linear-gradient(135deg,#7C3AED,#00CFFF);color:#ffffff;text-align:center;padding:14px 10px;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;font-family:Arial,sans-serif;letter-spacing:0.02em;">⬇&nbsp; Guardar PDF</a>
+      </td>
+      <td width="50%" style="padding-left:5px;">
+        <a href="${base}/transferir?t=${token}" style="display:block;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);color:#CBD5E1;text-align:center;padding:14px 10px;border-radius:12px;font-size:14px;font-weight:600;text-decoration:none;font-family:Arial,sans-serif;">↗&nbsp; Transferir</a>
+      </td>
+    </tr>
   </table>
 
   <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
