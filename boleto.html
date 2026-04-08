@@ -218,12 +218,18 @@ function buildGuideContent() {
 }
 
 function accionPrincipal() {
+  if (!isMobile) {
+    // Desktop: print directo, sin guía
+    window.print();
+    return;
+  }
+  // Móvil: mostrar guía primero, luego print sincrónico (iOS requiere gesto directo)
   guideBox.innerHTML = buildGuideContent();
   guide.classList.add('show');
   document.getElementById('pdf-btn-ok').addEventListener('click', () => {
     guide.classList.remove('show');
-    setTimeout(() => window.print(), 100);
-  });
+    window.print(); // sin setTimeout — iOS necesita que sea sincrónico al gesto
+  }, { once: true });
 }
 
 guide.addEventListener('click', (e) => {

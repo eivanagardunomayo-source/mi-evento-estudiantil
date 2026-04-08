@@ -216,6 +216,39 @@ function logout() {
   document.getElementById('pin-error').textContent = '';
 }
 
+// ── AUDIO ────────────────────────────────────────────────────────
+let audioCtx = null;
+
+function initAudio() {
+  try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+}
+
+function playBeep(type) {
+  try {
+    if (!audioCtx) return;
+    const osc  = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    const t = audioCtx.currentTime;
+    if (type === 'ok') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(660, t);
+      osc.frequency.setValueAtTime(880, t + 0.12);
+      gain.gain.setValueAtTime(0.3, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+      osc.start(t); osc.stop(t + 0.35);
+    } else {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(350, t);
+      osc.frequency.setValueAtTime(220, t + 0.15);
+      gain.gain.setValueAtTime(0.3, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+      osc.start(t); osc.stop(t + 0.4);
+    }
+  } catch(e) {}
+}
+
 // ── CAMERA ───────────────────────────────────────────────────────
 const video  = document.getElementById('video');
 const canvas = document.getElementById('canvas');
@@ -286,30 +319,37 @@ async function processQR(raw) {
 function renderResult(d) {
   const card = document.getElementById('result-card');
   if (d.ok && !d.viewOnly) {
+    playBeep('ok');
     scanCount++;
     localStorage.setItem(COUNT_KEY, scanCount);
     document.getElementById('counter').textContent = scanCount;
     card.className = 'result-card ok';
     card.innerHTML = `<div class="r-icon">✅</div><div><div class="r-status">Acceso permitido</div><div class="r-nombre">${d.nombre}</div><div class="r-detail">${d.tipo || 'Asistente'} · Boleto ${d.numBoleto} de ${d.totalBoletos}<br>${d.ref}</div></div>`;
   } else if (d.reason === 'already_used') {
+    playBeep('error');
     card.className = 'result-card fail';
     card.innerHTML = `<div class="r-icon">🚫</div><div><div class="r-status">Ya ingresó</div><div class="r-nombre">${d.nombre}</div><div class="r-detail">Este boleto ya fue utilizado</div></div>`;
   } else if (d.reason === 'not_confirmed') {
+    playBeep('error');
     card.className = 'result-card warn';
     card.innerHTML = `<div class="r-icon">⚠️</div><div><div class="r-status">Pago no confirmado</div><div class="r-nombre">${d.nombre || '—'}</div><div class="r-detail">El pago aún no ha sido aprobado</div></div>`;
   } else if (d.reason === 'transferred') {
+    playBeep('error');
     card.className = 'result-card warn';
-    card.innerHTML = `<div class="r-icon">↗</div><div><div class="r-status">Boleto transferido</div><div class="r-nombre">${d.transferredTo || '—'}</div><div class="r-detail">Este boleto fue transferido a ${d.transferredTo || 'otra persona'}</div></div>`;
+    card.innerHTML = `<div class="r-icon">↗</div><div><div class="r-status">Boleto transferido</div><div class="r-nombre">${d.transferredTo || '—'}</div><div class="r-detail">Este boleto fue transferido a <strong>${d.transferredTo || 'otra persona'}</strong></div></div>`;
   } else if (d.reason === 'not_found') {
+    playBeep('error');
     card.className = 'result-card fail';
     card.innerHTML = `<div class="r-icon">❌</div><div><div class="r-status">Código inválido</div><div class="r-detail">No corresponde a ningún boleto</div></div>`;
   } else {
+    playBeep('error');
     card.className = 'result-card fail';
     card.innerHTML = `<div class="r-icon">❌</div><div><div class="r-status">Error</div><div class="r-detail">${d.reason || 'Intenta de nuevo'}</div></div>`;
   }
 }
 
 function showScanner() {
+  initAudio(); // inicializar desde gesto de usuario para que iOS permita audio
   document.getElementById('pin-screen').style.display    = 'none';
   document.getElementById('scanner-screen').style.display = 'flex';
   startCamera();
