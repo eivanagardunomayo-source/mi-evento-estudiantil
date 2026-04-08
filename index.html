@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="format-detection" content="telephone=no, date=no, email=no, address=no"/>
   <title>Welcome 2 The Future 2026 — Tec de Monterrey CDMX</title>
   <meta name="description" content="El summit de innovación, IA y tecnologías emergentes del Tec de Monterrey CDMX. 15 de mayo de 2026."/>
   <meta property="og:title" content="Welcome 2 The Future 2026"/>
@@ -957,7 +958,7 @@
     }
     .ss-label{font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.5);margin-bottom:7px;}
     .clabe-wrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-    .clabe-num{font-family:'Courier New',monospace;font-size:1rem;font-weight:700;letter-spacing:0.1em;color:#fff;}
+    .clabe-num{font-family:'Courier New',monospace;font-size:1rem;font-weight:700;letter-spacing:0.1em;color:#fff!important;text-decoration:none!important;pointer-events:none;}
     .copy-btn{
       background:rgba(0,207,255,0.08);border:1px solid rgba(0,207,255,0.22);
       border-radius:8px;padding:6px 12px;color:var(--cyan);
@@ -2826,7 +2827,7 @@ function handleFile(file){
   }
   zone.classList.add('has-file');
   fn.style.color = '';
-  fn.textContent = '✓ ' + file.name + ' (' + sizeMB.toFixed(1) + ' MB)' + (isImg && sizeMB > 1 ? ' — se comprimirá automáticamente' : '');
+  fn.textContent = '✓ ' + file.name + ' (' + sizeMB.toFixed(1) + ' MB)';
   fn.style.display = 'block';
 }
 
