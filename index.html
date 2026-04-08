@@ -3169,6 +3169,13 @@ async function enviarRegistro(){
   document.getElementById('sc-ref').textContent    = referencia;
   goToStep(3);
 }
+
+// Auto-abrir modal de compra si viene desde challenge.html con ?comprar=1
+if (new URLSearchParams(window.location.search).get('comprar') === '1') {
+  window.addEventListener('load', function() {
+    setTimeout(openModal, 400);
+  });
+}
 </script>
 
 </body>
