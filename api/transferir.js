@@ -67,26 +67,30 @@ module.exports = async function handler(req, res) {
       if (b.estado !== 'Confirmado') return res.status(400).json({ error: 'El boleto aún no ha sido confirmado' });
       if (b.ingresado) return res.status(400).json({ error: 'Este boleto ya fue utilizado y no puede transferirse' });
 
-      // Actualizar titular en Notion
+      // Generar nuevo token para invalidar el anterior
+      const nuevoToken = crypto.randomUUID();
+
+      // Actualizar titular y token en Notion
       await notion.pages.update({
         page_id: b.pageId,
         properties: {
           'Nombre': { title: [{ text: { content: nuevoNombre.trim() } }] },
-          'Email':  { email: nuevoEmail.trim() }
+          'Email':  { email: nuevoEmail.trim() },
+          'Token':  { rich_text: [{ text: { content: nuevoToken } }] }
         }
       });
 
-      // Enviar boleto al nuevo titular
-      const validarUrl = `${base}/validar?t=${token}`;
-      const boletoUrl  = `${base}/boleto?t=${token}`;
+      // Enviar boleto al nuevo titular con el nuevo token
+      const validarUrl = `${base}/validar?t=${nuevoToken}`;
+      const boletoUrl  = `${base}/boleto?t=${nuevoToken}`;
       const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=8&data=${encodeURIComponent(validarUrl)}`;
-      const shortCode = token.replace(/-/g, '').substring(0, 12).toUpperCase();
+      const shortCode = nuevoToken.replace(/-/g, '').substring(0, 12).toUpperCase();
 
       await transporter.sendMail({
         from: `"Welcome 2 The Future" <${process.env.GMAIL_USER}>`,
         to:   nuevoEmail.trim(),
         subject: `Te transfirieron un boleto — W2TF 2026 · ${b.ref}`,
-        html: buildTransferEmail({ nuevoNombre: nuevoNombre.trim(), ref: b.ref, tipo: b.tipo, numBoleto: b.numBoleto, totalBoletos: b.totalBoletos, monto: b.monto, qrUrl, token, shortCode, boletoUrl })
+        html: buildTransferEmail({ nuevoNombre: nuevoNombre.trim(), ref: b.ref, tipo: b.tipo, numBoleto: b.numBoleto, totalBoletos: b.totalBoletos, monto: b.monto, qrUrl, token: nuevoToken, shortCode, boletoUrl })
       });
 
       return res.status(200).json({ success: true });

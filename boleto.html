@@ -145,16 +145,10 @@ const token    = params.get('t');
 const autoSave = params.get('dl') === '1';
 const wrap     = document.getElementById('wrap');
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-const canShare = !!navigator.share;
+const isIOS    = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 function accionPrincipal() {
-  if (canShare) {
-    const url = location.origin + '/boleto?t=' + encodeURIComponent(token);
-    navigator.share({ title: 'Mi Boleto W2TF 2026', text: 'Mi boleto para Welcome 2 The Future 2026 — preséntalo en la entrada.', url })
-      .catch(() => {});
-  } else {
-    window.print();
-  }
+  window.print();
 }
 
 async function init() {
@@ -172,29 +166,26 @@ async function init() {
     }
     renderTicket(data);
 
-    // Botón principal según dispositivo
+    // Botón principal
     const icon  = document.getElementById('btn-icon');
     const label = document.getElementById('btn-label');
-    if (canShare) {
-      icon.textContent  = '⬆';
-      label.textContent = 'Compartir boleto';
-    } else {
-      icon.textContent  = '⬇';
-      label.textContent = 'Guardar PDF';
-    }
+    icon.textContent  = '⬇';
+    label.textContent = 'Guardar PDF';
 
     document.getElementById('btn-transfer').href = '/transferir?t=' + encodeURIComponent(token);
     document.getElementById('actions').style.display = 'flex';
 
     const hint = document.getElementById('hint');
     hint.style.display = 'block';
-    if (canShare) {
-      hint.innerHTML = 'Toca <strong style="color:#CBD5E1;">Compartir boleto</strong> → en el menú elige <em>Imprimir</em> o <em>Guardar en Archivos</em> para tener el PDF';
+    if (isIOS) {
+      hint.innerHTML = 'Toca <strong style="color:#CBD5E1;">Guardar PDF</strong> → en la vista previa toca el ícono de compartir ↑ → <em>Guardar en Archivos</em>';
+    } else if (isMobile) {
+      hint.innerHTML = 'Toca <strong style="color:#CBD5E1;">Guardar PDF</strong> → elige <em>Guardar como PDF</em> en la impresora';
     } else {
       hint.innerHTML = 'Toca <strong style="color:#CBD5E1;">Guardar PDF</strong> → activa <em>"Gráficos en segundo plano"</em> → Guardar';
     }
 
-    if (autoSave && !isMobile) {
+    if (autoSave) {
       setTimeout(() => window.print(), 1000);
     }
   } catch {
