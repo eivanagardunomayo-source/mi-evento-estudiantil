@@ -91,7 +91,8 @@ function buildConfirmEmail(d) {
 
   <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
     <tr><td style="text-align:center;">
-      <img src="${base}/logo-belae.png" width="90" alt="BeLAE" style="filter:brightness(0) invert(1);opacity:0.85;"/>
+      <img src="${base}/logo-oficial.png" width="200" alt="Welcome 2 The Future 2026" style="opacity:0.95;display:block;margin:0 auto 12px;"/>
+      <img src="${base}/logo-belae.png" width="72" alt="BeLAE" style="filter:brightness(0) invert(1);opacity:0.75;display:block;margin:0 auto;"/>
     </td></tr>
   </table>
 
@@ -114,10 +115,17 @@ function buildConfirmEmail(d) {
     </td></tr>
   </table>
 
-  <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
     <tr><td style="background:rgba(255,153,0,0.07);border:1px solid rgba(255,153,0,0.2);border-radius:12px;padding:14px 18px;">
       <div style="color:#fff;font-size:13px;font-weight:700;margin-bottom:4px;">Importante</div>
       <div style="color:rgba(255,255,255,0.6);font-size:13px;line-height:1.6;">Estén atentos a los medios de contacto que registraron. Podríamos buscarlos para entrevistas o aclaraciones previas a la final.</div>
+    </td></tr>
+  </table>
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+    <tr><td style="background:rgba(0,207,255,0.06);border:1px solid rgba(0,207,255,0.2);border-radius:12px;padding:14px 18px;">
+      <div style="color:#00CFFF;font-size:13px;font-weight:700;margin-bottom:4px;">Asistencia obligatoria para finalistas</div>
+      <div style="color:rgba(255,255,255,0.6);font-size:13px;line-height:1.6;">En caso de ser seleccionados como finalistas, <strong style="color:#fff;">la presentación es presencial y obligatoria</strong> el <strong style="color:#fff;">15 de mayo en el Tec de Monterrey Campus Ciudad de México</strong>. Asegúrense de tener disponibilidad esa fecha.</div>
     </td></tr>
   </table>
 
