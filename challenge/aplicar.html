@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aplica al Challenge — Welcome 2 The Future 2026</title>
+  <meta name="description" content="Aplica al Startup Challenge de Welcome 2 The Future. Presenta tu idea frente a Nazca VC y expertos de industria."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet"/>
+
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --cyan:#00CFFF;
+      --purple:#7A00FF;
+      --magenta:#FF00C8;
+      --bg:#04040f;
+      --card:rgba(255,255,255,0.04);
+      --border:rgba(255,255,255,0.09);
+      --text-muted:rgba(255,255,255,0.5);
+      --ease:cubic-bezier(0.16,1,0.3,1);
+    }
+    html{scroll-behavior:smooth;}
+    body{
+      font-family:'Outfit',sans-serif;
+      background:var(--bg);
+      color:#fff;
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    body::before{
+      content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0.02;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+    /* bg glow */
+    .bg-glow{position:fixed;inset:0;z-index:-1;
+      background:radial-gradient(ellipse at 50% 0%,rgba(0,207,255,0.08) 0%,transparent 60%),
+                 radial-gradient(ellipse at 80% 80%,rgba(122,0,255,0.07) 0%,transparent 50%);
+    }
+
+    /* ── Nav ──────────────────────────────────── */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 32px;
+      background:rgba(4,4,15,0.8);backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-back{
+      display:flex;align-items:center;gap:8px;
+      color:var(--text-muted);text-decoration:none;font-size:0.85rem;font-weight:600;
+      transition:color 0.2s;
+    }
+    .nav-back:hover{color:#fff;}
+    .nav-title{font-size:0.85rem;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:0.05em;}
+
+    /* ── Wrapper ──────────────────────────────── */
+    .page-wrap{
+      max-width:680px;margin:0 auto;
+      padding:100px 24px 80px;
+    }
+
+    /* ── Intro block ──────────────────────────── */
+    .intro{
+      text-align:center;margin-bottom:48px;
+      padding:36px 32px;
+      background:linear-gradient(135deg,rgba(122,0,255,0.08),rgba(0,207,255,0.04));
+      border:1px solid rgba(122,0,255,0.2);
+      border-radius:20px;
+    }
+    .intro-eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+      color:var(--cyan);margin-bottom:14px;
+    }
+    .intro-eyebrow::before,.intro-eyebrow::after{content:'';display:block;width:20px;height:1px;background:var(--cyan);opacity:0.5;}
+    .intro h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:900;margin-bottom:10px;line-height:1.2;}
+    .intro-sub{color:var(--text-muted);font-size:0.95rem;line-height:1.65;margin-bottom:14px;}
+    .intro-time{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:0.78rem;color:rgba(255,255,255,0.35);
+      background:rgba(255,255,255,0.04);border:1px solid var(--border);
+      border-radius:100px;padding:5px 14px;
+    }
+
+    /* ── Stepper ──────────────────────────────── */
+    .stepper{
+      display:flex;align-items:center;
+      margin-bottom:40px;
+      gap:0;
+    }
+    .step-item{
+      flex:1;display:flex;align-items:center;flex-direction:column;gap:6px;
+      position:relative;
+    }
+    .step-item:not(:last-child)::after{
+      content:'';position:absolute;top:14px;left:calc(50% + 14px);right:calc(-50% + 14px);
+      height:1px;background:var(--border);z-index:0;
+    }
+    .step-item.done:not(:last-child)::after{background:var(--cyan);opacity:0.4;}
+    .step-dot{
+      width:28px;height:28px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:0.72rem;font-weight:800;
+      background:rgba(255,255,255,0.06);border:1.5px solid var(--border);
+      color:var(--text-muted);transition:all 0.35s var(--ease);
+      position:relative;z-index:1;
+    }
+    .step-item.active .step-dot{
+      background:var(--cyan);border-color:var(--cyan);color:#000;
+      box-shadow:0 0 16px rgba(0,207,255,0.4);
+    }
+    .step-item.done .step-dot{
+      background:rgba(0,207,255,0.15);border-color:rgba(0,207,255,0.4);
+      color:var(--cyan);
+    }
+    .step-label{
+      font-size:0.65rem;font-weight:600;letter-spacing:0.05em;
+      color:var(--text-muted);text-align:center;
+      transition:color 0.3s;white-space:nowrap;
+    }
+    .step-item.active .step-label{color:#fff;}
+    .step-item.done .step-label{color:rgba(0,207,255,0.7);}
+
+    /* ── Step panels ──────────────────────────── */
+    .step-panel{
+      display:none;
+      animation:slideIn 0.4s var(--ease) both;
+    }
+    .step-panel.active{display:block;}
+    @keyframes slideIn{
+      from{opacity:0;transform:translateX(24px);}
+      to{opacity:1;transform:translateX(0);}
+    }
+    .step-panel.slide-back{
+      animation:slideBack 0.4s var(--ease) both;
+    }
+    @keyframes slideBack{
+      from{opacity:0;transform:translateX(-24px);}
+      to{opacity:1;transform:translateX(0);}
+    }
+
+    .step-heading{
+      font-size:1.3rem;font-weight:800;margin-bottom:4px;
+    }
+    .step-sub{
+      font-size:0.88rem;color:var(--text-muted);margin-bottom:28px;line-height:1.5;
+    }
+
+    /* ── Form fields ──────────────────────────── */
+    .field{margin-bottom:22px;}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    @media(max-width:520px){.field-row{grid-template-columns:1fr;}}
+
+    label{
+      display:block;font-size:0.8rem;font-weight:700;
+      color:rgba(255,255,255,0.75);margin-bottom:7px;
+      letter-spacing:0.02em;
+    }
+    label .optional{
+      font-weight:400;color:var(--text-muted);margin-left:4px;font-size:0.75rem;
+    }
+    .helper{
+      font-size:0.75rem;color:var(--text-muted);margin-top:7px;line-height:1.5;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    textarea,
+    select{
+      width:100%;
+      background:rgba(255,255,255,0.04);
+      border:1.5px solid var(--border);
+      border-radius:12px;
+      padding:12px 16px;
+      color:#fff;
+      font-family:'Outfit',sans-serif;
+      font-size:0.93rem;
+      line-height:1.5;
+      transition:border-color 0.2s,box-shadow 0.2s,background 0.2s;
+      outline:none;
+      -webkit-appearance:none;
+    }
+    input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.2);}
+    input:focus,textarea:focus,select:focus{
+      border-color:var(--cyan);
+      box-shadow:0 0 0 3px rgba(0,207,255,0.1);
+      background:rgba(0,207,255,0.03);
+    }
+    input.error,textarea.error,select.error{
+      border-color:rgba(255,80,80,0.7);
+      box-shadow:0 0 0 3px rgba(255,80,80,0.08);
+    }
+    .error-msg{
+      font-size:0.73rem;color:#ff6b6b;margin-top:5px;display:none;
+    }
+    .field.has-error .error-msg{display:block;}
+
+    textarea{resize:vertical;min-height:100px;}
+
+    /* Char counter */
+    .char-wrap{display:flex;justify-content:flex-end;margin-top:5px;}
+    .char-counter{
+      font-size:0.7rem;color:var(--text-muted);transition:color 0.2s;
+    }
+    .char-counter.warn{color:#ffa040;}
+    .char-counter.over{color:#ff5050;}
+
+    select option{background:#0d0d20;color:#fff;}
+
+    /* ── Team member repeater ─────────────────── */
+    .members-list{display:flex;flex-direction:column;gap:10px;margin-bottom:10px;}
+    .member-row{
+      display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:center;
+    }
+    @media(max-width:520px){
+      .member-row{grid-template-columns:1fr 1fr auto;}
+    }
+    .member-remove{
+      width:32px;height:32px;border-radius:8px;border:1.5px solid var(--border);
+      background:rgba(255,80,80,0.06);color:rgba(255,100,100,0.7);
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      font-size:1rem;flex-shrink:0;transition:all 0.2s;
+    }
+    .member-remove:hover{border-color:rgba(255,80,80,0.4);background:rgba(255,80,80,0.12);color:#ff6b6b;}
+    .btn-add-member{
+      display:flex;align-items:center;gap:8px;
+      background:rgba(0,207,255,0.06);border:1.5px dashed rgba(0,207,255,0.25);
+      border-radius:10px;padding:9px 16px;
+      color:var(--cyan);font-size:0.8rem;font-weight:700;
+      cursor:pointer;width:100%;justify-content:center;
+      transition:all 0.2s;font-family:'Outfit',sans-serif;
+    }
+    .btn-add-member:hover{background:rgba(0,207,255,0.1);border-color:rgba(0,207,255,0.4);}
+
+    /* ── Question card ────────────────────────── */
+    .q-card{
+      background:rgba(255,255,255,0.03);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:20px 22px;
+      margin-bottom:18px;
+    }
+    .q-number{
+      font-size:0.65rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;
+      color:var(--cyan);opacity:0.7;margin-bottom:8px;
+    }
+    .q-label{
+      font-size:0.9rem;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.4;
+    }
+
+    /* ── Nav buttons ──────────────────────────── */
+    .btn-nav{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-top:32px;gap:12px;
+    }
+    .btn-back{
+      display:flex;align-items:center;gap:8px;
+      background:rgba(255,255,255,0.05);border:1.5px solid var(--border);
+      border-radius:12px;padding:13px 22px;
+      color:rgba(255,255,255,0.7);font-size:0.88rem;font-weight:700;
+      cursor:pointer;transition:all 0.2s;font-family:'Outfit',sans-serif;
+    }
+    .btn-back:hover{background:rgba(255,255,255,0.08);color:#fff;}
+    .btn-back:disabled{opacity:0.3;cursor:default;}
+    .btn-next{
+      flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
+      background:linear-gradient(135deg,var(--purple),var(--cyan));
+      border:none;border-radius:12px;padding:14px 28px;
+      color:#fff;font-size:0.95rem;font-weight:800;
+      cursor:pointer;transition:opacity 0.2s,transform 0.15s;
+      font-family:'Outfit',sans-serif;letter-spacing:0.02em;
+      position:relative;overflow:hidden;
+    }
+    .btn-next::after{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);
+      transform:translateX(-100%);transition:transform 0.5s;
+    }
+    .btn-next:hover::after{transform:translateX(100%);}
+    .btn-next:hover{opacity:0.9;transform:translateY(-1px);}
+    .btn-next:disabled{opacity:0.4;cursor:default;transform:none;}
+    .btn-next.loading .btn-text{display:none;}
+    .btn-next.loading .btn-spin{display:block;}
+    .btn-spin{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+
+    /* ── Autosave badge ───────────────────────── */
+    .autosave{
+      display:flex;align-items:center;gap:6px;
+      font-size:0.7rem;color:rgba(255,255,255,0.25);
+      margin-top:16px;justify-content:center;
+    }
+    .autosave-dot{width:6px;height:6px;border-radius:50%;background:rgba(0,220,100,0.6);animation:pulse 2s ease-in-out infinite;}
+    @keyframes pulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
+
+    /* ── Success screen ───────────────────────── */
+    #success{
+      display:none;
+      text-align:center;padding:20px 0 60px;
+    }
+    .success-icon{
+      width:72px;height:72px;border-radius:50%;
+      background:linear-gradient(135deg,rgba(0,220,100,0.2),rgba(0,207,255,0.15));
+      border:2px solid rgba(0,220,100,0.4);
+      display:flex;align-items:center;justify-content:center;
+      font-size:2rem;margin:0 auto 24px;
+    }
+    #success h2{font-size:1.8rem;font-weight:900;margin-bottom:10px;}
+    #success .sub{color:var(--text-muted);font-size:0.95rem;margin-bottom:32px;line-height:1.6;}
+    .dates-card{
+      background:var(--card);border:1px solid var(--border);
+      border-radius:16px;padding:22px 28px;text-align:left;
+      margin-bottom:20px;
+    }
+    .dates-card h4{font-size:0.8rem;font-weight:700;color:var(--cyan);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px;}
+    .date-row{
+      display:flex;align-items:center;gap:10px;
+      font-size:0.88rem;color:rgba(255,255,255,0.8);
+      padding:8px 0;
+      border-bottom:1px solid rgba(255,255,255,0.05);
+    }
+    .date-row:last-child{border:none;}
+    .date-row strong{color:#fff;}
+    .note-card{
+      background:rgba(255,153,0,0.06);border:1px solid rgba(255,153,0,0.2);
+      border-radius:12px;padding:14px 18px;
+      font-size:0.83rem;color:rgba(255,255,255,0.65);line-height:1.6;
+      text-align:left;
+    }
+
+    /* ── Error banner ─────────────────────────── */
+    .error-banner{
+      display:none;
+      background:rgba(255,80,80,0.08);border:1px solid rgba(255,80,80,0.3);
+      border-radius:12px;padding:14px 18px;
+      font-size:0.85rem;color:#ff8080;margin-top:16px;line-height:1.5;
+    }
+
+    @media(max-width:600px){
+      .page-wrap{padding:80px 16px 60px;}
+      .intro{padding:24px 18px;}
+      .stepper{gap:0;}
+      .step-label{display:none;}
+      .step-item:not(:last-child)::after{left:calc(50% + 10px);right:calc(-50% + 10px);}
+    }
+  </style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<nav>
+  <a href="/challenge" class="nav-back">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    The Challenge
+  </a>
+  <span class="nav-title">W2TF 2026 · Aplicación</span>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- Intro -->
+  <div class="intro" id="intro-block">
+    <div class="intro-eyebrow">Startup Challenge</div>
+    <h1>Aplica al <span style="background:linear-gradient(90deg,#fff,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Challenge</span></h1>
+    <p class="intro-sub">10 preguntas. 1 link a tu pitch deck. Eso es todo.<br/>No buscamos empresas perfectas — buscamos ideas con potencial y equipos con hambre de construir.</p>
+    <span class="intro-time">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Tiempo estimado: 15–20 minutos
+    </span>
+  </div>
+
+  <!-- Stepper -->
+  <div class="stepper" id="stepper">
+    <div class="step-item active" data-step="1">
+      <div class="step-dot">1</div>
+      <span class="step-label">Tu equipo</span>
+    </div>
+    <div class="step-item" data-step="2">
+      <div class="step-dot">2</div>
+      <span class="step-label">Tu proyecto</span>
+    </div>
+    <div class="step-item" data-step="3">
+      <div class="step-dot">3</div>
+      <span class="step-label">Tu avance</span>
+    </div>
+    <div class="step-item" data-step="4">
+      <div class="step-dot">4</div>
+      <span class="step-label">Detalles</span>
+    </div>
+  </div>
+
+  <!-- ── PASO 1: Tu equipo ───────────────────── -->
+  <div class="step-panel active" id="panel-1">
+    <p class="step-heading">Tu equipo</p>
+    <p class="step-sub">Cuéntanos quiénes están detrás del proyecto.</p>
+
+    <div class="field">
+      <label for="nombreProyecto">Nombre del proyecto</label>
+      <input type="text" id="nombreProyecto" placeholder="ej. Finova, Árbol, Klima..." maxlength="80"/>
+      <div class="error-msg">Este campo es obligatorio.</div>
+    </div>
+
+    <div class="field">
+      <label>Integrantes del equipo</label>
+      <div class="members-list" id="members-list">
+        <div class="member-row">
+          <input type="text" placeholder="Nombre completo" class="member-name"/>
+          <input type="text" placeholder="Rol (ej. CEO, CTO)" class="member-role"/>
+          <button type="button" class="member-remove" onclick="removeMember(this)" style="visibility:hidden;">×</button>
+        </div>
+      </div>
+      <button type="button" class="btn-add-member" onclick="addMember()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Agregar integrante
+      </button>
+      <div class="error-msg" id="members-error">Agrega al menos un integrante con nombre y rol.</div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="email">Correo de contacto</label>
+        <input type="email" id="email" placeholder="hola@ejemplo.com"/>
+        <div class="error-msg">Ingresa un correo válido.</div>
+      </div>
+      <div class="field">
+        <label for="telefono">Teléfono</label>
+        <input type="tel" id="telefono" placeholder="+52 55 1234 5678"/>
+        <div class="error-msg">Este campo es obligatorio.</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="carrera">Carrera / Universidad</label>
+      <input type="text" id="carrera" placeholder="ej. ITC — Tec de Monterrey CDMX"/>
+      <div class="error-msg">Este campo es obligatorio.</div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="ciudad">Ciudad donde opera el proyecto</label>
+        <input type="text" id="ciudad" placeholder="ej. Ciudad de México"/>
+        <div class="error-msg">Este campo es obligatorio.</div>
+      </div>
+      <div class="field">
+        <label for="linkedin">LinkedIn del fundador principal <span class="optional">(recomendado)</span></label>
+        <input type="url" id="linkedin" placeholder="linkedin.com/in/tu-perfil"/>
+        <p class="helper">Nos ayuda a conocer mejor al equipo.</p>
+      </div>
+    </div>
+
+    <div class="btn-nav">
+      <button class="btn-back" disabled>← Atrás</button>
+      <button class="btn-next" onclick="goNext(1)">
+        <span class="btn-text">Siguiente — Tu proyecto →</span>
+        <span class="btn-spin"></span>
+      </button>
+    </div>
+    <div class="autosave"><span class="autosave-dot"></span> Guardado automático activado</div>
+  </div>
+
+  <!-- ── PASO 2: Tu proyecto ─────────────────── -->
+  <div class="step-panel" id="panel-2">
+    <p class="step-heading">Tu proyecto</p>
+    <p class="step-sub">Las preguntas que más nos importan. Sé directo y concreto.</p>
+
+    <div class="q-card">
+      <div class="q-number">Pregunta 1 de 5</div>
+      <div class="q-label">¿Qué problema resuelven, para quién, y por qué es urgente resolverlo hoy?</div>
+      <textarea id="p1" placeholder="Describe el problema, quién lo sufre y por qué importa ahora..." maxlength="500"></textarea>
+      <div class="char-wrap"><span class="char-counter" id="c-p1">0 / 500</span></div>
+      <p class="helper">Queremos entender el problema, quién lo sufre y por qué importa ahora. Sé concreto.</p>
+      <div class="error-msg">Este campo es obligatorio.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-number">Pregunta 2 de 5</div>
+      <div class="q-label">Describe tu solución en una frase.</div>
+      <input type="text" id="p2" placeholder="Una sola frase, lo más clara posible..." maxlength="200"/>
+      <div class="char-wrap"><span class="char-counter" id="c-p2">0 / 200</span></div>
+      <p class="helper">Si necesitas un párrafo, la solución todavía no está clara. Fuerza la síntesis.</p>
+      <div class="error-msg">Este campo es obligatorio.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-number">Pregunta 3 de 5</div>
+      <div class="q-label">¿Qué alternativas existen hoy y qué hace diferente a la tuya?</div>
+      <textarea id="p3" placeholder="Menciona competidores, sustitutos o cómo se resuelve hoy sin tu producto..." maxlength="500"></textarea>
+      <div class="char-wrap"><span class="char-counter" id="c-p3">0 / 500</span></div>
+      <p class="helper">Menciona competidores, sustitutos o cómo se resuelve hoy ese problema sin tu producto.</p>
+      <div class="error-msg">Este campo es obligatorio.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-number">Pregunta 4 de 5</div>
+      <div class="q-label">¿Qué evidencia real tienen de que la gente quiere esto?</div>
+      <textarea id="p4" placeholder="Entrevistas, pilotos, usuarios, ventas, cartas de intención..." maxlength="500"></textarea>
+      <div class="char-wrap"><span class="char-counter" id="c-p4">0 / 500</span></div>
+      <p class="helper">Entrevistas, pilotos, usuarios, ventas, cartas de intención — lo que sea, pero real.</p>
+      <div class="error-msg">Este campo es obligatorio.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-number">Pregunta 5 de 5</div>
+      <div class="q-label">¿Cómo ganan dinero o cómo planean hacerlo?</div>
+      <textarea id="p5" placeholder="Quién paga, cuánto y por qué..." maxlength="400"></textarea>
+      <div class="char-wrap"><span class="char-counter" id="c-p5">0 / 400</span></div>
+      <p class="helper">Quién paga, cuánto y por qué. Si aún no monetizan, cuál es el plan.</p>
+      <div class="error-msg">Este campo es obligatorio.</div>
+    </div>
+
+    <div class="btn-nav">
+      <button class="btn-back" onclick="goBack(2)">← Atrás</button>
+      <button class="btn-next" onclick="goNext(2)">
+        <span class="btn-text">Siguiente — Tu avance →</span>
+        <span class="btn-spin"></span>
+      </button>
+    </div>
+    <div class="autosave"><span class="autosave-dot"></span> Progreso guardado</div>
+  </div>
+
+  <!-- ── PASO 3: Tu avance ───────────────────── -->
+  <div class="step-panel" id="panel-3">
+    <p class="step-heading">Tu avance</p>
+    <p class="step-sub">Tracción, tecnología y riesgos. Queremos ver que entienden su proyecto a fondo.</p>
+
+    <div class="q-card">
+      <div class="q-number">Pregunta 6 de 9</div>
+      <div class="q-label">¿Qué han logrado hasta hoy?</div>
+      <textarea id="p6" placeholder="Métricas, pilotos, alianzas, avances técnicos, prototipo funcional..." maxlength="500"></textarea>
+      <div class="char-wrap"><span class="char-counter" id="c-p6">0 / 500</span></div>
+      <p class="helper">Métricas, pilotos, alianzas, avances técnicos, prototipo funcional. Lo más concreto que tengan.</p>
+      <div class="error-msg">Este campo es obligatorio.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-number">Pregunta 7 de 9</div>
+      <div class="q-label">¿Qué tecnología usan y para qué parte del producto es central?</div>
+      <textarea id="p7" placeholder="¿Es el core de su solución o una herramienta de soporte?" maxlength="400"></textarea>
+      <div class="char-wrap"><span class="char-counter" id="c-p7">0 / 400</span></div>
+      <p class="helper">Queremos entender si la tecnología es el core de tu solución o solo una herramienta de soporte.</p>
+      <div class="error-msg">Este campo es obligatorio.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-number">Pregunta 8 de 9</div>
+      <div class="q-label">¿Cuál es el mayor riesgo de que esto no funcione y cómo piensan enfrentarlo?</div>
+      <textarea id="p8" placeholder="No hay respuesta incorrecta — queremos ver que entienden sus retos..." maxlength="400"></textarea>
+      <div class="char-wrap"><span class="char-counter" id="c-p8">0 / 400</span></div>
+      <p class="helper">No hay respuesta incorrecta. Queremos ver que entienden sus retos.</p>
+      <div class="error-msg">Este campo es obligatorio.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-number">Pregunta 9 de 9</div>
+      <div class="q-label">¿Por qué quieren participar en el Challenge?</div>
+      <textarea id="p9" placeholder="¿Qué buscan obtener de esta experiencia?" maxlength="300"></textarea>
+      <div class="char-wrap"><span class="char-counter" id="c-p9">0 / 300</span></div>
+      <p class="helper">¿Qué buscan obtener de esta experiencia?</p>
+      <div class="error-msg">Este campo es obligatorio.</div>
+    </div>
+
+    <div class="btn-nav">
+      <button class="btn-back" onclick="goBack(3)">← Atrás</button>
+      <button class="btn-next" onclick="goNext(3)">
+        <span class="btn-text">Siguiente — Últimos detalles →</span>
+        <span class="btn-spin"></span>
+      </button>
+    </div>
+    <div class="autosave"><span class="autosave-dot"></span> Progreso guardado</div>
+  </div>
+
+  <!-- ── PASO 4: Últimos detalles ────────────── -->
+  <div class="step-panel" id="panel-4">
+    <p class="step-heading">Últimos detalles</p>
+    <p class="step-sub">Ya casi terminas. Un par de datos y tu pitch deck.</p>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="etapa">Etapa actual del proyecto</label>
+        <select id="etapa">
+          <option value="" disabled selected>Selecciona...</option>
+          <option>Idea</option>
+          <option>Prototipo</option>
+          <option>MVP</option>
+          <option>Primeros usuarios</option>
+          <option>Primeras ventas</option>
+        </select>
+        <div class="error-msg">Selecciona una etapa.</div>
+      </div>
+      <div class="field">
+        <label for="industria">Industria principal</label>
+        <select id="industria">
+          <option value="" disabled selected>Selecciona...</option>
+          <option>Fintech</option>
+          <option>Healthtech</option>
+          <option>Climate &amp; Energy</option>
+          <option>SaaS &amp; B2B Software</option>
+          <option>AI &amp; Data</option>
+          <option>AgTech</option>
+          <option>PropTech</option>
+          <option>Marketplaces</option>
+          <option>Biotech</option>
+          <option>Edtech</option>
+          <option>Otro</option>
+        </select>
+        <div class="error-msg">Selecciona una industria.</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="deckUrl">Link a tu pitch deck</label>
+      <input type="url" id="deckUrl" placeholder="https://drive.google.com/file/d/..."/>
+      <p class="helper">Comparte tu deck desde Google Drive, Dropbox o Docsend. Asegúrate de que el link sea accesible para cualquier persona con el link. Máximo 10 slides: problema, solución, mercado, modelo de negocio, validación, equipo y visión.</p>
+      <div class="error-msg">Ingresa el link a tu pitch deck.</div>
+    </div>
+
+    <div class="btn-nav">
+      <button class="btn-back" onclick="goBack(4)">← Atrás</button>
+      <button class="btn-next" id="btn-submit" onclick="submitForm()">
+        <span class="btn-text">Enviar mi aplicación →</span>
+        <span class="btn-spin"></span>
+      </button>
+    </div>
+    <div class="error-banner" id="error-banner">
+      Hubo un problema al enviar tu aplicación. Intenta de nuevo o escríbenos a <a href="mailto:belaeccm.tec@gmail.com" style="color:#ff9090;">belaeccm.tec@gmail.com</a>
+    </div>
+    <div class="autosave"><span class="autosave-dot"></span> Progreso guardado</div>
+  </div>
+
+  <!-- ── Pantalla de éxito ───────────────────── -->
+  <div id="success">
+    <div class="success-icon">🎉</div>
+    <h2>¡Aplicación enviada!</h2>
+    <p class="sub">Tu proyecto ya está en el radar.<br/>Revisa tu correo — te enviaremos confirmación y cualquier actualización del proceso.</p>
+
+    <div class="dates-card">
+      <h4>Fechas clave</h4>
+      <div class="date-row">📅 <span><strong>5 de mayo</strong> — Cierre de aplicaciones</span></div>
+      <div class="date-row">📅 <span><strong>8 de mayo</strong> — Anuncio de finalistas</span></div>
+      <div class="date-row">📅 <span><strong>15 de mayo</strong> — Final presencial · Tec de Monterrey CCM</span></div>
+    </div>
+    <div class="note-card">
+      <strong style="color:#fff;">Importante:</strong> Estén atentos a los medios de contacto que registraron. Podríamos buscarlos para entrevistas o aclaraciones previas a la final.
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+// ─── Estado global ────────────────────────────────────
+const STORAGE_KEY = 'w2tf_challenge_draft';
+let currentStep = 1;
+
+// ─── Autosave ─────────────────────────────────────────
+function saveToStorage() {
+  const data = collectAllData();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    if (d.nombreProyecto) document.getElementById('nombreProyecto').value = d.nombreProyecto;
+    if (d.email)          document.getElementById('email').value = d.email;
+    if (d.telefono)       document.getElementById('telefono').value = d.telefono;
+    if (d.carrera)        document.getElementById('carrera').value = d.carrera;
+    if (d.ciudad)         document.getElementById('ciudad').value = d.ciudad;
+    if (d.linkedin)       document.getElementById('linkedin').value = d.linkedin;
+    if (d.p1) { document.getElementById('p1').value = d.p1; updateCounter('p1', 500); }
+    if (d.p2) { document.getElementById('p2').value = d.p2; updateCounter('p2', 200); }
+    if (d.p3) { document.getElementById('p3').value = d.p3; updateCounter('p3', 500); }
+    if (d.p4) { document.getElementById('p4').value = d.p4; updateCounter('p4', 500); }
+    if (d.p5) { document.getElementById('p5').value = d.p5; updateCounter('p5', 400); }
+    if (d.p6) { document.getElementById('p6').value = d.p6; updateCounter('p6', 500); }
+    if (d.p7) { document.getElementById('p7').value = d.p7; updateCounter('p7', 400); }
+    if (d.p8) { document.getElementById('p8').value = d.p8; updateCounter('p8', 400); }
+    if (d.p9) { document.getElementById('p9').value = d.p9; updateCounter('p9', 300); }
+    if (d.etapa)    document.getElementById('etapa').value = d.etapa;
+    if (d.industria) document.getElementById('industria').value = d.industria;
+    if (d.deckUrl)  document.getElementById('deckUrl').value = d.deckUrl;
+    if (d.members && d.members.length > 0) {
+      const list = document.getElementById('members-list');
+      // Fill first row
+      list.querySelectorAll('.member-name')[0].value = d.members[0].nombre || '';
+      list.querySelectorAll('.member-role')[0].value = d.members[0].rol || '';
+      for (let i = 1; i < d.members.length; i++) addMember(d.members[i]);
+    }
+  } catch(e) {}
+}
+
+// ─── Character counters ───────────────────────────────
+function updateCounter(id, max) {
+  const el = document.getElementById(id);
+  const counter = document.getElementById('c-' + id);
+  if (!el || !counter) return;
+  const len = el.value.length;
+  counter.textContent = len + ' / ' + max;
+  counter.className = 'char-counter' + (len > max * 0.9 ? ' warn' : '') + (len >= max ? ' over' : '');
+}
+
+function attachCounters() {
+  const pairs = [
+    ['p1',500],['p2',200],['p3',500],['p4',500],['p5',400],
+    ['p6',500],['p7',400],['p8',400],['p9',300]
+  ];
+  pairs.forEach(([id, max]) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', () => { updateCounter(id, max); saveToStorage(); });
+      updateCounter(id, max);
+    }
+  });
+}
+
+// ─── Members repeater ─────────────────────────────────
+function addMember(data = null) {
+  const list = document.getElementById('members-list');
+  const row = document.createElement('div');
+  row.className = 'member-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Nombre completo" class="member-name" value="${data ? (data.nombre || '') : ''}"/>
+    <input type="text" placeholder="Rol (ej. CEO, CTO)" class="member-role" value="${data ? (data.rol || '') : ''}"/>
+    <button type="button" class="member-remove" onclick="removeMember(this)">×</button>
+  `;
+  list.appendChild(row);
+  updateRemoveButtons();
+  row.querySelectorAll('input').forEach(i => i.addEventListener('input', saveToStorage));
+  row.querySelector('.member-name').focus();
+}
+
+function removeMember(btn) {
+  btn.closest('.member-row').remove();
+  updateRemoveButtons();
+  saveToStorage();
+}
+
+function updateRemoveButtons() {
+  const rows = document.querySelectorAll('.member-row');
+  rows.forEach((row, i) => {
+    const btn = row.querySelector('.member-remove');
+    btn.style.visibility = rows.length > 1 ? 'visible' : 'hidden';
+  });
+}
+
+function getMembers() {
+  return Array.from(document.querySelectorAll('.member-row')).map(row => ({
+    nombre: row.querySelector('.member-name').value.trim(),
+    rol: row.querySelector('.member-role').value.trim()
+  })).filter(m => m.nombre || m.rol);
+}
+
+// ─── Validación por paso ──────────────────────────────
+function validateStep(step) {
+  let valid = true;
+
+  function checkField(id, validator) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const fieldEl = el.closest('.field') || el.parentElement;
+    const ok = validator(el.value.trim());
+    fieldEl.classList.toggle('has-error', !ok);
+    if (!ok) valid = false;
+    return ok;
+  }
+
+  if (step === 1) {
+    checkField('nombreProyecto', v => v.length > 0);
+    checkField('email', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+    checkField('telefono', v => v.length > 0);
+    checkField('carrera', v => v.length > 0);
+    checkField('ciudad', v => v.length > 0);
+    // Validate members
+    const members = getMembers();
+    const hasValid = members.some(m => m.nombre && m.rol);
+    const membersErrEl = document.getElementById('members-error');
+    if (!hasValid) {
+      membersErrEl.style.display = 'block';
+      valid = false;
+    } else {
+      membersErrEl.style.display = 'none';
+    }
+  }
+
+  if (step === 2) {
+    ['p1','p2','p3','p4','p5'].forEach(id => checkField(id, v => v.length > 0));
+  }
+
+  if (step === 3) {
+    ['p6','p7','p8','p9'].forEach(id => checkField(id, v => v.length > 0));
+  }
+
+  if (step === 4) {
+    checkField('etapa', v => v.length > 0);
+    checkField('industria', v => v.length > 0);
+    checkField('deckUrl', v => v.length > 0);
+  }
+
+  return valid;
+}
+
+// ─── Navegación ───────────────────────────────────────
+function goNext(from) {
+  if (!validateStep(from)) {
+    window.scrollTo({ top: document.querySelector('.has-error')?.offsetTop - 120 || 0, behavior: 'smooth' });
+    return;
+  }
+  saveToStorage();
+  showStep(from + 1, false);
+}
+
+function goBack(from) {
+  saveToStorage();
+  showStep(from - 1, true);
+}
+
+function showStep(step, isBack = false) {
+  const current = document.getElementById('panel-' + currentStep);
+  const next = document.getElementById('panel-' + step);
+  current.classList.remove('active');
+  next.className = 'step-panel active' + (isBack ? ' slide-back' : '');
+  currentStep = step;
+  updateStepper();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateStepper() {
+  document.querySelectorAll('.step-item').forEach(item => {
+    const s = parseInt(item.dataset.step);
+    item.classList.remove('active','done');
+    if (s === currentStep) item.classList.add('active');
+    else if (s < currentStep) item.classList.add('done');
+    if (s < currentStep) item.querySelector('.step-dot').innerHTML = '✓';
+    else item.querySelector('.step-dot').textContent = s;
+  });
+}
+
+// ─── Collect data ─────────────────────────────────────
+function collectAllData() {
+  return {
+    nombreProyecto: document.getElementById('nombreProyecto')?.value.trim() || '',
+    members: getMembers(),
+    email: document.getElementById('email')?.value.trim() || '',
+    telefono: document.getElementById('telefono')?.value.trim() || '',
+    carrera: document.getElementById('carrera')?.value.trim() || '',
+    ciudad: document.getElementById('ciudad')?.value.trim() || '',
+    linkedin: document.getElementById('linkedin')?.value.trim() || '',
+    p1: document.getElementById('p1')?.value.trim() || '',
+    p2: document.getElementById('p2')?.value.trim() || '',
+    p3: document.getElementById('p3')?.value.trim() || '',
+    p4: document.getElementById('p4')?.value.trim() || '',
+    p5: document.getElementById('p5')?.value.trim() || '',
+    p6: document.getElementById('p6')?.value.trim() || '',
+    p7: document.getElementById('p7')?.value.trim() || '',
+    p8: document.getElementById('p8')?.value.trim() || '',
+    p9: document.getElementById('p9')?.value.trim() || '',
+    etapa: document.getElementById('etapa')?.value || '',
+    industria: document.getElementById('industria')?.value || '',
+    deckUrl: document.getElementById('deckUrl')?.value.trim() || '',
+  };
+}
+
+// ─── Submit ───────────────────────────────────────────
+async function submitForm() {
+  if (!validateStep(4)) return;
+
+  const btn = document.getElementById('btn-submit');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  document.getElementById('error-banner').style.display = 'none';
+
+  const data = collectAllData();
+
+  try {
+    const res = await fetch('/api/challenge-apply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || 'Error al enviar');
+
+    // Limpiar borrador
+    localStorage.removeItem(STORAGE_KEY);
+
+    // Mostrar pantalla de éxito
+    document.getElementById('intro-block').style.display = 'none';
+    document.getElementById('stepper').style.display = 'none';
+    document.getElementById('panel-4').style.display = 'none';
+    document.getElementById('success').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } catch(err) {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    document.getElementById('error-banner').style.display = 'block';
+    document.getElementById('error-banner').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+// ─── Init ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  attachCounters();
+  loadFromStorage();
+  // Autosave on any input change
+  document.querySelectorAll('input,textarea,select').forEach(el => {
+    el.addEventListener('change', saveToStorage);
+  });
+  // First member row input listeners
+  document.querySelectorAll('.member-name, .member-role').forEach(el => {
+    el.addEventListener('input', saveToStorage);
+  });
+});
+</script>
+</body>
+</html>

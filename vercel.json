@@ -8,6 +8,7 @@
     "api/admin.js":       { "maxDuration": 15 },
     "api/staff-auth.js":  { "maxDuration": 5  },
     "api/transferir.js":  { "maxDuration": 30 },
-    "api/boleto-pdf.js":  { "maxDuration": 30 }
+    "api/boleto-pdf.js":       { "maxDuration": 30 },
+    "api/challenge-apply.js":  { "maxDuration": 30 }
   }
 }
