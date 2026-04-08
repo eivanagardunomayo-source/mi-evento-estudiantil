@@ -1501,6 +1501,10 @@
         <span class="btn-shine"></span>
         🎟️ Reservar mi lugar — <strong>desde $200 MXN</strong>
       </button>
+      <a href="/challenge" class="btn btn-outline hero-cta-main" style="width:100%;text-align:center;display:block;box-sizing:border-box;">
+        <span class="btn-shine"></span>
+        🏆 The Challenge — Concurso de emprendimiento
+      </a>
       <span style="font-size:0.72rem;color:rgba(255,255,255,0.3);">Pago único · Confirmación por correo</span>
 
       <!-- Add to Calendar -->
@@ -2119,8 +2123,10 @@
         <div class="type-pills" id="type-pills">
           <button class="type-pill selected" data-val="tec">🎓 Estudiante Tec / Exatec</button>
           <button class="type-pill" data-val="externo">🌐 Externo</button>
+          <button class="type-pill" data-val="challenge">🏆 The Challenge</button>
         </div>
         <div class="ext-note" id="ext-note" style="display:none">Otras universidades, profesionales y público general. Precio fijo <strong>$300 MXN</strong> — sin descuento por grupo.</div>
+        <div class="ext-note" id="challenge-note" style="display:none;border-color:rgba(255,180,0,0.3);background:rgba(255,180,0,0.05);color:rgba(255,255,255,0.7);">Aplicante a The Challenge. <strong style="color:#FCD34D;">20% de descuento</strong> sobre el precio Tec — boleto a <strong style="color:#FCD34D;">$160 MXN</strong>.</div>
         <input type="hidden" id="select-tipo" value="tec"/>
 
         <!-- Descuento por grupo (solo Tec) -->
@@ -2184,6 +2190,10 @@
         <div class="form-group" id="matricula-group">
           <label class="form-label" for="inp-matricula">Matrícula</label>
           <input class="form-input" id="inp-matricula" type="text" placeholder="A01234567"/>
+        </div>
+        <div class="form-group" id="emprendimiento-group" style="display:none;">
+          <label class="form-label" for="inp-emprendimiento">Nombre del emprendimiento con el que aplicaste</label>
+          <input class="form-input" id="inp-emprendimiento" type="text" placeholder="Nombre de tu proyecto o startup"/>
         </div>
         <div class="form-group">
           <label class="form-label" for="inp-celular">Número de celular</label>
@@ -2552,6 +2562,12 @@ function calcPrecio(){
     return { regular:300, perUnit:300, total:300*ticketQty,
              savingPreventa:0, savingVolumen:0, totalSaving:0, disc:0 };
   }
+  if(selectedTipo === 'challenge'){
+    // 20% de descuento sobre precio Tec base ($200)
+    const chalPrice = 160;
+    return { regular:200, perUnit:chalPrice, total:chalPrice*ticketQty,
+             savingPreventa:0, savingVolumen:0, totalSaving:(200-chalPrice)*ticketQty, disc:0 };
+  }
 
   // Tec
   const prevBase = 200; // precio preventa sin descuento de grupo
@@ -2624,14 +2640,17 @@ function updatePriceUI(){
     sbEl.style.display = 'none';
   }
 
-  // discount tier badges — solo visible para Tec
+  // discount tier badges — solo visible para Tec (no challenge, no externo)
   const tiersEl = document.getElementById('discount-tiers');
-  tiersEl.style.display = externo ? 'none' : 'flex';
+  tiersEl.style.display = (externo || selectedTipo === 'challenge') ? 'none' : 'flex';
 
   const explainerEl  = document.getElementById('group-explainer');
   const explainerTxt = document.getElementById('group-explainer-text');
 
-  if(externo){
+  if(selectedTipo === 'challenge'){
+    explainerEl.className = 'group-explainer';
+    explainerTxt.innerHTML = 'Precio especial para aplicantes a The Challenge. <strong>20% de descuento</strong> — $160 MXN por boleto.';
+  } else if(externo){
     explainerEl.className = 'group-explainer';
     explainerTxt.innerHTML = 'Precio fijo para externos. No aplica descuento por cantidad.';
   } else if(preventa){
@@ -2710,14 +2729,18 @@ document.addEventListener('keydown', function(e){
   const pills = document.querySelectorAll('.type-pill');
   const mat   = document.getElementById('matricula-group');
   const note  = document.getElementById('ext-note');
+  const chalNote = document.getElementById('challenge-note');
+  const emprendGroup = document.getElementById('emprendimiento-group');
   pills.forEach(pill=>{
     pill.addEventListener('click',()=>{
       pills.forEach(p=>p.classList.remove('selected'));
       pill.classList.add('selected');
       selectedTipo = pill.dataset.val;
       document.getElementById('select-tipo').value = selectedTipo;
-      mat.style.display  = selectedTipo === 'tec' ? 'block' : 'none';
-      note.style.display = selectedTipo === 'externo' ? 'block' : 'none';
+      mat.style.display         = selectedTipo === 'tec' ? 'block' : 'none';
+      note.style.display        = selectedTipo === 'externo' ? 'block' : 'none';
+      chalNote.style.display    = selectedTipo === 'challenge' ? 'block' : 'none';
+      emprendGroup.style.display = selectedTipo === 'challenge' ? 'block' : 'none';
       updatePriceUI();
     });
   });
@@ -2770,14 +2793,17 @@ function irAPago(){
 
   // Inline validation
   const celular = document.getElementById('inp-celular').value.trim();
+  const emprendimiento = document.getElementById('inp-emprendimiento').value.trim();
   let ok = true;
   const nEl = document.getElementById('inp-nombre');
   const eEl = document.getElementById('inp-email');
   const cEl = document.getElementById('inp-celular');
-  nEl.classList.remove('err'); eEl.classList.remove('err'); cEl.classList.remove('err');
+  const emEl = document.getElementById('inp-emprendimiento');
+  nEl.classList.remove('err'); eEl.classList.remove('err'); cEl.classList.remove('err'); emEl.classList.remove('err');
   if(!nombre){ nEl.classList.add('err'); nEl.focus(); ok=false; }
   else if(!email || !email.includes('@') || !email.includes('.')){ eEl.classList.add('err'); if(ok) eEl.focus(); ok=false; }
   else if(!celular){ cEl.classList.add('err'); if(ok) cEl.focus(); ok=false; }
+  else if(selectedTipo === 'challenge' && !emprendimiento){ emEl.classList.add('err'); if(ok) emEl.focus(); ok=false; }
   if(!ok) return;
 
   const ref = generarReferencia();
@@ -3068,8 +3094,9 @@ async function enviarRegistro(){
   const nombre    = document.getElementById('inp-nombre').value.trim();
   const email     = document.getElementById('inp-email').value.trim();
   const celular   = document.getElementById('inp-celular').value.trim();
-  const matricula = document.getElementById('inp-matricula').value.trim();
-  const tipo      = document.getElementById('select-tipo').value;
+  const matricula      = document.getElementById('inp-matricula').value.trim();
+  const tipo           = document.getElementById('select-tipo').value;
+  const emprendimiento = document.getElementById('inp-emprendimiento').value.trim();
   const referencia= document.getElementById('ref-value').value;
   const { total } = calcPrecio();
 
@@ -3140,7 +3167,7 @@ async function enviarRegistro(){
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        nombre, email, celular, institucion: matricula, carrera: '', tipo,
+        nombre, email, celular, institucion: matricula, carrera: emprendimiento || '', tipo,
         boletos: ticketQty, referencia, monto: total,
         comprobante: comprobanteBase64
       })

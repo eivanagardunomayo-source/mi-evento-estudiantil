@@ -12,7 +12,9 @@ module.exports = async function handler(req, res) {
 
   try {
     const { nombre, email, celular, institucion, carrera, tipo, boletos, referencia, comprobante, monto: montoRaw } = req.body;
-    const monto = parseInt(montoRaw) || (parseInt(boletos) * (tipo === 'externo' ? (parseInt(process.env.PRECIO_EXTERNO) || 300) : (parseInt(process.env.PRECIO_BOLETO) || 200)));
+    const precioBase = tipo === 'externo' ? (parseInt(process.env.PRECIO_EXTERNO) || 300) : tipo === 'challenge' ? 160 : (parseInt(process.env.PRECIO_BOLETO) || 200);
+    const monto = parseInt(montoRaw) || (parseInt(boletos) * precioBase);
+    const tipoNotion = tipo === 'challenge' ? 'The Challenge' : tipo === 'externo' ? 'Externo' : 'Tec';
     const fecha = new Date().toISOString();
     const token = require('crypto').randomUUID();
     const from = `"Welcome 2 The Future" <${process.env.GMAIL_USER}>`;
@@ -31,7 +33,7 @@ module.exports = async function handler(req, res) {
         'Celular':      { phone_number: celular || '' },
         'Institución':  { rich_text: [{ text: { content: institucion || '' } }] },
         'Carrera':      { rich_text: [{ text: { content: carrera  || '' } }] },
-        'Tipo':         { select:    { name: tipo || 'Tec' } },
+        'Tipo':         { select:    { name: tipoNotion } },
         '# Boletos':    { number:    parseInt(boletos) },
         'Monto':        { number:    monto },
         'Referencia':   { rich_text: [{ text: { content: referencia } }] },
