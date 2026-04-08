@@ -2,7 +2,7 @@ const { Client } = require('@notionhq/client');
 const transporter = require('./_mailer');
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
-const DB_ID  = process.env.NOTION_CHALLENGE_DB_ID;
+const DB_ID  = (process.env.NOTION_CHALLENGE_DB_ID || '').trim();
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
