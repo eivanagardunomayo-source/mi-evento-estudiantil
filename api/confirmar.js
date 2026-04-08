@@ -111,18 +111,9 @@ function buildTicketBlock({ nombre, ref, tipo, montoPorBoleto, numBoleto, totalB
 
   <!-- HEADER GRADIENTE -->
   <tr>
-    <td style="background:linear-gradient(135deg,#7A00FF 0%,#00CFFF 100%);padding:18px 24px;">
-      <table width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-          <td style="vertical-align:middle;">
-            <div style="color:rgba(255,255,255,0.85);font-size:9px;letter-spacing:0.25em;text-transform:uppercase;font-family:Arial,sans-serif;margin-bottom:4px;">Welcome 2 The Future · 2026</div>
-            <div style="color:#ffffff;font-size:18px;font-weight:900;letter-spacing:0.08em;font-family:Arial,sans-serif;">✦ BOLETO OFICIAL ✦</div>
-          </td>
-          <td style="text-align:right;vertical-align:middle;width:110px;">
-            <img src="${base}/logo-oficial.png" width="100" alt="W2TF" style="display:inline-block;max-width:100px;"/>
-          </td>
-        </tr>
-      </table>
+    <td style="background:linear-gradient(135deg,#7A00FF 0%,#00CFFF 100%);padding:22px 24px;text-align:center;">
+      <img src="${base}/logo-oficial.png" width="160" alt="W2TF 2026" style="display:inline-block;max-width:160px;margin-bottom:12px;"/>
+      <div style="color:#ffffff;font-size:18px;font-weight:900;letter-spacing:0.08em;font-family:Arial,sans-serif;">✦ BOLETO OFICIAL ✦</div>
     </td>
   </tr>
 
