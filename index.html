@@ -784,16 +784,6 @@
     .ms1-sub{font-size:0.82rem;color:var(--text-muted);margin-bottom:22px;}
     .form-section-label{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:10px;}
     /* type pills */
-    .type-pills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px;}
-    .type-pill{
-      padding:8px 14px;border-radius:20px;
-      border:1px solid rgba(255,255,255,0.1);
-      background:transparent;color:rgba(255,255,255,0.45);
-      font-family:inherit;font-size:0.77rem;font-weight:600;
-      cursor:pointer;transition:all 0.2s;
-    }
-    .type-pill:hover{border-color:rgba(255,255,255,0.22);color:rgba(255,255,255,0.75);}
-    .type-pill.selected{border-color:var(--cyan);background:rgba(0,207,255,0.1);color:var(--cyan);}
     /* ticket counter */
     .ticket-row{
       display:flex;align-items:center;justify-content:space-between;
@@ -813,28 +803,6 @@
     .tc-btn:disabled{opacity:0.3;cursor:not-allowed;}
     .tc-count{font-size:1.3rem;font-weight:800;min-width:24px;text-align:center;}
     /* total box */
-    /* discount banner */
-    .discount-tiers{
-      display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;
-    }
-    .dtier{
-      display:flex;align-items:center;gap:6px;
-      padding:7px 12px;border-radius:20px;
-      border:1px solid rgba(255,255,255,0.08);
-      background:rgba(255,255,255,0.02);
-      font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.35);
-      transition:all 0.35s;
-    }
-    .dtier.active{
-      border-color:rgba(0,220,100,0.35);
-      background:rgba(0,220,100,0.08);
-      color:#00dc64;
-    }
-    .dtier-dot{
-      width:7px;height:7px;border-radius:50%;
-      background:rgba(255,255,255,0.15);flex-shrink:0;transition:background 0.35s;
-    }
-    .dtier.active .dtier-dot{background:#00dc64;}
     /* per-ticket price in counter row */
     .ticket-price-tag{
       font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.4);
@@ -2069,25 +2037,17 @@
         <p class="ms1-sub">Welcome 2 The Future 2026 · Tec CDMX</p>
 
         <p class="form-section-label">¿Quién eres?</p>
-        <div class="type-pills" id="type-pills">
-          <button class="type-pill selected" data-val="tec">🎓 Estudiante Tec / Exatec</button>
-          <button class="type-pill" data-val="externo">🌐 Externo</button>
-          <button class="type-pill" data-val="challenge">🏆 The Challenge</button>
+        <div class="form-group" style="margin-bottom:16px;">
+          <select class="form-select" id="type-select" onchange="onTipoChange(this.value)">
+            <option value="tec">Estudiante Tec / Exatec</option>
+            <option value="externo">Externo</option>
+            <option value="challenge">The Challenge</option>
+          </select>
         </div>
         <div class="ext-note" id="ext-note" style="display:none">Otras universidades, profesionales y público general. Precio fijo <strong>$300 MXN</strong>. Con código de descuento: <strong>$250 MXN</strong>.</div>
         <div class="ext-note" id="challenge-note" style="display:none;border-color:rgba(255,180,0,0.3);background:rgba(255,180,0,0.05);color:rgba(255,255,255,0.7);">Aplicante a The Challenge. Boleto a <strong style="color:#FCD34D;">$160 MXN</strong>.</div>
         <input type="hidden" id="select-tipo" value="tec"/>
 
-        <!-- Descuento grupal Alumno Tec (se oculta si hay código válido) -->
-        <div class="discount-tiers" id="discount-tiers">
-          <div class="dtier" id="dtier-1"><span class="dtier-dot"></span><span>1: $150</span></div>
-          <div class="dtier" id="dtier-2"><span class="dtier-dot"></span><span>2: $140</span></div>
-          <div class="dtier" id="dtier-3"><span class="dtier-dot"></span><span>3: $130</span></div>
-          <div class="dtier" id="dtier-4"><span class="dtier-dot"></span><span>4: $120</span></div>
-          <div class="dtier" id="dtier-5"><span class="dtier-dot"></span><span>5: $110</span></div>
-          <div class="dtier" id="dtier-6"><span class="dtier-dot"></span><span>6: $100</span></div>
-          <div class="dtier" id="dtier-7"><span class="dtier-dot"></span><span>7+: $90</span></div>
-        </div>
         <div class="group-explainer" id="group-explainer">
           <span id="group-explainer-text">¿Vienes con amigos? Desde <strong>2 boletos</strong> el precio baja — con 7 o más pagas solo <strong>$90 MXN</strong> c/u.</span>
         </div>
@@ -2133,7 +2093,7 @@
         <div class="form-group" id="code-group" style="margin-top:12px;margin-bottom:4px;">
           <label class="form-label" for="inp-codigo">Código de descuento <span style="font-weight:400;opacity:0.5;">(opcional)</span></label>
           <div style="display:flex;gap:8px;">
-            <input class="form-input" id="inp-codigo" type="text" placeholder="JULIOW2TF" autocomplete="off" style="flex:1;letter-spacing:0.05em;"/>
+            <input class="form-input" id="inp-codigo" type="text" placeholder="" autocomplete="off" style="flex:1;letter-spacing:0.05em;"/>
             <button type="button" class="code-apply-btn" id="btn-codigo" onclick="applyCode()">Aplicar</button>
           </div>
           <div class="code-msg" id="code-msg"></div>
@@ -2615,18 +2575,6 @@ function updatePriceUI() {
     sbEl.style.display = 'none';
   }
 
-  // discount tier badges — solo visible para Tec sin código activo
-  const tiersEl   = document.getElementById('discount-tiers');
-  const showTiers = !externo && selectedTipo !== 'challenge' && !appliedCode;
-  tiersEl.style.display = showTiers ? 'flex' : 'none';
-
-  if (showTiers) {
-    TEC_GROUP_PRICING.forEach((tier, i) => {
-      const el = document.getElementById('dtier-' + (i + 1));
-      if (el) el.classList.toggle('active', ticketQty >= tier.min && ticketQty <= tier.max);
-    });
-  }
-
   // group explainer
   const explainerEl  = document.getElementById('group-explainer');
   const explainerTxt = document.getElementById('group-explainer-text');
@@ -2721,27 +2669,23 @@ document.addEventListener('keydown', function(e){
   if(e.key === 'Escape') closeModal();
 });
 
-// ── Type pills ──
-(function(){
-  const pills = document.querySelectorAll('.type-pill');
-  const mat   = document.getElementById('matricula-group');
-  const note  = document.getElementById('ext-note');
-  const chalNote = document.getElementById('challenge-note');
-  const emprendGroup = document.getElementById('emprendimiento-group');
-  pills.forEach(pill=>{
-    pill.addEventListener('click',()=>{
-      pills.forEach(p=>p.classList.remove('selected'));
-      pill.classList.add('selected');
-      selectedTipo = pill.dataset.val;
-      document.getElementById('select-tipo').value = selectedTipo;
-      mat.style.display         = selectedTipo === 'tec' ? 'block' : 'none';
-      note.style.display        = selectedTipo === 'externo' ? 'block' : 'none';
-      chalNote.style.display    = selectedTipo === 'challenge' ? 'block' : 'none';
-      emprendGroup.style.display = selectedTipo === 'challenge' ? 'block' : 'none';
-      updatePriceUI();
-    });
-  });
-})();
+// ── Tipo selector ──
+function onTipoChange(val) {
+  selectedTipo = val;
+  document.getElementById('select-tipo').value = val;
+  document.getElementById('matricula-group').style.display    = val === 'tec'       ? 'block' : 'none';
+  document.getElementById('ext-note').style.display           = val === 'externo'   ? 'block' : 'none';
+  document.getElementById('challenge-note').style.display     = val === 'challenge' ? 'block' : 'none';
+  document.getElementById('emprendimiento-group').style.display = val === 'challenge' ? 'block' : 'none';
+  // Limpiar código si cambia tipo
+  if (appliedCode) {
+    appliedCode = null;
+    document.getElementById('btn-codigo').classList.remove('applied');
+    document.getElementById('inp-codigo').value = '';
+    document.getElementById('code-msg').textContent = '';
+  }
+  updatePriceUI();
+}
 
 // ── Ticket counter ──
 function changeQty(delta){
