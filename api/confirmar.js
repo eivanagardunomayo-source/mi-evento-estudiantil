@@ -166,7 +166,7 @@ function buildTicketBlock({ nombre, ref, tipo, montoPorBoleto, numBoleto, totalB
               </tr>
               <tr>
                 <td style="color:#64748B;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">Hora</td>
-                <td style="color:#ffffff;text-align:right;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">2:30 PM</td>
+                <td style="color:#ffffff;text-align:right;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">3:30 PM</td>
               </tr>
               <tr>
                 <td style="color:#64748B;padding:5px 0;">Lugar</td>

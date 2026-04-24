@@ -86,7 +86,7 @@ module.exports = async function generateTicketPDF({
       { key: 'Tipo de acceso', val: tipo || 'Asistente',       color: '#00CFFF' },
       { key: 'Referencia',     val: ref,                        color: '#A78BFA' },
       { key: 'Fecha',          val: '15 de mayo, 2026',         color: '#ffffff' },
-      { key: 'Hora',           val: '2:30 PM',                  color: '#ffffff' },
+      { key: 'Hora',           val: '3:30 PM',                  color: '#ffffff' },
       { key: 'Lugar',          val: 'Tec de Monterrey CCM',     color: '#ffffff' },
     ];
 

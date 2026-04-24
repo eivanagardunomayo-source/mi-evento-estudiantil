@@ -200,7 +200,7 @@ function buildEmailComprador({ nombre, boletos, monto, referencia }) {
     </div>
 
     <div style="text-align:center;">
-      <div style="color:#64748B;font-size:12px;margin-bottom:4px;">15 de mayo de 2026 · 2:30 PM</div>
+      <div style="color:#64748B;font-size:12px;margin-bottom:4px;">15 de mayo de 2026 · 3:30 PM</div>
       <div style="color:#64748B;font-size:12px;">Tec de Monterrey CDMX</div>
     </div>
   </div>

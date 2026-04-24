@@ -186,7 +186,7 @@ function buildTransferEmail({ nuevoNombre, ref, tipo, numBoleto, totalBoletos, m
                 <tr><td style="color:#64748B;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">Tipo de acceso</td><td style="color:#00CFFF;font-weight:700;text-align:right;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">${tipo}</td></tr>
                 <tr><td style="color:#64748B;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">Referencia</td><td style="color:#A78BFA;font-weight:700;text-align:right;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">${ref}</td></tr>
                 <tr><td style="color:#64748B;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">Fecha</td><td style="color:#ffffff;text-align:right;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">15 de mayo, 2026</td></tr>
-                <tr><td style="color:#64748B;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">Hora</td><td style="color:#ffffff;text-align:right;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">2:30 PM</td></tr>
+                <tr><td style="color:#64748B;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">Hora</td><td style="color:#ffffff;text-align:right;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">3:30 PM</td></tr>
                 <tr><td style="color:#64748B;padding:5px 0;">Lugar</td><td style="color:#ffffff;text-align:right;padding:5px 0;">Tec de Monterrey CCM</td></tr>
               </table>
             </td>
