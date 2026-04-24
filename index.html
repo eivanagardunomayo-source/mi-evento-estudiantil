@@ -2041,11 +2041,9 @@
           <select class="form-select" id="type-select" onchange="onTipoChange(this.value)">
             <option value="tec">Estudiante Tec / Exatec</option>
             <option value="externo">Externo</option>
-            <option value="challenge">The Challenge</option>
           </select>
         </div>
         <div class="ext-note" id="ext-note" style="display:none">Otras universidades, profesionales y público general. Precio fijo <strong>$300 MXN</strong>. Con código de descuento: <strong>$250 MXN</strong>.</div>
-        <div class="ext-note" id="challenge-note" style="display:none;border-color:rgba(255,180,0,0.3);background:rgba(255,180,0,0.05);color:rgba(255,255,255,0.7);">Aplicante a The Challenge. Boleto a <strong style="color:#FCD34D;">$160 MXN</strong>.</div>
         <input type="hidden" id="select-tipo" value="tec"/>
 
         <div class="group-explainer" id="group-explainer">
@@ -2113,10 +2111,6 @@
         <div class="form-group" id="matricula-group">
           <label class="form-label" for="inp-matricula">Matrícula</label>
           <input class="form-input" id="inp-matricula" type="text" placeholder="A01234567"/>
-        </div>
-        <div class="form-group" id="emprendimiento-group" style="display:none;">
-          <label class="form-label" for="inp-emprendimiento">Nombre del emprendimiento con el que aplicaste</label>
-          <input class="form-input" id="inp-emprendimiento" type="text" placeholder="Nombre de tu proyecto o startup"/>
         </div>
         <div class="form-group">
           <label class="form-label" for="inp-celular">Número de celular</label>
@@ -2476,9 +2470,10 @@ const PRECIO_EXTERNO = 300; // Externo
 // Reglas: mayúsculas, sin espacios, sin acentos, siempre termina en W2TF
 // Ej: Julio → JULIOW2TF | Ana Paula → ANAPAULAW2TF | José → JOSEW2TF
 const DISCOUNT_CODES = {
-  'JULIOW2TF':    true,
-  'ANAPAULAW2TF': true,
-  'JOSEW2TF':     true,
+  'JULIOW2TF':     true,
+  'ANAPAULAW2TF':  true,
+  'JOSEW2TF':      true,
+  'CHALLENGEW2TF': true, // código para aplicantes a The Challenge
 };
 
 /* ─── CONFIG: Descuento grupal Tec ─────────────────────── */
@@ -2508,9 +2503,6 @@ function calcPrecio() {
   if (selectedTipo === 'externo') {
     const perUnit = appliedCode ? 250 : PRECIO_EXTERNO;
     return { perUnit, total: perUnit * ticketQty, discType: appliedCode ? 'codigo' : 'ninguno', basePrice: PRECIO_EXTERNO };
-  }
-  if (selectedTipo === 'challenge') {
-    return { perUnit: 160, total: 160 * ticketQty, discType: 'ninguno', basePrice: 160 };
   }
   // Tec: código tiene prioridad sobre grupal
   if (appliedCode) {
@@ -2579,10 +2571,7 @@ function updatePriceUI() {
   const explainerEl  = document.getElementById('group-explainer');
   const explainerTxt = document.getElementById('group-explainer-text');
 
-  if (selectedTipo === 'challenge') {
-    explainerEl.className = 'group-explainer';
-    explainerTxt.innerHTML = 'Precio especial para aplicantes a The Challenge. Boleto a <strong>$160 MXN</strong>.';
-  } else if (externo) {
+  if (externo) {
     explainerEl.className = 'group-explainer';
     explainerTxt.innerHTML = 'Precio fijo para externos: <strong>$300 MXN</strong>. Con código válido baja a <strong>$250 MXN</strong>.';
   } else if (appliedCode) {
@@ -2675,8 +2664,6 @@ function onTipoChange(val) {
   document.getElementById('select-tipo').value = val;
   document.getElementById('matricula-group').style.display    = val === 'tec'       ? 'block' : 'none';
   document.getElementById('ext-note').style.display           = val === 'externo'   ? 'block' : 'none';
-  document.getElementById('challenge-note').style.display     = val === 'challenge' ? 'block' : 'none';
-  document.getElementById('emprendimiento-group').style.display = val === 'challenge' ? 'block' : 'none';
   // Limpiar código si cambia tipo
   if (appliedCode) {
     appliedCode = null;
@@ -2734,17 +2721,14 @@ function irAPago(){
 
   // Inline validation
   const celular = document.getElementById('inp-celular').value.trim();
-  const emprendimiento = document.getElementById('inp-emprendimiento').value.trim();
   let ok = true;
   const nEl = document.getElementById('inp-nombre');
   const eEl = document.getElementById('inp-email');
   const cEl = document.getElementById('inp-celular');
-  const emEl = document.getElementById('inp-emprendimiento');
-  nEl.classList.remove('err'); eEl.classList.remove('err'); cEl.classList.remove('err'); emEl.classList.remove('err');
+  nEl.classList.remove('err'); eEl.classList.remove('err'); cEl.classList.remove('err');
   if(!nombre){ nEl.classList.add('err'); nEl.focus(); ok=false; }
   else if(!email || !email.includes('@') || !email.includes('.')){ eEl.classList.add('err'); if(ok) eEl.focus(); ok=false; }
   else if(!celular){ cEl.classList.add('err'); if(ok) cEl.focus(); ok=false; }
-  else if(selectedTipo === 'challenge' && !emprendimiento){ emEl.classList.add('err'); if(ok) emEl.focus(); ok=false; }
   if(!ok) return;
 
   const ref = generarReferencia();
@@ -3037,7 +3021,6 @@ async function enviarRegistro(){
   const celular   = document.getElementById('inp-celular').value.trim();
   const matricula      = document.getElementById('inp-matricula').value.trim();
   const tipo           = document.getElementById('select-tipo').value;
-  const emprendimiento = document.getElementById('inp-emprendimiento').value.trim();
   const referencia= document.getElementById('ref-value').value;
   const { total } = calcPrecio();
 
@@ -3108,7 +3091,7 @@ async function enviarRegistro(){
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        nombre, email, celular, institucion: matricula, carrera: emprendimiento || '', tipo,
+        nombre, email, celular, institucion: matricula, carrera: '', tipo,
         boletos: ticketQty, referencia, monto: total,
         codigoDescuento: appliedCode || '',
         tipoDescuento: calcPrecio().discType,

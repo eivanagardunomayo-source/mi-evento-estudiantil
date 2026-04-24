@@ -16,9 +16,10 @@ module.exports = async function handler(req, res) {
     // ─── Precios y códigos de descuento ─────────────────────────────────
     // PARA AGREGAR CÓDIGOS: agrega una línea 'NOMBREW2TF': true,
     const DISCOUNT_CODES_VALID = {
-      'JULIOW2TF':    true,
-      'ANAPAULAW2TF': true,
-      'JOSEW2TF':     true,
+      'JULIOW2TF':     true,
+      'ANAPAULAW2TF':  true,
+      'JOSEW2TF':      true,
+      'CHALLENGEW2TF': true, // código para aplicantes a The Challenge
     };
     const TEC_GROUP_PRICING = [
       { min: 1, max: 1, price: 150 },
@@ -37,8 +38,6 @@ module.exports = async function handler(req, res) {
     let precioUnitario;
     if (tipo === 'externo') {
       precioUnitario = codigoValido ? 250 : 300;
-    } else if (tipo === 'challenge') {
-      precioUnitario = 160;
     } else {
       // Tec: código tiene prioridad sobre grupal
       if (codigoValido) {
@@ -51,7 +50,7 @@ module.exports = async function handler(req, res) {
     const monto = precioUnitario * qty;
     const discountType = codigoValido ? 'codigo' : (tipo === 'tec' && qty >= 2 ? 'grupal' : 'ninguno');
 
-    const tipoNotion = tipo === 'challenge' ? 'The Challenge' : tipo === 'externo' ? 'Externo' : 'Tec';
+    const tipoNotion = tipo === 'externo' ? 'Externo' : 'Tec';
     const fecha = new Date().toISOString();
     const token = require('crypto').randomUUID();
     const from = `"Welcome 2 The Future" <${process.env.GMAIL_USER}>`;
