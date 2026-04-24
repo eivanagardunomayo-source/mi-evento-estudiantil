@@ -2486,14 +2486,31 @@ const PRECIO_TEC     = 150; // Alumno Tec / Exatec
 const PRECIO_EXTERNO = 300; // Externo
 
 /* ─── CONFIG: Códigos de descuento ─────────────────────── */
-// Para agregar un código nuevo: agrega una línea 'NOMBREW2TF': true,
-// Reglas: mayúsculas, sin espacios, sin acentos, siempre termina en W2TF
-// Ej: Julio → JULIOW2TF | Ana Paula → ANAPAULAW2TF | José → JOSEW2TF
+// Para agregar un código nuevo: agrega una línea 'NOMBREW2TF': { type: 'regular' },
+// Tipos: 'regular' (Tec $100 / Ext $250) | 'gratis' ($0) | 'dosxuno' (2×1) | 'mitad' (50% off)
 const DISCOUNT_CODES = {
-  'JULIOW2TF':     true,
-  'ANAPAULAW2TF':  true,
-  'JOSEW2TF':      true,
-  'CHALLENGEW2TF': true, // código para aplicantes a The Challenge
+  'VICENTEW2TF':        { type: 'regular' },
+  'RAMIROW2TF':         { type: 'regular' },
+  'CARLOSW2TF':         { type: 'regular' },
+  'JULIOW2TF':          { type: 'regular' },
+  'NORMAW2TF':          { type: 'regular' },
+  'ANGELICAW2TF':       { type: 'regular' },
+  'MAURICIOW2TF':       { type: 'regular' },
+  'MAURICIOADRIANW2TF': { type: 'regular' },
+  'ADRIANW2TF':         { type: 'regular' },
+  'GIOW2TF':            { type: 'regular' },
+  'IVANAW2TF':          { type: 'regular' },
+  'NEXUSW2TF':          { type: 'regular' },
+  'AMIGOSW2TF':         { type: 'regular' },
+  'CHALLENGEW2TF':      { type: 'regular' },
+  'IBSAW2TF':           { type: 'regular' },
+  'ALPHAW2TF':          { type: 'regular' },
+  'INGENIERIAW2TF':     { type: 'regular' },
+  'SANTAFEW2TF':        { type: 'regular' },
+  'LAETW2TF':           { type: 'regular' },
+  'PROFESW2TF':         { type: 'gratis'  },
+  '2X1W2TF':            { type: 'dosxuno' },
+  '50W2TF':             { type: 'mitad'   },
 };
 
 /* ─── CONFIG: Descuento grupal Tec ─────────────────────── */
@@ -2520,33 +2537,64 @@ function getTecGroupPrice(qty) {
 
 /* ── Pricing engine ── */
 function calcPrecio() {
-  if (selectedTipo === 'externo') {
-    const perUnit = appliedCode ? 250 : PRECIO_EXTERNO;
-    return { perUnit, total: perUnit * ticketQty, discType: appliedCode ? 'codigo' : 'ninguno', basePrice: PRECIO_EXTERNO };
-  }
-  // Tec: código tiene prioridad sobre grupal
+  const basePrice = selectedTipo === 'externo' ? PRECIO_EXTERNO : PRECIO_TEC;
+
   if (appliedCode) {
-    return { perUnit: 100, total: 100 * ticketQty, discType: 'codigo', basePrice: PRECIO_TEC };
+    const codeType = (DISCOUNT_CODES[appliedCode] || {}).type || 'regular';
+
+    if (codeType === 'gratis') {
+      return { perUnit: 0, total: 0, discType: 'gratis', basePrice, codeType };
+    }
+    if (codeType === 'dosxuno') {
+      const pagados = Math.ceil(ticketQty / 2);
+      const total   = pagados * basePrice;
+      const perUnit = total / ticketQty;
+      return { perUnit, total, discType: 'dosxuno', basePrice, codeType };
+    }
+    if (codeType === 'mitad') {
+      const perUnit = Math.round(basePrice / 2);
+      return { perUnit, total: perUnit * ticketQty, discType: 'mitad', basePrice, codeType };
+    }
+    // regular
+    const perUnit = selectedTipo === 'externo' ? 250 : 100;
+    return { perUnit, total: perUnit * ticketQty, discType: 'codigo', basePrice, codeType };
   }
+
+  if (selectedTipo === 'externo') {
+    return { perUnit: basePrice, total: basePrice * ticketQty, discType: 'ninguno', basePrice, codeType: null };
+  }
+  // Tec: descuento grupal sin código
   const perUnit = getTecGroupPrice(ticketQty);
-  return { perUnit, total: perUnit * ticketQty, discType: ticketQty >= 2 ? 'grupal' : 'ninguno', basePrice: PRECIO_TEC };
+  return { perUnit, total: perUnit * ticketQty, discType: ticketQty >= 2 ? 'grupal' : 'ninguno', basePrice, codeType: null };
 }
 
 function updatePriceUI() {
-  const { perUnit, total, discType, basePrice } = calcPrecio();
-  const externo   = selectedTipo === 'externo';
-  const hasSaving = perUnit < basePrice;
-  const totalSaving = hasSaving ? (basePrice - perUnit) * ticketQty : 0;
+  const { perUnit, total, discType, basePrice, codeType } = calcPrecio();
+  const externo     = selectedTipo === 'externo';
+  const hasSaving   = perUnit < basePrice;
+  const totalSaving = hasSaving ? Math.round((basePrice * ticketQty) - total) : 0;
 
   // per-ticket tag
   const tag = document.getElementById('ticket-price-tag');
-  tag.innerHTML = hasSaving
-    ? `<span class="orig">$${basePrice}</span><span class="now">$${perUnit} c/u</span>`
-    : `<span class="now">$${perUnit} c/u</span>`;
+  if (discType === 'gratis') {
+    tag.innerHTML = `<span class="now">¡Gratis!</span>`;
+  } else if (discType === 'dosxuno') {
+    tag.innerHTML = `<span class="orig">$${basePrice}</span><span class="now">2×1</span>`;
+  } else if (hasSaving) {
+    tag.innerHTML = `<span class="orig">$${basePrice}</span><span class="now">$${perUnit} c/u</span>`;
+  } else {
+    tag.innerHTML = `<span class="now">$${perUnit} c/u</span>`;
+  }
 
   // breakdown qty
-  document.getElementById('qty-breakdown').textContent =
-    ticketQty + ' boleto' + (ticketQty > 1 ? 's' : '') + ' × $' + perUnit;
+  if (discType === 'dosxuno') {
+    const pagados = Math.ceil(ticketQty / 2);
+    document.getElementById('qty-breakdown').textContent =
+      `${ticketQty} boleto${ticketQty > 1 ? 's' : ''} — pagas ${pagados} × $${basePrice}`;
+  } else {
+    document.getElementById('qty-breakdown').textContent =
+      ticketQty + ' boleto' + (ticketQty > 1 ? 's' : '') + ' × $' + (discType === 'gratis' ? 0 : perUnit);
+  }
 
   // total price
   document.getElementById('modal-total-price').innerHTML =
@@ -2568,9 +2616,10 @@ function updatePriceUI() {
   const sbEl      = document.getElementById('savings-breakdown');
   const sbCodeRow = document.getElementById('sb-row-codigo');
   const sbVolRow  = document.getElementById('sb-row-volumen');
+  const isCodeDiscount = ['codigo', 'gratis', 'dosxuno', 'mitad'].includes(discType);
   if (hasSaving) {
     sbEl.style.display = 'block';
-    if (discType === 'codigo') {
+    if (isCodeDiscount) {
       sbCodeRow.style.display = 'flex';
       document.getElementById('sb-codigo-val').textContent = '−$' + totalSaving.toLocaleString('es-MX');
       sbVolRow.style.display = 'none';
@@ -2591,12 +2640,22 @@ function updatePriceUI() {
   const explainerEl  = document.getElementById('group-explainer');
   const explainerTxt = document.getElementById('group-explainer-text');
 
-  if (externo) {
+  if (appliedCode) {
+    explainerEl.className = 'group-explainer highlight';
+    if (discType === 'gratis') {
+      explainerTxt.innerHTML = '¡Código especial! Tu boleto es <strong>completamente gratuito</strong>.';
+    } else if (discType === 'dosxuno') {
+      const pagados = Math.ceil(ticketQty / 2);
+      explainerTxt.innerHTML = `Código 2×1 activo: compras <strong>${pagados}</strong> boleto${pagados > 1 ? 's' : ''} y entran <strong>${ticketQty}</strong>.`;
+    } else if (discType === 'mitad') {
+      explainerTxt.innerHTML = `50% de descuento activo: cada boleto cuesta <strong>$${perUnit} MXN</strong>.`;
+    } else {
+      const precio = selectedTipo === 'externo' ? '$250 MXN' : '$100 MXN por boleto';
+      explainerTxt.innerHTML = `Precio con código: <strong>${precio}</strong>. No aplica descuento grupal.`;
+    }
+  } else if (externo) {
     explainerEl.className = 'group-explainer';
     explainerTxt.innerHTML = 'Precio fijo para externos: <strong>$300 MXN</strong>. Con código válido baja a <strong>$250 MXN</strong>.';
-  } else if (appliedCode) {
-    explainerEl.className = 'group-explainer highlight';
-    explainerTxt.innerHTML = 'Precio con código: <strong>$100 MXN por boleto</strong>. No aplica descuento grupal.';
   } else if (ticketQty >= 2) {
     explainerEl.className = 'group-explainer highlight';
     explainerTxt.innerHTML = `Precio grupal activo: cada boleto cuesta <strong>$${perUnit} MXN</strong>.`;
@@ -2623,14 +2682,21 @@ function applyCode() {
 
   if (DISCOUNT_CODES[raw]) {
     const hadGroupDiscount = !appliedCode && selectedTipo === 'tec' && ticketQty >= 2;
+    const codeType = DISCOUNT_CODES[raw].type || 'regular';
     appliedCode = raw;
     input.value = raw;
     btn.classList.add('applied');
+    msg.style.color = '#34D399';
     if (hadGroupDiscount) {
       msg.style.color = 'rgba(252,211,77,0.9)';
       msg.textContent = 'No puedes aplicar dos promociones. Se validó el código de descuento.';
+    } else if (codeType === 'gratis') {
+      msg.textContent = '¡Código especial! Tu boleto es completamente gratuito.';
+    } else if (codeType === 'dosxuno') {
+      msg.textContent = '¡Código 2×1 aplicado! Compra uno y entra otro gratis.';
+    } else if (codeType === 'mitad') {
+      msg.textContent = '¡50% de descuento aplicado!';
     } else {
-      msg.style.color = '#34D399';
       msg.textContent = 'Código aplicado.';
     }
   } else {

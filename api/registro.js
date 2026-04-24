@@ -14,12 +14,30 @@ module.exports = async function handler(req, res) {
     const { nombre, email, celular, institucion, carrera, tipo, boletos, referencia, comprobante, monto: montoRaw, codigoDescuento, tipoDescuento } = req.body;
 
     // ─── Precios y códigos de descuento ─────────────────────────────────
-    // PARA AGREGAR CÓDIGOS: agrega una línea 'NOMBREW2TF': true,
+    // Tipos: 'regular' (Tec $100 / Ext $250) | 'gratis' ($0) | 'dosxuno' (2×1) | 'mitad' (50% off)
     const DISCOUNT_CODES_VALID = {
-      'JULIOW2TF':     true,
-      'ANAPAULAW2TF':  true,
-      'JOSEW2TF':      true,
-      'CHALLENGEW2TF': true, // código para aplicantes a The Challenge
+      'VICENTEW2TF':        { type: 'regular' },
+      'RAMIROW2TF':         { type: 'regular' },
+      'CARLOSW2TF':         { type: 'regular' },
+      'JULIOW2TF':          { type: 'regular' },
+      'NORMAW2TF':          { type: 'regular' },
+      'ANGELICAW2TF':       { type: 'regular' },
+      'MAURICIOW2TF':       { type: 'regular' },
+      'MAURICIOADRIANW2TF': { type: 'regular' },
+      'ADRIANW2TF':         { type: 'regular' },
+      'GIOW2TF':            { type: 'regular' },
+      'IVANAW2TF':          { type: 'regular' },
+      'NEXUSW2TF':          { type: 'regular' },
+      'AMIGOSW2TF':         { type: 'regular' },
+      'CHALLENGEW2TF':      { type: 'regular' },
+      'IBSAW2TF':           { type: 'regular' },
+      'ALPHAW2TF':          { type: 'regular' },
+      'INGENIERIAW2TF':     { type: 'regular' },
+      'SANTAFEW2TF':        { type: 'regular' },
+      'LAETW2TF':           { type: 'regular' },
+      'PROFESW2TF':         { type: 'gratis'  },
+      '2X1W2TF':            { type: 'dosxuno' },
+      '50W2TF':             { type: 'mitad'   },
     };
     const TEC_GROUP_PRICING = [
       { min: 1, max: 1, price: 150 },
@@ -32,23 +50,42 @@ module.exports = async function handler(req, res) {
     ];
 
     const qty = parseInt(boletos) || 1;
-    const codigoNorm = String(codigoDescuento || '').trim().toUpperCase();
-    const codigoValido = codigoNorm && DISCOUNT_CODES_VALID[codigoNorm];
+    const codigoNorm   = String(codigoDescuento || '').trim().toUpperCase();
+    const codigoData   = codigoNorm ? DISCOUNT_CODES_VALID[codigoNorm] : null;
+    const codigoValido = !!codigoData;
+    const codeType     = codigoData ? codigoData.type : null;
 
-    let precioUnitario;
-    if (tipo === 'externo') {
-      precioUnitario = codigoValido ? 250 : 300;
-    } else {
-      // Tec: código tiene prioridad sobre grupal
-      if (codigoValido) {
-        precioUnitario = 100;
+    const PRECIO_BASE = tipo === 'externo' ? 300 : 150;
+
+    let monto;
+    let discountType;
+
+    if (codigoValido) {
+      if (codeType === 'gratis') {
+        monto = 0;
+        discountType = 'gratis';
+      } else if (codeType === 'dosxuno') {
+        const pagados = Math.ceil(qty / 2);
+        monto = pagados * PRECIO_BASE;
+        discountType = 'dosxuno';
+      } else if (codeType === 'mitad') {
+        monto = Math.round(PRECIO_BASE / 2) * qty;
+        discountType = 'mitad';
       } else {
-        const tier = TEC_GROUP_PRICING.find(t => qty >= t.min && qty <= t.max) || { price: 90 };
-        precioUnitario = tier.price;
+        // regular
+        const precioUnitario = tipo === 'externo' ? 250 : 100;
+        monto = precioUnitario * qty;
+        discountType = 'codigo';
       }
+    } else if (tipo === 'externo') {
+      monto = 300 * qty;
+      discountType = 'ninguno';
+    } else {
+      // Tec: descuento grupal
+      const tier = TEC_GROUP_PRICING.find(t => qty >= t.min && qty <= t.max) || { price: 90 };
+      monto = tier.price * qty;
+      discountType = qty >= 2 ? 'grupal' : 'ninguno';
     }
-    const monto = precioUnitario * qty;
-    const discountType = codigoValido ? 'codigo' : (tipo === 'tec' && qty >= 2 ? 'grupal' : 'ninguno');
 
     const tipoNotion = tipo === 'externo' ? 'Externo' : 'Tec';
     const fecha = new Date().toISOString();
@@ -198,7 +235,13 @@ function buildEmailAdmin({ nombre, email, celular, institucion, carrera, tipo, b
       <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:10px 0;color:#64748B;">Tipo</td><td style="padding:10px 0;color:#0f172a;">${tipo}</td></tr>
       <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:10px 0;color:#64748B;"># Boletos</td><td style="padding:10px 0;color:#0f172a;">${boletos}</td></tr>
       <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:10px 0;color:#64748B;">Monto</td><td style="padding:10px 0;font-weight:700;color:#059669;font-size:16px;">$${monto} MXN</td></tr>
-      <tr><td style="padding:10px 0;color:#64748B;">Descuento</td><td style="padding:10px 0;color:#0f172a;">${discountType === 'codigo' ? `Código: <strong>${codigoDescuento}</strong>` : discountType === 'grupal' ? 'Grupal (cantidad)' : 'Ninguno'}</td></tr>
+      <tr><td style="padding:10px 0;color:#64748B;">Descuento</td><td style="padding:10px 0;color:#0f172a;">${
+        discountType === 'gratis'  ? `Código gratis: <strong>${codigoDescuento}</strong>` :
+        discountType === 'dosxuno' ? `Código 2×1: <strong>${codigoDescuento}</strong>` :
+        discountType === 'mitad'   ? `Código 50%: <strong>${codigoDescuento}</strong>` :
+        discountType === 'codigo'  ? `Código: <strong>${codigoDescuento}</strong>` :
+        discountType === 'grupal'  ? 'Grupal (cantidad)' : 'Ninguno'
+      }</td></tr>
     </table>
 
     <div style="background:${tieneComprobante ? '#f0fdf4' : '#fff7ed'};border-radius:8px;padding:12px 16px;margin-top:20px;">
