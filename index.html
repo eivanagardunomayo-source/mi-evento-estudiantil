@@ -894,31 +894,16 @@
       margin-top:-10px;margin-bottom:16px;line-height:1.5;
     }
     .ext-note strong{color:rgba(0,220,100,0.7);}
-    /* preventa banner */
-    .preventa-banner{
-      display:flex;align-items:center;gap:10px;
-      background:linear-gradient(90deg,rgba(255,153,0,0.1),rgba(255,80,0,0.08));
-      border:1px solid rgba(255,153,0,0.3);border-radius:14px;
-      padding:10px 14px;margin-bottom:18px;
+    /* discount code button */
+    .code-apply-btn{
+      padding:11px 16px;background:rgba(0,207,255,0.1);
+      border:1px solid rgba(0,207,255,0.25);border-radius:12px;
+      color:var(--cyan);font-family:inherit;font-size:0.82rem;font-weight:700;
+      cursor:pointer;white-space:nowrap;transition:all 0.2s;flex-shrink:0;
     }
-    .preventa-badge{
-      background:linear-gradient(90deg,#FF9900,#FF5000);
-      border-radius:6px;padding:3px 8px;
-      font-size:0.62rem;font-weight:800;letter-spacing:0.08em;color:#000;
-      text-transform:uppercase;flex-shrink:0;
-    }
-    .preventa-text{font-size:0.75rem;color:rgba(255,255,255,0.65);flex:1;line-height:1.4;}
-    .preventa-text strong{color:#FF9900;}
-    .preventa-cd{
-      font-size:0.78rem;font-weight:800;color:#FF9900;
-      font-family:'Courier New',monospace;white-space:nowrap;flex-shrink:0;
-    }
-    /* expired state */
-    .preventa-banner.expired{
-      background:rgba(255,255,255,0.02);border-color:rgba(255,255,255,0.07);
-    }
-    .preventa-banner.expired .preventa-badge{background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.4);}
-    .preventa-banner.expired .preventa-text,.preventa-banner.expired .preventa-cd{color:rgba(255,255,255,0.3);}
+    .code-apply-btn:hover{background:rgba(0,207,255,0.18);}
+    .code-apply-btn.applied{background:rgba(0,220,100,0.1);border-color:rgba(0,220,100,0.3);color:#00dc64;}
+    .code-msg{font-size:0.73rem;margin-top:6px;min-height:16px;line-height:1.4;}
     /* form */
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
     @media(max-width:420px){.form-row{grid-template-columns:1fr;}}
@@ -1429,11 +1414,11 @@
 
     <!-- IZQUIERDA: identidad -->
     <div class="hero-left">
-      <div class="hero-el" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(255,153,0,0.15),rgba(255,80,0,0.1));border:1px solid rgba(255,153,0,0.4);border-radius:100px;padding:8px 20px;margin-bottom:18px;">
-        <span style="width:7px;height:7px;border-radius:50%;background:#FF9900;box-shadow:0 0 8px rgba(255,153,0,0.8);flex-shrink:0;animation:pulse-dot 1.5s ease-in-out infinite;"></span>
-        <span style="font-size:0.78rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#FF9900;">Preventa activa</span>
-        <span style="width:1px;height:14px;background:rgba(255,153,0,0.3);"></span>
-        <span style="font-size:0.78rem;color:rgba(255,255,255,0.75);">El precio más bajo que tendrá el evento — <strong style="color:#fff;">$200 MXN</strong></span>
+      <div class="hero-el" style="display:inline-flex;align-items:center;gap:10px;background:rgba(0,207,255,0.08);border:1px solid rgba(0,207,255,0.25);border-radius:100px;padding:8px 20px;margin-bottom:18px;">
+        <span style="width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px rgba(0,207,255,0.8);flex-shrink:0;animation:pulse-dot 1.5s ease-in-out infinite;"></span>
+        <span style="font-size:0.78rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);">Boletos disponibles</span>
+        <span style="width:1px;height:14px;background:rgba(0,207,255,0.3);"></span>
+        <span style="font-size:0.78rem;color:rgba(255,255,255,0.75);">Alumno Tec: <strong style="color:#fff;">$150 MXN</strong> · Externo: <strong style="color:#fff;">$300 MXN</strong></span>
       </div>
       <p class="hero-eyebrow hero-el">
         <span></span>
@@ -1455,7 +1440,7 @@
         </span>
         <span class="hero-meta-item">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          2:30 PM – 9:30 PM
+          3:30 PM – 9:20 PM
         </span>
         <span class="hero-meta-item">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
@@ -1472,7 +1457,7 @@
     <div class="hero-right hero-el">
       <div class="urgency-badge" style="margin:0;">
         <span class="dot"></span>
-        Lugares muy limitados — $200 MXN
+        Lugares muy limitados — desde $150 MXN
       </div>
 
       <div class="cd-big-wrap" style="margin:0;">
@@ -1505,7 +1490,7 @@
 
       <button class="btn btn-primary hero-cta-main" onclick="openModal()" style="width:100%;">
         <span class="btn-shine"></span>
-        🎟️ Reservar mi lugar — <strong>desde $200 MXN</strong>
+        🎟️ Reservar mi lugar — <strong>desde $150 MXN</strong>
       </button>
       <a href="/challenge" class="btn btn-outline hero-cta-main" style="width:100%;text-align:center;display:block;box-sizing:border-box;">
         <span class="btn-shine"></span>
@@ -1570,7 +1555,7 @@
       <div class="que-es-visual fade-section">
         <div class="que-es-card">
           <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:8px;">Lo que debes saber</h3>
-          <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:20px;">Desde las 2:30 PM hasta las 9:30 PM en el campus Tec de Monterrey CDMX — ponentes de primer nivel, pitches en vivo y conexiones reales.</p>
+          <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:20px;">Desde las 3:30 PM hasta las 9:20 PM en el campus Tec de Monterrey CDMX — ponentes de primer nivel, pitches en vivo y conexiones reales.</p>
           <div style="display:flex;flex-direction:column;gap:10px;">
             <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(0,207,255,0.05);border-radius:10px;border:1px solid rgba(0,207,255,0.1);">
               <span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Fecha</span>
@@ -1580,11 +1565,11 @@
               <span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Lugar</span>
               <span style="font-size:0.85rem;font-weight:700;color:var(--cyan);">Pabellón de Biblioteca</span>
             </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(255,153,0,0.07);border-radius:10px;border:1px solid rgba(255,153,0,0.2);">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(0,207,255,0.05);border-radius:10px;border:1px solid rgba(0,207,255,0.15);">
               <span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">Precio</span>
               <div style="text-align:right;">
-                <span style="font-size:0.85rem;font-weight:700;color:#FF9900;">$200 MXN · Preventa</span>
-                <span style="display:block;font-size:0.7rem;color:rgba(255,153,0,0.55);">Precio de preventa — después subirá a $250 MXN</span>
+                <span style="font-size:0.85rem;font-weight:700;color:var(--cyan);">Tec $150 · Externo $300 MXN</span>
+                <span style="display:block;font-size:0.7rem;color:rgba(0,207,255,0.5);">Descuentos grupales Tec · Códigos de descuento</span>
               </div>
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(255,0,200,0.05);border-radius:10px;border:1px solid rgba(255,0,200,0.1);">
@@ -1673,7 +1658,7 @@
 
       <!-- Panel 2 — Sergio Daniel -->
       <div class="sa-panel">
-        <div class="sa-panel-bg" style="background-image:url('sergio-daniel.jpg');background-size:cover;background-position:center 15%;"></div>
+        <div class="sa-panel-bg" style="background-image:url('sergio-daniel.jpg');background-size:cover;background-position:center 42%;"></div>
         <div class="sa-panel-initial">SG</div>
         <div class="sa-panel-vlabel">Sergio Daniel</div>
         <div class="sa-panel-content">
@@ -1684,27 +1669,15 @@
         </div>
       </div>
 
-      <!-- Panel 3 — TBA -->
+      <!-- Panel 3 — Cristina -->
       <div class="sa-panel">
-        <div class="sa-panel-bg" style="background:linear-gradient(160deg,rgba(0,207,255,0.06) 0%,rgba(255,255,255,0.02) 100%);"></div>
-        <div class="sa-panel-initial" style="font-size:2rem;opacity:0.2;">?</div>
-        <div class="sa-panel-vlabel">Por anunciar</div>
+        <div class="sa-panel-bg" style="background-image:url('cristina-martinez.jpg');background-size:cover;background-position:center 20%;"></div>
+        <div class="sa-panel-initial">CM</div>
+        <div class="sa-panel-vlabel">Cristina</div>
         <div class="sa-panel-content">
-          <div class="sa-panel-role">Próximamente</div>
-          <div class="sa-panel-name">Por anunciar</div>
-          <div class="sa-panel-bio">Más speakers por confirmar. Mantente al tanto en nuestras redes sociales.</div>
-        </div>
-      </div>
-
-      <!-- Panel 4 — TBA -->
-      <div class="sa-panel">
-        <div class="sa-panel-bg" style="background:linear-gradient(160deg,rgba(122,0,255,0.06) 0%,rgba(255,255,255,0.02) 100%);"></div>
-        <div class="sa-panel-initial" style="font-size:2rem;opacity:0.2;">?</div>
-        <div class="sa-panel-vlabel">Por anunciar</div>
-        <div class="sa-panel-content">
-          <div class="sa-panel-role">Próximamente</div>
-          <div class="sa-panel-name">Por anunciar</div>
-          <div class="sa-panel-bio">Más speakers por confirmar. Mantente al tanto en nuestras redes sociales.</div>
+          <div class="sa-panel-role">Founder & CEO · PIT Policy Lab</div>
+          <div class="sa-panel-name">Cristina<br>Martínez Pinto</div>
+          <div class="sa-panel-bio">Fundadora de PIT Policy Lab, impulsando gobernanza tech e innovación responsable en LATAM. Young Global Leader WEF 2026 y parte del SW50 — las 50 mujeres mexicanas más influyentes en tecnología.</div>
         </div>
       </div>
 
@@ -1760,7 +1733,7 @@
         <button class="ag-stop ag-on" data-idx="0" style="--ag-clr:var(--cyan)">
           <span class="ag-dot"></span>
           <div class="ag-stop-info">
-            <span class="ag-stop-time">2:30</span>
+            <span class="ag-stop-time">3:30</span>
             <span class="ag-stop-label">Apertura</span>
           </div>
         </button>
@@ -1768,20 +1741,12 @@
         <button class="ag-stop" data-idx="1" style="--ag-clr:var(--purple)">
           <span class="ag-dot"></span>
           <div class="ag-stop-info">
-            <span class="ag-stop-time">3:30</span>
-            <span class="ag-stop-label">Conferencias I</span>
+            <span class="ag-stop-time">4:30</span>
+            <span class="ag-stop-label">Ponencias</span>
           </div>
         </button>
 
-        <button class="ag-stop" data-idx="2" style="--ag-clr:var(--cyan)">
-          <span class="ag-dot"></span>
-          <div class="ag-stop-info">
-            <span class="ag-stop-time">5:40</span>
-            <span class="ag-stop-label">Conferencias II</span>
-          </div>
-        </button>
-
-        <button class="ag-stop" data-idx="3" style="--ag-clr:#FF9900">
+        <button class="ag-stop" data-idx="2" style="--ag-clr:#FF9900">
           <span class="ag-dot"></span>
           <div class="ag-stop-info">
             <span class="ag-stop-time">8:00</span>
@@ -1801,74 +1766,57 @@
             </div>
             <div>
               <div class="ag-detail-htitle">Apertura</div>
-              <div class="ag-detail-hrange">2:30 PM — 3:30 PM</div>
+              <div class="ag-detail-hrange">3:30 PM — 4:30 PM</div>
             </div>
           </div>
           <div class="ag-row">
-            <span class="ag-row-time" style="color:var(--cyan)">2:30</span>
+            <span class="ag-row-time" style="color:var(--cyan)">3:30</span>
             <div>
               <div class="ag-row-title">Apertura de puertas</div>
               <div class="ag-row-desc" style="color:var(--text-muted);font-size:0.73rem;margin-top:3px;">Visita a stands y networking</div>
             </div>
           </div>
           <div class="ag-row">
-            <span class="ag-row-time" style="color:var(--cyan)">3:00</span>
+            <span class="ag-row-time" style="color:var(--cyan)">4:00</span>
             <div><div class="ag-row-title">Inauguración oficial</div></div>
           </div>
         </div>
 
-        <!-- Panel 1: Conferencias I + Networking -->
+        <!-- Panel 1: Ponencias -->
         <div class="ag-detail-inner" data-panel="1">
           <div class="ag-detail-header">
             <div class="ag-detail-icon" style="background:rgba(122,0,255,0.15);">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b57eff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
             </div>
             <div>
-              <div class="ag-detail-htitle">Conferencias I + Networking</div>
-              <div class="ag-detail-hrange">3:30 PM — 5:20 PM</div>
+              <div class="ag-detail-htitle">Ponencias + Networking</div>
+              <div class="ag-detail-hrange">4:30 PM — 7:35 PM</div>
             </div>
           </div>
           <div class="ag-row ag-star">
-            <span class="ag-row-time" style="color:var(--purple)">3:30</span>
+            <span class="ag-row-time" style="color:var(--purple)">4:30</span>
             <div><div class="ag-row-title">Ponente 1</div></div>
           </div>
-          <div class="ag-row ag-star">
-            <span class="ag-row-time" style="color:var(--purple)">4:25</span>
-            <div><div class="ag-row-title">Ponente 2</div></div>
-          </div>
           <div class="ag-row">
-            <span class="ag-row-time" style="color:var(--purple)">5:20</span>
+            <span class="ag-row-time" style="color:var(--purple)">5:25</span>
             <div><div class="ag-row-title">Stands + Networking</div></div>
           </div>
-        </div>
-
-        <!-- Panel 2: Conferencias II -->
-        <div class="ag-detail-inner" data-panel="2">
-          <div class="ag-detail-header">
-            <div class="ag-detail-icon" style="background:rgba(0,207,255,0.15);">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            </div>
-            <div>
-              <div class="ag-detail-htitle">Conferencias II</div>
-              <div class="ag-detail-hrange">5:40 PM — 7:35 PM</div>
-            </div>
-          </div>
           <div class="ag-row ag-star">
-            <span class="ag-row-time" style="color:var(--cyan)">5:40</span>
-            <div><div class="ag-row-title">Ponente 3</div></div>
+            <span class="ag-row-time" style="color:var(--purple)">5:45</span>
+            <div><div class="ag-row-title">Ponente 2</div></div>
           </div>
           <div class="ag-row ag-star">
             <span class="ag-row-time" style="color:var(--cyan)">6:40</span>
-            <div><div class="ag-row-title">Ponente 4</div></div>
+            <div><div class="ag-row-title">Ponente 3</div></div>
           </div>
           <div class="ag-row">
             <span class="ag-row-time" style="color:var(--cyan)">7:35</span>
-            <div><div class="ag-row-title">Stands + Networking</div></div>
+            <div><div class="ag-row-title">Break + visita a stands</div></div>
           </div>
         </div>
 
-        <!-- Panel 3: Startup Challenge -->
-        <div class="ag-detail-inner" data-panel="3">
+        <!-- Panel 2: Startup Challenge -->
+        <div class="ag-detail-inner" data-panel="2">
 
           <div class="ag-detail-header">
             <div class="ag-detail-icon" style="background:rgba(255,153,0,0.15);">
@@ -1876,7 +1824,7 @@
             </div>
             <div>
               <div class="ag-detail-htitle">The Challenge</div>
-              <div class="ag-detail-hrange">8:00 PM — 9:30 PM</div>
+              <div class="ag-detail-hrange">8:00 PM — 9:20 PM</div>
             </div>
           </div>
           <div class="ag-row ag-star"><span class="ag-row-time" style="color:#FF9900">8:00</span><div><div class="ag-row-title">Pitch 1</div></div></div>
@@ -1884,7 +1832,7 @@
           <div class="ag-row ag-star"><span class="ag-row-time" style="color:#FF9900">8:30</span><div><div class="ag-row-title">Pitch 3</div></div></div>
           <div class="ag-row ag-star"><span class="ag-row-time" style="color:#FF9900">8:55</span><div><div class="ag-row-title">Anuncio del ganador</div></div></div>
           <div class="ag-row"><span class="ag-row-time" style="color:#FF9900">9:05</span><div><div class="ag-row-title">Clausura</div></div></div>
-          <div class="ag-row"><span class="ag-row-time" style="color:#FF9900">9:30</span><div><div class="ag-row-title">Fin del evento</div></div></div>
+          <div class="ag-row"><span class="ag-row-time" style="color:#FF9900">9:20</span><div><div class="ag-row-title">Fin del evento</div></div></div>
         </div>
 
       </div>
@@ -1998,13 +1946,14 @@
         <a href="https://www.revolut.com/es-MX/" target="_blank" rel="noopener" style="font-size:0.75rem;color:var(--cyan);text-decoration:none;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;">revolut.com →</a>
       </div>
 
-      <!-- Próximamente -->
-      <div style="background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.12);border-radius:24px;padding:48px 36px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
-        <div style="width:48px;height:48px;border-radius:50%;border:1.5px dashed rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <!-- PIT Policy Lab -->
+      <div style="background:var(--card-bg);border:1px solid rgba(255,0,200,0.2);border-radius:24px;padding:48px 36px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:20px;transition:border-color 0.3s,transform 0.3s;" onmouseenter="this.style.borderColor='rgba(255,0,200,0.5)';this.style.transform='translateY(-4px)'" onmouseleave="this.style.borderColor='rgba(255,0,200,0.2)';this.style.transform=''">
+        <img src="logo-pit.png" alt="PIT Policy Lab" style="height:100px;object-fit:contain;filter:brightness(0) invert(1);"/>
+        <div>
+          <div style="font-size:1rem;font-weight:800;color:#fff;margin-bottom:8px;">PIT Policy Lab</div>
+          <div style="font-size:0.83rem;color:var(--text-muted);line-height:1.6;">Laboratorio de consultoría e investigación enfocado en tecnología de interés público para América Latina, que traduce la complejidad tecnológica en políticas públicas éticas y accionables sobre IA, gobernanza digital e innovación.</div>
         </div>
-        <div style="font-size:1rem;font-weight:800;color:rgba(255,255,255,0.4);">Más empresas por anunciar</div>
-        <div style="font-size:0.8rem;color:rgba(255,255,255,0.22);max-width:320px;line-height:1.6;">Estamos confirmando más marcas y empresas que formarán parte de Welcome 2 The Future 2026. Mantente al tanto.</div>
+        <a href="https://www.policylab.tech/" target="_blank" rel="noopener" style="font-size:0.75rem;color:var(--magenta);text-decoration:none;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;">policylab.tech →</a>
       </div>
 
     </div>
@@ -2047,7 +1996,7 @@
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
         <button class="btn btn-primary" onclick="openModal()" style="font-size:1rem;padding:16px 40px;">
           <span class="btn-shine"></span>
-          Reservar mi lugar — desde $200 MXN
+          Reservar mi lugar — desde $150 MXN
         </button>
       </div>
       <p class="cta-price-note">Pago único por transferencia SPEI · Boleto confirmado por correo · Cupo limitado</p>
@@ -2069,6 +2018,7 @@
       <img src="logo-tec.png" alt="Tec de Monterrey" class="footer-logo-img"/>
       <img src="logo-nazca2.png" alt="Nazca VC" class="footer-logo-img"/>
       <img src="logo-revolut.png" alt="Revolut" class="footer-logo-img"/>
+      <img src="logo-pit.png" alt="PIT Policy Lab" class="footer-logo-img"/>
     </div>
     <p class="footer-copy">© 2026 Welcome 2 The Future · Tec de Monterrey CDMX · Organizado por estudiantes</p>
     <div class="footer-links">
@@ -2118,38 +2068,35 @@
         <p class="ms1-title">Reserva tu lugar 🎟️</p>
         <p class="ms1-sub">Welcome 2 The Future 2026 · Tec CDMX</p>
 
-        <!-- Banner preventa -->
-        <div class="preventa-banner" id="preventa-banner">
-          <span class="preventa-badge" id="preventa-label">Preventa</span>
-          <span class="preventa-text" id="preventa-text">Precio de preventa activo. <strong>Termina el 17 de abril — después sube a $250.</strong></span>
-          <span class="preventa-cd" id="preventa-cd">--:--:--</span>
-        </div>
-
         <p class="form-section-label">¿Quién eres?</p>
         <div class="type-pills" id="type-pills">
           <button class="type-pill selected" data-val="tec">🎓 Estudiante Tec / Exatec</button>
           <button class="type-pill" data-val="externo">🌐 Externo</button>
           <button class="type-pill" data-val="challenge">🏆 The Challenge</button>
         </div>
-        <div class="ext-note" id="ext-note" style="display:none">Otras universidades, profesionales y público general. Precio fijo <strong>$300 MXN</strong> — sin descuento por grupo.</div>
-        <div class="ext-note" id="challenge-note" style="display:none;border-color:rgba(255,180,0,0.3);background:rgba(255,180,0,0.05);color:rgba(255,255,255,0.7);">Aplicante a The Challenge. <strong style="color:#FCD34D;">20% de descuento</strong> sobre el precio Tec — boleto a <strong style="color:#FCD34D;">$160 MXN</strong>.</div>
+        <div class="ext-note" id="ext-note" style="display:none">Otras universidades, profesionales y público general. Precio fijo <strong>$300 MXN</strong>. Con código de descuento: <strong>$250 MXN</strong>.</div>
+        <div class="ext-note" id="challenge-note" style="display:none;border-color:rgba(255,180,0,0.3);background:rgba(255,180,0,0.05);color:rgba(255,255,255,0.7);">Aplicante a The Challenge. Boleto a <strong style="color:#FCD34D;">$160 MXN</strong>.</div>
         <input type="hidden" id="select-tipo" value="tec"/>
 
-        <!-- Descuento por grupo (solo Tec) -->
+        <!-- Descuento grupal Alumno Tec (se oculta si hay código válido) -->
         <div class="discount-tiers" id="discount-tiers">
-          <div class="dtier" id="dtier-10">
-            <span class="dtier-dot"></span><span id="dtier-10-label">10+ boletos: $180 c/u</span>
-          </div>
+          <div class="dtier" id="dtier-1"><span class="dtier-dot"></span><span>1: $150</span></div>
+          <div class="dtier" id="dtier-2"><span class="dtier-dot"></span><span>2: $140</span></div>
+          <div class="dtier" id="dtier-3"><span class="dtier-dot"></span><span>3: $130</span></div>
+          <div class="dtier" id="dtier-4"><span class="dtier-dot"></span><span>4: $120</span></div>
+          <div class="dtier" id="dtier-5"><span class="dtier-dot"></span><span>5: $110</span></div>
+          <div class="dtier" id="dtier-6"><span class="dtier-dot"></span><span>6: $100</span></div>
+          <div class="dtier" id="dtier-7"><span class="dtier-dot"></span><span>7+: $90</span></div>
         </div>
         <div class="group-explainer" id="group-explainer">
-          <span id="group-explainer-text">¿Vienes con amigos? Si compran <strong>10 boletos o más</strong>, el precio por persona baja a <strong>$180 MXN</strong>.</span>
+          <span id="group-explainer-text">¿Vienes con amigos? Desde <strong>2 boletos</strong> el precio baja — con 7 o más pagas solo <strong>$90 MXN</strong> c/u.</span>
         </div>
 
         <div class="ticket-row">
           <div>
             <div class="ticket-info-label">Boleto general · W2TF 2026</div>
             <div class="ticket-price-tag" id="ticket-price-tag">
-              <span class="now">$200 c/u</span>
+              <span class="now">$150 c/u</span>
             </div>
           </div>
           <div class="tc-controls">
@@ -2161,18 +2108,18 @@
         <div class="modal-total" id="modal-total-box">
           <div>
             <div class="modal-total-label">Total a pagar</div>
-            <div style="font-size:0.72rem;color:rgba(255,255,255,0.2);" id="qty-breakdown">1 boleto × $200</div>
+            <div style="font-size:0.72rem;color:rgba(255,255,255,0.2);" id="qty-breakdown">1 boleto × $150</div>
             <div class="savings-pill" id="savings-pill">🎉 <span id="savings-text">Ahorras $0</span></div>
           </div>
-          <div class="modal-total-price" id="modal-total-price">$200 <span style="font-size:0.9rem;font-weight:600;">MXN</span></div>
+          <div class="modal-total-price" id="modal-total-price">$150 <span style="font-size:0.9rem;font-weight:600;">MXN</span></div>
         </div>
         <div class="savings-breakdown" id="savings-breakdown">
-          <div class="sb-row" id="sb-row-preventa" style="display:none;">
-            <span class="sb-key">🏷 Precio preventa</span>
-            <span class="sb-val" id="sb-preventa-val">−$0</span>
+          <div class="sb-row" id="sb-row-codigo" style="display:none;">
+            <span class="sb-key">🏷 Código de descuento</span>
+            <span class="sb-val" id="sb-codigo-val">−$0</span>
           </div>
           <div class="sb-row" id="sb-row-volumen" style="display:none;">
-            <span class="sb-key">👥 Descuento por grupo</span>
+            <span class="sb-key">👥 Descuento grupal</span>
             <span class="sb-val" id="sb-volumen-val">−$0</span>
           </div>
           <hr class="sb-divider"/>
@@ -2180,6 +2127,16 @@
             <span class="sb-key">✅ Total ahorrado</span>
             <span class="sb-val" id="sb-total-val">−$0</span>
           </div>
+        </div>
+
+        <!-- Código de descuento -->
+        <div class="form-group" id="code-group" style="margin-top:12px;margin-bottom:4px;">
+          <label class="form-label" for="inp-codigo">Código de descuento <span style="font-weight:400;opacity:0.5;">(opcional)</span></label>
+          <div style="display:flex;gap:8px;">
+            <input class="form-input" id="inp-codigo" type="text" placeholder="JULIOW2TF" autocomplete="off" style="flex:1;letter-spacing:0.05em;"/>
+            <button type="button" class="code-apply-btn" id="btn-codigo" onclick="applyCode()">Aplicar</button>
+          </div>
+          <div class="code-msg" id="code-msg"></div>
         </div>
 
         <p class="form-section-label">Tus datos</p>
@@ -2241,7 +2198,7 @@
             <div>
               <div class="ss-label">Transfiere exactamente este monto con la referencia</div>
               <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px;">
-                <span class="amount-big" id="monto-display">$200 MXN</span>
+                <span class="amount-big" id="monto-display">$150 MXN</span>
                 <span class="ref-chip" id="ref-spei-display">—</span>
               </div>
             </div>
@@ -2393,7 +2350,7 @@
    COUNTDOWN
 ═══════════════════════════════════════════════════════ */
 (function initCountdown(){
-  const target = new Date('2026-05-15T14:30:00-06:00');
+  const target = new Date('2026-05-15T15:30:00-06:00');
   const prevVals = {cd1:{d:null,h:null,m:null,s:null},cd2:{d:null,h:null,m:null,s:null}};
 
   function flipUpdate(id, val){
@@ -2547,74 +2504,86 @@ window.addEventListener('load', function(){
    MODAL & PAYMENT LOGIC
 ═══════════════════════════════════════════════════════ */
 const CLABE  = '638180010184222442';
-const PREVENTA_END = new Date('2026-04-18T00:00:00-06:00'); // 17 abr 23:59 CST
 let selectedFile = null;
 let currentStep  = 1;
 
-/* ─── MODAL CHECKOUT ──────────────────────────────────── */
-let ticketQty = 1;
-let selectedTipo = 'tec';
+/* ─── CONFIG: Precios base ─────────────────────────────── */
+const PRECIO_TEC     = 150; // Alumno Tec / Exatec
+const PRECIO_EXTERNO = 300; // Externo
 
-function isPreventaActive(){
-  return new Date() < PREVENTA_END;
+/* ─── CONFIG: Códigos de descuento ─────────────────────── */
+// Para agregar un código nuevo: agrega una línea 'NOMBREW2TF': true,
+// Reglas: mayúsculas, sin espacios, sin acentos, siempre termina en W2TF
+// Ej: Julio → JULIOW2TF | Ana Paula → ANAPAULAW2TF | José → JOSEW2TF
+const DISCOUNT_CODES = {
+  'JULIOW2TF':    true,
+  'ANAPAULAW2TF': true,
+  'JOSEW2TF':     true,
+};
+
+/* ─── CONFIG: Descuento grupal Tec ─────────────────────── */
+// precio por unidad según cantidad total (solo aplica sin código activo)
+const TEC_GROUP_PRICING = [
+  { min: 1, max: 1, price: 150 },
+  { min: 2, max: 2, price: 140 },
+  { min: 3, max: 3, price: 130 },
+  { min: 4, max: 4, price: 120 },
+  { min: 5, max: 5, price: 110 },
+  { min: 6, max: 6, price: 100 },
+  { min: 7, max: Infinity, price: 90 },
+];
+
+/* ─── MODAL CHECKOUT ──────────────────────────────────── */
+let ticketQty    = 1;
+let selectedTipo = 'tec';
+let appliedCode  = null; // código válido aplicado, o null
+
+function getTecGroupPrice(qty) {
+  const tier = TEC_GROUP_PRICING.find(t => qty >= t.min && qty <= t.max);
+  return tier ? tier.price : 90;
 }
 
 /* ── Pricing engine ── */
-function calcPrecio(){
-  const preventa  = isPreventaActive();
-  const REGULAR   = 250; // precio referencia Tec (post-preventa, sin grupo)
-
-  if(selectedTipo === 'externo'){
-    return { regular:300, perUnit:300, total:300*ticketQty,
-             savingPreventa:0, savingVolumen:0, totalSaving:0, disc:0 };
+function calcPrecio() {
+  if (selectedTipo === 'externo') {
+    const perUnit = appliedCode ? 250 : PRECIO_EXTERNO;
+    return { perUnit, total: perUnit * ticketQty, discType: appliedCode ? 'codigo' : 'ninguno', basePrice: PRECIO_EXTERNO };
   }
-  if(selectedTipo === 'challenge'){
-    // 20% de descuento sobre precio Tec base ($200)
-    const chalPrice = 160;
-    return { regular:200, perUnit:chalPrice, total:chalPrice*ticketQty,
-             savingPreventa:0, savingVolumen:0, totalSaving:(200-chalPrice)*ticketQty, disc:0 };
+  if (selectedTipo === 'challenge') {
+    return { perUnit: 160, total: 160 * ticketQty, discType: 'ninguno', basePrice: 160 };
   }
-
-  // Tec
-  const prevBase = 200; // precio preventa sin descuento de grupo
-  const perUnit  = preventa
-    ? (ticketQty >= 10 ? 150 : 200)
-    : (ticketQty >= 10 ? 180 : 250);
-
-  const total          = perUnit * ticketQty;
-  const savingPreventa = preventa ? (REGULAR - prevBase) * ticketQty : 0;        // $50 × qty
-  const savingVolumen  = ticketQty >= 10
-    ? (preventa ? (prevBase - 150) : (REGULAR - 180)) * ticketQty                // prev:50×q / post:70×q
-    : 0;
-  const totalSaving    = (REGULAR - perUnit) * ticketQty;
-  const disc           = savingVolumen > 0 ? (preventa ? 0.25 : 0.28) : 0;
-
-  return { regular:REGULAR, perUnit, total, savingPreventa, savingVolumen, totalSaving, disc };
+  // Tec: código tiene prioridad sobre grupal
+  if (appliedCode) {
+    return { perUnit: 100, total: 100 * ticketQty, discType: 'codigo', basePrice: PRECIO_TEC };
+  }
+  const perUnit = getTecGroupPrice(ticketQty);
+  return { perUnit, total: perUnit * ticketQty, discType: ticketQty >= 2 ? 'grupal' : 'ninguno', basePrice: PRECIO_TEC };
 }
 
-function updatePriceUI(){
-  const { regular, perUnit, total, savingPreventa, savingVolumen, totalSaving, disc } = calcPrecio();
-  const preventa = isPreventaActive();
-  const externo  = selectedTipo === 'externo';
+function updatePriceUI() {
+  const { perUnit, total, discType, basePrice } = calcPrecio();
+  const externo   = selectedTipo === 'externo';
+  const hasSaving = perUnit < basePrice;
+  const totalSaving = hasSaving ? (basePrice - perUnit) * ticketQty : 0;
 
-  // per-ticket tag — mostrar tachado si hay ahorro total
+  // per-ticket tag
   const tag = document.getElementById('ticket-price-tag');
-  tag.innerHTML = (!externo && totalSaving > 0)
-    ? `<span class="orig">$${regular}</span><span class="now">$${perUnit} c/u</span>`
+  tag.innerHTML = hasSaving
+    ? `<span class="orig">$${basePrice}</span><span class="now">$${perUnit} c/u</span>`
     : `<span class="now">$${perUnit} c/u</span>`;
 
   // breakdown qty
   document.getElementById('qty-breakdown').textContent =
-    ticketQty + ' boleto' + (ticketQty>1?'s':'') + ' × $' + perUnit;
+    ticketQty + ' boleto' + (ticketQty > 1 ? 's' : '') + ' × $' + perUnit;
 
   // total price
   document.getElementById('modal-total-price').innerHTML =
     '$' + total.toLocaleString('es-MX') + ' <span style="font-size:0.9rem;font-weight:600;">MXN</span>';
 
-  // savings pill (resumen compacto)
+  // savings pill
   const pill = document.getElementById('savings-pill');
   const box  = document.getElementById('modal-total-box');
-  if(!externo && totalSaving > 0){
+  if (hasSaving) {
     document.getElementById('savings-text').textContent = 'Ahorras $' + totalSaving.toLocaleString('es-MX');
     pill.classList.add('show');
     box.classList.add('has-discount');
@@ -2624,94 +2593,116 @@ function updatePriceUI(){
   }
 
   // savings breakdown detallado
-  const sbEl  = document.getElementById('savings-breakdown');
-  if(!externo && totalSaving > 0){
+  const sbEl      = document.getElementById('savings-breakdown');
+  const sbCodeRow = document.getElementById('sb-row-codigo');
+  const sbVolRow  = document.getElementById('sb-row-volumen');
+  if (hasSaving) {
     sbEl.style.display = 'block';
-    const sbPrevRow = document.getElementById('sb-row-preventa');
-    const sbVolRow  = document.getElementById('sb-row-volumen');
-    if(savingPreventa > 0){
-      sbPrevRow.style.display = 'flex';
-      document.getElementById('sb-preventa-val').textContent = '−$' + savingPreventa.toLocaleString('es-MX');
-    } else {
-      sbPrevRow.style.display = 'none';
-    }
-    if(savingVolumen > 0){
-      sbVolRow.style.display = 'flex';
-      document.getElementById('sb-volumen-val').textContent = '−$' + savingVolumen.toLocaleString('es-MX');
-    } else {
+    if (discType === 'codigo') {
+      sbCodeRow.style.display = 'flex';
+      document.getElementById('sb-codigo-val').textContent = '−$' + totalSaving.toLocaleString('es-MX');
       sbVolRow.style.display = 'none';
+    } else if (discType === 'grupal') {
+      sbVolRow.style.display = 'flex';
+      document.getElementById('sb-volumen-val').textContent = '−$' + totalSaving.toLocaleString('es-MX');
+      sbCodeRow.style.display = 'none';
+    } else {
+      sbCodeRow.style.display = 'none';
+      sbVolRow.style.display  = 'none';
     }
     document.getElementById('sb-total-val').textContent = '−$' + totalSaving.toLocaleString('es-MX');
   } else {
     sbEl.style.display = 'none';
   }
 
-  // discount tier badges — solo visible para Tec (no challenge, no externo)
-  const tiersEl = document.getElementById('discount-tiers');
-  tiersEl.style.display = (externo || selectedTipo === 'challenge') ? 'none' : 'flex';
+  // discount tier badges — solo visible para Tec sin código activo
+  const tiersEl   = document.getElementById('discount-tiers');
+  const showTiers = !externo && selectedTipo !== 'challenge' && !appliedCode;
+  tiersEl.style.display = showTiers ? 'flex' : 'none';
 
+  if (showTiers) {
+    TEC_GROUP_PRICING.forEach((tier, i) => {
+      const el = document.getElementById('dtier-' + (i + 1));
+      if (el) el.classList.toggle('active', ticketQty >= tier.min && ticketQty <= tier.max);
+    });
+  }
+
+  // group explainer
   const explainerEl  = document.getElementById('group-explainer');
   const explainerTxt = document.getElementById('group-explainer-text');
 
-  if(selectedTipo === 'challenge'){
+  if (selectedTipo === 'challenge') {
     explainerEl.className = 'group-explainer';
-    explainerTxt.innerHTML = 'Precio especial para aplicantes a The Challenge. <strong>20% de descuento</strong> — $160 MXN por boleto.';
-  } else if(externo){
+    explainerTxt.innerHTML = 'Precio especial para aplicantes a The Challenge. Boleto a <strong>$160 MXN</strong>.';
+  } else if (externo) {
     explainerEl.className = 'group-explainer';
-    explainerTxt.innerHTML = 'Precio fijo para externos. No aplica descuento por cantidad.';
-  } else if(preventa){
-    document.getElementById('dtier-10-label').textContent = '10+ boletos: $150 c/u';
-    document.getElementById('dtier-10').classList.toggle('active', ticketQty >= 10);
-    if(ticketQty >= 10){
-      explainerEl.className = 'group-explainer highlight';
-      explainerTxt.innerHTML = '🎉 ¡Precio grupal activo! Cada persona paga solo <strong>$150 MXN</strong>.';
-    } else {
-      explainerEl.className = 'group-explainer';
-      const faltan = 10 - ticketQty;
-      explainerTxt.innerHTML = `¿Vienes con amigos? Con <strong>10 boletos o más</strong> cada uno paga <strong>$150 MXN</strong> — te faltan <strong>${faltan}</strong> para activar el precio grupal.`;
-    }
+    explainerTxt.innerHTML = 'Precio fijo para externos: <strong>$300 MXN</strong>. Con código válido baja a <strong>$250 MXN</strong>.';
+  } else if (appliedCode) {
+    explainerEl.className = 'group-explainer highlight';
+    explainerTxt.innerHTML = 'Precio con código: <strong>$100 MXN por boleto</strong>. No aplica descuento grupal.';
+  } else if (ticketQty >= 2) {
+    explainerEl.className = 'group-explainer highlight';
+    explainerTxt.innerHTML = `Precio grupal activo: cada boleto cuesta <strong>$${perUnit} MXN</strong>.`;
   } else {
-    document.getElementById('dtier-10-label').textContent = '10+ boletos: $180 c/u';
-    document.getElementById('dtier-10').classList.toggle('active', ticketQty >= 10);
-    if(ticketQty >= 10){
-      explainerEl.className = 'group-explainer highlight';
-      explainerTxt.innerHTML = '🎉 ¡Precio grupal activo! Cada persona paga <strong>$180 MXN</strong>.';
-    } else {
-      explainerEl.className = 'group-explainer';
-      const faltan = 10 - ticketQty;
-      explainerTxt.innerHTML = `¿Vienes con amigos? Con <strong>10 boletos o más</strong> el precio baja a <strong>$180 MXN</strong> — te faltan <strong>${faltan}</strong>.`;
-    }
+    explainerEl.className = 'group-explainer';
+    explainerTxt.innerHTML = '¿Vienes con amigos? Desde <strong>2 boletos</strong> el precio baja — con 7 o más pagas solo <strong>$90 MXN</strong> c/u.';
   }
 }
 
-/* ── Preventa countdown ── */
-(function initPreventaCountdown(){
-  const banner = document.getElementById('preventa-banner');
-  const cdEl   = document.getElementById('preventa-cd');
-  const txtEl  = document.getElementById('preventa-text');
-  const lblEl  = document.getElementById('preventa-label');
+/* ── Código de descuento ── */
+function applyCode() {
+  const input = document.getElementById('inp-codigo');
+  const msg   = document.getElementById('code-msg');
+  const btn   = document.getElementById('btn-codigo');
+  const raw   = input.value.trim().toUpperCase();
 
-  function tick(){
-    const now  = new Date();
-    const diff = PREVENTA_END - now;
-    if(diff <= 0){
-      banner.classList.add('expired');
-      lblEl.textContent = 'Preventa';
-      txtEl.innerHTML   = 'La preventa ha finalizado. Precios de venta general activos.';
-      cdEl.textContent  = 'Expirada';
-      updatePriceUI();
-      return;
-    }
-    const d  = Math.floor(diff / 86400000);
-    const h  = Math.floor((diff % 86400000) / 3600000);
-    const m  = Math.floor((diff % 3600000)  / 60000);
-    const s  = Math.floor((diff % 60000)    / 1000);
-    const pad = n => String(n).padStart(2,'0');
-    cdEl.textContent = d > 0 ? `${d}d ${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(h)}:${pad(m)}:${pad(s)}`;
+  if (!raw) {
+    appliedCode = null;
+    msg.textContent = '';
+    btn.classList.remove('applied');
+    updatePriceUI();
+    return;
   }
-  tick();
-  setInterval(tick, 1000);
-})();
+
+  if (DISCOUNT_CODES[raw]) {
+    const hadGroupDiscount = !appliedCode && selectedTipo === 'tec' && ticketQty >= 2;
+    appliedCode = raw;
+    input.value = raw;
+    btn.classList.add('applied');
+    if (hadGroupDiscount) {
+      msg.style.color = 'rgba(252,211,77,0.9)';
+      msg.textContent = 'No puedes aplicar dos promociones. Se validó el código de descuento.';
+    } else {
+      msg.style.color = '#34D399';
+      msg.textContent = 'Código aplicado.';
+    }
+  } else {
+    appliedCode = null;
+    btn.classList.remove('applied');
+    msg.style.color = '#F87171';
+    msg.textContent = 'Código inválido.';
+  }
+  updatePriceUI();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeInput = document.getElementById('inp-codigo');
+  if (!codeInput) return;
+  codeInput.addEventListener('input', function() {
+    const pos = this.selectionStart;
+    this.value = this.value.toUpperCase();
+    try { this.setSelectionRange(pos, pos); } catch(e) {}
+    if (!this.value.trim() && appliedCode) {
+      appliedCode = null;
+      document.getElementById('btn-codigo').classList.remove('applied');
+      document.getElementById('code-msg').textContent = '';
+      updatePriceUI();
+    }
+  });
+  codeInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); applyCode(); }
+  });
+});
 
 function openModal(){
   document.getElementById('modal-overlay').classList.add('open');
@@ -2813,8 +2804,8 @@ function irAPago(){
   if(!ok) return;
 
   const ref = generarReferencia();
-  const { perUnit, total, disc } = calcPrecio();
-  const descLabel = disc > 0 ? ` (−${disc*100|0}% grupal)` : '';
+  const { perUnit, total, discType } = calcPrecio();
+  const descLabel = discType === 'codigo' ? ' (código)' : discType === 'grupal' ? ' (grupal)' : '';
 
   // Fill step 2
   document.getElementById('oc-nombre').textContent = nombre;
@@ -2883,7 +2874,7 @@ function handleFile(file){
   const bar = document.getElementById('cd-progress-bar');
   if(!bar) return;
   const start = new Date('2026-03-06T00:00:00-06:00'); // ~70 días antes
-  const end   = new Date('2026-05-15T14:30:00-06:00');
+  const end   = new Date('2026-05-15T15:30:00-06:00');
   function update(){
     const now = new Date();
     const total = end - start;
@@ -3175,6 +3166,8 @@ async function enviarRegistro(){
       body: JSON.stringify({
         nombre, email, celular, institucion: matricula, carrera: emprendimiento || '', tipo,
         boletos: ticketQty, referencia, monto: total,
+        codigoDescuento: appliedCode || '',
+        tipoDescuento: calcPrecio().discType,
         comprobante: comprobanteBase64
       })
     });

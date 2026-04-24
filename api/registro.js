@@ -11,9 +11,46 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { nombre, email, celular, institucion, carrera, tipo, boletos, referencia, comprobante, monto: montoRaw } = req.body;
-    const precioBase = tipo === 'externo' ? (parseInt(process.env.PRECIO_EXTERNO) || 300) : tipo === 'challenge' ? 160 : (parseInt(process.env.PRECIO_BOLETO) || 200);
-    const monto = parseInt(montoRaw) || (parseInt(boletos) * precioBase);
+    const { nombre, email, celular, institucion, carrera, tipo, boletos, referencia, comprobante, monto: montoRaw, codigoDescuento, tipoDescuento } = req.body;
+
+    // ─── Precios y códigos de descuento ─────────────────────────────────
+    // PARA AGREGAR CÓDIGOS: agrega una línea 'NOMBREW2TF': true,
+    const DISCOUNT_CODES_VALID = {
+      'JULIOW2TF':    true,
+      'ANAPAULAW2TF': true,
+      'JOSEW2TF':     true,
+    };
+    const TEC_GROUP_PRICING = [
+      { min: 1, max: 1, price: 150 },
+      { min: 2, max: 2, price: 140 },
+      { min: 3, max: 3, price: 130 },
+      { min: 4, max: 4, price: 120 },
+      { min: 5, max: 5, price: 110 },
+      { min: 6, max: 6, price: 100 },
+      { min: 7, max: Infinity, price: 90 },
+    ];
+
+    const qty = parseInt(boletos) || 1;
+    const codigoNorm = String(codigoDescuento || '').trim().toUpperCase();
+    const codigoValido = codigoNorm && DISCOUNT_CODES_VALID[codigoNorm];
+
+    let precioUnitario;
+    if (tipo === 'externo') {
+      precioUnitario = codigoValido ? 250 : 300;
+    } else if (tipo === 'challenge') {
+      precioUnitario = 160;
+    } else {
+      // Tec: código tiene prioridad sobre grupal
+      if (codigoValido) {
+        precioUnitario = 100;
+      } else {
+        const tier = TEC_GROUP_PRICING.find(t => qty >= t.min && qty <= t.max) || { price: 90 };
+        precioUnitario = tier.price;
+      }
+    }
+    const monto = precioUnitario * qty;
+    const discountType = codigoValido ? 'codigo' : (tipo === 'tec' && qty >= 2 ? 'grupal' : 'ninguno');
+
     const tipoNotion = tipo === 'challenge' ? 'The Challenge' : tipo === 'externo' ? 'Externo' : 'Tec';
     const fecha = new Date().toISOString();
     const token = require('crypto').randomUUID();
@@ -71,7 +108,7 @@ module.exports = async function handler(req, res) {
       from,
       to: process.env.ADMIN_EMAIL,
       subject: `Nuevo pago pendiente — ${referencia} — ${nombre}`,
-      html: buildEmailAdmin({ nombre, email, celular, institucion, carrera, tipo, boletos, monto, referencia, tieneComprobante: adminAttachments.length > 0 }),
+      html: buildEmailAdmin({ nombre, email, celular, institucion, carrera, tipo, boletos, monto, referencia, tieneComprobante: adminAttachments.length > 0, codigoDescuento: codigoValido ? codigoNorm : '', discountType }),
       attachments: adminAttachments
     });
 
@@ -141,7 +178,7 @@ function buildEmailComprador({ nombre, boletos, monto, referencia }) {
 </html>`;
 }
 
-function buildEmailAdmin({ nombre, email, celular, institucion, carrera, tipo, boletos, monto, referencia, tieneComprobante }) {
+function buildEmailAdmin({ nombre, email, celular, institucion, carrera, tipo, boletos, monto, referencia, tieneComprobante, codigoDescuento, discountType }) {
   return `<!DOCTYPE html>
 <html lang="es">
 <head><meta charset="UTF-8"/></head>
@@ -161,7 +198,8 @@ function buildEmailAdmin({ nombre, email, celular, institucion, carrera, tipo, b
       <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:10px 0;color:#64748B;">Institución</td><td style="padding:10px 0;color:#0f172a;">${institucion || '—'}${carrera ? ' · ' + carrera : ''}</td></tr>
       <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:10px 0;color:#64748B;">Tipo</td><td style="padding:10px 0;color:#0f172a;">${tipo}</td></tr>
       <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:10px 0;color:#64748B;"># Boletos</td><td style="padding:10px 0;color:#0f172a;">${boletos}</td></tr>
-      <tr><td style="padding:10px 0;color:#64748B;">Monto</td><td style="padding:10px 0;font-weight:700;color:#059669;font-size:16px;">$${monto} MXN</td></tr>
+      <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:10px 0;color:#64748B;">Monto</td><td style="padding:10px 0;font-weight:700;color:#059669;font-size:16px;">$${monto} MXN</td></tr>
+      <tr><td style="padding:10px 0;color:#64748B;">Descuento</td><td style="padding:10px 0;color:#0f172a;">${discountType === 'codigo' ? `Código: <strong>${codigoDescuento}</strong>` : discountType === 'grupal' ? 'Grupal (cantidad)' : 'Ninguno'}</td></tr>
     </table>
 
     <div style="background:${tieneComprobante ? '#f0fdf4' : '#fff7ed'};border-radius:8px;padding:12px 16px;margin-top:20px;">
