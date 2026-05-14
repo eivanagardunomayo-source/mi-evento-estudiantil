@@ -9,6 +9,10 @@
     "api/staff-auth.js":  { "maxDuration": 5  },
     "api/transferir.js":  { "maxDuration": 30 },
     "api/boleto-pdf.js":       { "maxDuration": 30 },
-    "api/challenge-apply.js":  { "maxDuration": 30 }
+    "api/challenge-apply.js":       { "maxDuration": 30 },
+    "api/registrar-asistencia.js":  { "maxDuration": 15 },
+    "api/marcar-asistencia.js":     { "maxDuration": 15 },
+    "api/estado-asistencia.js":     { "maxDuration": 10 },
+    "api/admin-asistencia.js":      { "maxDuration": 15 }
   }
 }

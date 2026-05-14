@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro de Asistencia — Welcome 2 The Future 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --cyan:#00CFFF;
+      --magenta:#FF00C8;
+      --purple:#7A00FF;
+      --card-bg:rgba(255,255,255,0.04);
+      --card-border:rgba(255,255,255,0.08);
+    }
+    body{
+      font-family:'Outfit',sans-serif;
+      background:#000;
+      color:#fff;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:24px 16px;
+      position:relative;
+      overflow-x:hidden;
+    }
+    body::before{
+      content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+      background:radial-gradient(circle at 50% 0%,rgba(0,207,255,0.18) 0%,rgba(122,0,255,0.12) 45%,rgba(255,0,200,0.08) 80%,transparent 100%);
+    }
+    .card{
+      position:relative;z-index:1;
+      background:var(--card-bg);
+      border:1px solid var(--card-border);
+      border-radius:24px;
+      padding:36px 28px;
+      width:100%;
+      max-width:420px;
+      backdrop-filter:blur(12px);
+    }
+    .logo{
+      display:block;
+      width:90px;
+      margin:0 auto 20px;
+    }
+    .badge{
+      display:inline-block;
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:var(--cyan);
+      background:rgba(0,207,255,0.1);
+      border:1px solid rgba(0,207,255,0.25);
+      border-radius:100px;
+      padding:5px 14px;
+      margin-bottom:16px;
+    }
+    h1{font-size:24px;font-weight:800;line-height:1.2;margin-bottom:6px;}
+    .sub{color:rgba(255,255,255,0.5);font-size:13px;margin-bottom:28px;line-height:1.5;}
+    label{display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;}
+    input{
+      width:100%;
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:12px;
+      padding:14px 16px;
+      color:#fff;
+      font-family:'Outfit',sans-serif;
+      font-size:15px;
+      outline:none;
+      transition:border-color .2s;
+      margin-bottom:18px;
+    }
+    input::placeholder{color:rgba(255,255,255,0.25);}
+    input:focus{border-color:var(--cyan);}
+    .optional{font-size:11px;color:rgba(255,255,255,0.3);font-weight:400;text-transform:none;letter-spacing:0;}
+    .btn{
+      width:100%;
+      padding:16px;
+      border:none;
+      border-radius:12px;
+      font-family:'Outfit',sans-serif;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+      background:linear-gradient(135deg,var(--cyan),var(--purple));
+      color:#fff;
+      letter-spacing:0.04em;
+      transition:opacity .2s,transform .15s;
+      margin-top:4px;
+    }
+    .btn:hover{opacity:0.9;transform:translateY(-1px);}
+    .btn:active{transform:translateY(0);}
+    .btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+    .msg{
+      margin-top:16px;
+      padding:12px 16px;
+      border-radius:10px;
+      font-size:13px;
+      text-align:center;
+      display:none;
+    }
+    .msg.error{background:rgba(255,50,50,0.12);border:1px solid rgba(255,50,50,0.3);color:#ff7070;}
+    .msg.ok{background:rgba(0,207,255,0.1);border:1px solid rgba(0,207,255,0.3);color:var(--cyan);}
+    .divider{height:1px;background:var(--card-border);margin:24px 0;}
+    .ya-registrado{text-align:center;font-size:13px;color:rgba(255,255,255,0.4);}
+    .ya-registrado a{color:var(--cyan);text-decoration:none;font-weight:600;}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="../logo-w2tf.png" alt="W2TF" class="logo"/>
+    <div style="text-align:center;">
+      <span class="badge">Registro de Asistencia</span>
+      <h1>Bienvenido al Summit</h1>
+      <p class="sub">Regístrate una sola vez para marcar tu asistencia a cada sesión durante el evento.</p>
+    </div>
+
+    <form id="form">
+      <label for="nombre">Nombre completo</label>
+      <input type="text" id="nombre" name="nombre" placeholder="Ej. Mariana García López" autocomplete="name" required/>
+
+      <label for="email">Correo electrónico</label>
+      <input type="email" id="email" name="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" required/>
+
+      <label for="telefono">Teléfono <span class="optional">(opcional)</span></label>
+      <input type="tel" id="telefono" name="telefono" placeholder="55 1234 5678" autocomplete="tel"/>
+
+      <button type="submit" class="btn" id="btn">Registrarme →</button>
+      <div class="msg" id="msg"></div>
+    </form>
+
+    <div class="divider"></div>
+    <p class="ya-registrado">¿Ya te registraste? <a href="panel.html">Ver mi asistencia</a></p>
+  </div>
+
+  <script>
+    const BASE = window.location.origin;
+
+    // Si ya hay email guardado, redirigir según redirect param
+    const params   = new URLSearchParams(window.location.search);
+    const redirect = params.get('redirect');
+    const stored   = localStorage.getItem('w2tf_email');
+
+    if (stored) {
+      if (redirect) {
+        window.location.href = `../checkin/${redirect}.html`;
+      } else {
+        window.location.href = 'panel.html';
+      }
+    }
+
+    document.getElementById('form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn  = document.getElementById('btn');
+      const msg  = document.getElementById('msg');
+      const nombre   = document.getElementById('nombre').value.trim();
+      const email    = document.getElementById('email').value.trim().toLowerCase();
+      const telefono = document.getElementById('telefono').value.trim();
+
+      msg.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Registrando...';
+
+      try {
+        const resp = await fetch(`${BASE}/api/registrar-asistencia`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, email, telefono })
+        });
+        const data = await resp.json();
+
+        if (!resp.ok) throw new Error(data.error || 'Error al registrar');
+
+        // Guardar email en localStorage para que persista en el celular
+        localStorage.setItem('w2tf_email', email);
+        localStorage.setItem('w2tf_nombre', nombre);
+
+        msg.className = 'msg ok';
+        msg.textContent = '¡Listo! Redirigiendo...';
+        msg.style.display = 'block';
+
+        setTimeout(() => {
+          if (redirect) {
+            window.location.href = `../checkin/${redirect}.html`;
+          } else {
+            window.location.href = 'panel.html';
+          }
+        }, 800);
+
+      } catch (err) {
+        msg.className = 'msg error';
+        msg.textContent = err.message;
+        msg.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Registrarme →';
+      }
+    });
+  </script>
+</body>
+</html>

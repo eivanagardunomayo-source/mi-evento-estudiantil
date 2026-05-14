@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Check-in Ponencia 2 — W2TF 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--cyan:#00CFFF;--magenta:#FF00C8;--purple:#7A00FF;}
+    body{
+      font-family:'Outfit',sans-serif;background:#000;color:#fff;
+      min-height:100vh;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;padding:24px 16px;
+      position:relative;overflow-x:hidden;
+    }
+    body::before{
+      content:'';position:fixed;inset:0;pointer-events:none;
+      background:radial-gradient(circle at 50% 0%,rgba(122,0,255,0.22) 0%,rgba(255,0,200,0.1) 50%,transparent 80%);
+    }
+    .card{
+      position:relative;z-index:1;
+      background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+      border-radius:24px;padding:36px 28px;width:100%;max-width:400px;
+      backdrop-filter:blur(12px);text-align:center;
+    }
+    .logo{width:72px;margin:0 auto 20px;display:block;}
+    .session-num{
+      font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;
+      color:var(--magenta);background:rgba(255,0,200,0.1);border:1px solid rgba(255,0,200,0.25);
+      border-radius:100px;padding:5px 14px;display:inline-block;margin-bottom:16px;
+    }
+    h1{font-size:26px;font-weight:800;margin-bottom:8px;}
+    .sub{color:rgba(255,255,255,0.45);font-size:13px;line-height:1.5;margin-bottom:28px;}
+    #estado-cargando,#estado-exito,#estado-ya,#estado-error,#estado-no-reg{display:none;}
+    .spinner{
+      width:48px;height:48px;border:3px solid rgba(255,255,255,0.1);
+      border-top-color:var(--magenta);border-radius:50%;
+      animation:spin .8s linear infinite;margin:0 auto 16px;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .check-circle{
+      width:72px;height:72px;border-radius:50%;margin:0 auto 20px;display:flex;
+      align-items:center;justify-content:center;font-size:32px;
+      background:linear-gradient(135deg,rgba(255,0,200,0.2),rgba(122,0,255,0.2));
+      border:2px solid rgba(255,0,200,0.4);
+    }
+    .ya-circle{
+      width:72px;height:72px;border-radius:50%;margin:0 auto 20px;display:flex;
+      align-items:center;justify-content:center;font-size:32px;
+      background:rgba(255,255,255,0.06);border:2px solid rgba(255,255,255,0.12);
+    }
+    .hora{font-size:12px;color:rgba(255,255,255,0.4);margin-top:8px;}
+    .btn{
+      display:inline-block;margin-top:20px;padding:14px 28px;
+      background:linear-gradient(135deg,var(--magenta),var(--purple));
+      border:none;border-radius:12px;color:#fff;font-family:'Outfit',sans-serif;
+      font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;transition:opacity .2s;
+    }
+    .btn:hover{opacity:0.85;}
+    .btn-secondary{
+      display:inline-block;margin-top:12px;padding:12px 24px;
+      background:transparent;border:1px solid rgba(255,255,255,0.15);
+      border-radius:12px;color:rgba(255,255,255,0.6);font-family:'Outfit',sans-serif;
+      font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:border-color .2s;
+    }
+    .btn-secondary:hover{border-color:var(--magenta);color:var(--magenta);}
+    .error-icon{font-size:40px;margin-bottom:16px;}
+    .nombre-chip{
+      display:inline-block;background:rgba(255,0,200,0.08);border:1px solid rgba(255,0,200,0.2);
+      border-radius:100px;padding:4px 14px;font-size:13px;color:var(--magenta);margin-bottom:20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="../logo-w2tf.png" alt="W2TF" class="logo"/>
+    <span class="session-num">Ponencia 2</span>
+    <h1>Check-in</h1>
+    <p class="sub">Registrando tu asistencia a la segunda ponencia del summit.</p>
+
+    <div id="estado-cargando"><div class="spinner"></div><p style="color:rgba(255,255,255,0.5);font-size:14px;">Verificando...</p></div>
+    <div id="estado-exito">
+      <div class="check-circle">✓</div>
+      <div class="nombre-chip" id="exito-nombre"></div>
+      <h2 style="font-size:20px;font-weight:800;margin-bottom:6px;">¡Asistencia registrada!</h2>
+      <p style="color:rgba(255,255,255,0.45);font-size:13px;">Tu presencia en la Ponencia 2 quedó guardada.</p>
+      <p class="hora" id="exito-hora"></p>
+      <a href="../asistencia/panel.html" class="btn">Ver mi progreso →</a>
+    </div>
+    <div id="estado-ya">
+      <div class="ya-circle">✓</div>
+      <div class="nombre-chip" id="ya-nombre"></div>
+      <h2 style="font-size:20px;font-weight:800;margin-bottom:6px;">Ya estás registrado</h2>
+      <p style="color:rgba(255,255,255,0.45);font-size:13px;">Ya habías marcado asistencia a esta ponencia.</p>
+      <a href="../asistencia/panel.html" class="btn">Ver mi progreso →</a>
+    </div>
+    <div id="estado-no-reg">
+      <div class="error-icon">⚠️</div>
+      <h2 style="font-size:18px;font-weight:800;margin-bottom:8px;">Primero regístrate</h2>
+      <p style="color:rgba(255,255,255,0.45);font-size:13px;">Necesitas registrarte una vez antes de marcar asistencia.</p>
+      <a href="../asistencia/registro.html?redirect=ponencia-2" class="btn">Registrarme →</a>
+    </div>
+    <div id="estado-error">
+      <div class="error-icon">❌</div>
+      <h2 style="font-size:18px;font-weight:800;margin-bottom:8px;">Algo salió mal</h2>
+      <p style="color:rgba(255,255,255,0.45);font-size:13px;" id="error-msg"></p>
+      <button class="btn-secondary" onclick="intentar()">Reintentar</button>
+    </div>
+  </div>
+
+  <script>
+    const SESION = 'ponencia-2';
+    const BASE   = window.location.origin;
+    function mostrar(id) {
+      ['estado-cargando','estado-exito','estado-ya','estado-no-reg','estado-error']
+        .forEach(i => document.getElementById(i).style.display = i === id ? 'block' : 'none');
+    }
+    async function intentar() {
+      const email  = localStorage.getItem('w2tf_email');
+      const nombre = localStorage.getItem('w2tf_nombre') || '';
+      if (!email) { mostrar('estado-no-reg'); return; }
+      mostrar('estado-cargando');
+      try {
+        const resp = await fetch(`${BASE}/api/marcar-asistencia`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, sesion: SESION })
+        });
+        const data = await resp.json();
+        if (resp.status === 404 && data.code === 'NOT_REGISTERED') {
+          localStorage.removeItem('w2tf_email'); localStorage.removeItem('w2tf_nombre');
+          mostrar('estado-no-reg'); return;
+        }
+        if (!resp.ok) throw new Error(data.error || 'Error desconocido');
+        if (data.yaRegistrado) {
+          document.getElementById('ya-nombre').textContent = nombre;
+          mostrar('estado-ya');
+        } else {
+          document.getElementById('exito-nombre').textContent = nombre;
+          const hora = data.hora ? new Date(data.hora).toLocaleString('es-MX',{timeZone:'America/Mexico_City',hour12:true,hour:'2-digit',minute:'2-digit'}) : '';
+          document.getElementById('exito-hora').textContent = hora ? `Registrado a las ${hora}` : '';
+          mostrar('estado-exito');
+        }
+      } catch(err) {
+        document.getElementById('error-msg').textContent = err.message;
+        mostrar('estado-error');
+      }
+    }
+    intentar();
+  </script>
+</body>
+</html>
