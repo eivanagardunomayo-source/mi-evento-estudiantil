@@ -3,16 +3,18 @@ const { Client } = require('@notionhq/client');
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const DB_ID  = process.env.NOTION_ASISTENCIA_DB_ID;
 // Contraseña para el panel admin — cámbiala antes del evento si quieres
-const ADMIN_PASS = process.env.ADMIN_ASISTENCIA_PASS || 'w2tf2026admin';
+const ADMIN_PASS = process.env.ADMIN_ASISTENCIA_PASS;
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'GET') return res.status(405).json({ error: 'Método no permitido' });
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
 
-  const pass = req.query.pass || '';
+  if (!ADMIN_PASS) return res.status(500).json({ error: 'Contraseña admin no configurada' });
+
+  const pass = req.body?.pass || '';
   if (pass !== ADMIN_PASS) {
     return res.status(401).json({ error: 'Contraseña incorrecta' });
   }

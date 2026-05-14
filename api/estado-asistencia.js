@@ -32,12 +32,10 @@ module.exports = async function handler(req, res) {
     };
 
     return res.status(200).json({
-      nombre:    props['Nombre']?.title?.[0]?.text?.content || '',
-      email,
-      p1:        fmt('Ponencia 1'),
-      p2:        fmt('Ponencia 2'),
-      p3:        fmt('Ponencia 3'),
-      bonus:     fmt('Bonus'),
+      p1:    fmt('Ponencia 1'),
+      p2:    fmt('Ponencia 2'),
+      p3:    fmt('Ponencia 3'),
+      bonus: fmt('Bonus'),
     });
 
   } catch (err) {

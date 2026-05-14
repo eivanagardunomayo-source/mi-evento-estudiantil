@@ -187,7 +187,11 @@
       document.getElementById('contenido').style.display = 'none';
 
       try {
-        const resp = await fetch(`${BASE}/api/admin-asistencia?pass=${encodeURIComponent(passOk)}`);
+        const resp = await fetch(`${BASE}/api/admin-asistencia`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pass: passOk })
+        });
         if (resp.status === 401) {
           document.getElementById('admin-panel').style.display  = 'none';
           document.getElementById('login-screen').style.display = 'flex';
@@ -250,10 +254,10 @@
             <div class="nombre-cel">${esc(a.nombre)}</div>
             <div class="email-cel">${esc(a.email)}</div>
           </td>
-          <td><span class="dot ${a.p1 ? 'ok' : 'no'}" title="${a.p1 || ''}">${a.p1 ? '✓' : '·'}</span></td>
-          <td><span class="dot ${a.p2 ? 'ok' : 'no'}" title="${a.p2 || ''}">${a.p2 ? '✓' : '·'}</span></td>
-          <td><span class="dot ${a.p3 ? 'ok' : 'no'}" title="${a.p3 || ''}">${a.p3 ? '✓' : '·'}</span></td>
-          <td><span class="dot ${a.bonus ? 'bonus-ok' : 'no'}" title="${a.bonus || ''}">${a.bonus ? '⚡' : '·'}</span></td>
+          <td><span class="dot ${a.p1 ? 'ok' : 'no'}" title="${esc(a.p1 || '')}">${a.p1 ? '✓' : '·'}</span></td>
+          <td><span class="dot ${a.p2 ? 'ok' : 'no'}" title="${esc(a.p2 || '')}">${a.p2 ? '✓' : '·'}</span></td>
+          <td><span class="dot ${a.p3 ? 'ok' : 'no'}" title="${esc(a.p3 || '')}">${a.p3 ? '✓' : '·'}</span></td>
+          <td><span class="dot ${a.bonus ? 'bonus-ok' : 'no'}" title="${esc(a.bonus || '')}">${a.bonus ? '⚡' : '·'}</span></td>
           <td>${estadoChip}</td>
         </tr>`;
       }).join('');
