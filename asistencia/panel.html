@@ -44,46 +44,66 @@
     .nombre-val{font-size:20px;font-weight:800;}
     .email-val{font-size:12px;color:rgba(255,255,255,0.35);margin-top:4px;}
 
-    /* Progress bar */
+    /* Progress */
     .progress-card{
       background:var(--card-bg);border:1px solid var(--card-border);border-radius:18px;
       padding:20px 22px;margin-bottom:20px;
     }
-    .progress-label{font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:12px;}
-    .progress-bar-wrap{background:rgba(255,255,255,0.06);border-radius:100px;height:8px;overflow:hidden;margin-bottom:8px;}
-    .progress-bar-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--cyan),var(--purple),var(--magenta));transition:width .6s ease;}
+    .progress-label{font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:14px;}
+    .progress-row{display:flex;gap:6px;margin-bottom:10px;}
+    .progress-seg{
+      flex:1;height:8px;border-radius:100px;
+      background:rgba(255,255,255,0.08);transition:background .5s ease;
+    }
+    .progress-seg.p-ok{background:linear-gradient(90deg,var(--cyan),var(--purple));}
+    .progress-seg.b-ok{background:linear-gradient(90deg,var(--gold),var(--magenta));}
+    .progress-detail{display:flex;justify-content:space-between;align-items:center;}
     .progress-txt{font-size:12px;color:rgba(255,255,255,0.4);}
     .progress-num{color:#fff;font-weight:700;}
+    .bonus-txt{font-size:11px;padding:3px 10px;border-radius:100px;font-weight:700;}
+    .bonus-pending{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.25);}
+    .bonus-done{background:rgba(245,158,11,0.15);color:var(--gold);}
 
     /* Sesiones */
     .sesiones-titulo{font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:12px;}
     .sesion-card{
       background:var(--card-bg);border:1px solid var(--card-border);
-      border-radius:16px;padding:18px 20px;margin-bottom:10px;
-      display:flex;align-items:center;gap:16px;
-      transition:border-color .3s;
+      border-radius:16px;padding:16px 18px;margin-bottom:10px;
+      display:flex;align-items:center;gap:14px;
+      transition:border-color .3s,background .3s;
     }
     .sesion-card.ok{border-color:rgba(0,207,255,0.25);background:rgba(0,207,255,0.04);}
     .sesion-card.bonus-ok{border-color:rgba(245,158,11,0.3);background:rgba(245,158,11,0.04);}
-    .check-box{
-      width:40px;height:40px;border-radius:10px;flex-shrink:0;
-      display:flex;align-items:center;justify-content:center;font-size:20px;
-      background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
-    }
-    .check-box.done{background:rgba(0,207,255,0.12);border-color:rgba(0,207,255,0.3);color:var(--cyan);}
-    .check-box.bonus-done{background:rgba(245,158,11,0.12);border-color:rgba(245,158,11,0.35);color:var(--gold);}
-    .sesion-info{flex:1;}
-    .sesion-nombre{font-size:14px;font-weight:700;}
-    .sesion-hora{font-size:11px;color:rgba(255,255,255,0.35);margin-top:3px;}
-    .sesion-badge{
-      font-size:10px;font-weight:700;letter-spacing:0.08em;
-      border-radius:6px;padding:3px 8px;
-    }
-    .badge-ok{background:rgba(0,207,255,0.12);color:var(--cyan);}
-    .badge-bonus-ok{background:rgba(245,158,11,0.12);color:var(--gold);}
-    .badge-pendiente{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.25);}
 
-    /* Completo banner */
+    /* Speaker avatar */
+    .speaker-avatar{
+      width:44px;height:44px;border-radius:50%;flex-shrink:0;
+      object-fit:cover;border:2px solid rgba(255,255,255,0.1);
+      transition:border-color .3s;
+    }
+    .sesion-card.ok .speaker-avatar{border-color:rgba(0,207,255,0.4);}
+    .sesion-card.bonus-ok .speaker-avatar{border-color:rgba(245,158,11,0.5);}
+    .avatar-placeholder{
+      width:44px;height:44px;border-radius:50%;flex-shrink:0;
+      background:rgba(255,255,255,0.06);border:2px solid rgba(255,255,255,0.1);
+      display:flex;align-items:center;justify-content:center;font-size:18px;
+    }
+
+    .check-box{
+      width:28px;height:28px;border-radius:8px;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;font-size:14px;
+      background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
+      font-weight:700;
+    }
+    .check-box.done{background:rgba(0,207,255,0.15);border-color:rgba(0,207,255,0.4);color:var(--cyan);}
+    .check-box.bonus-done{background:rgba(245,158,11,0.15);border-color:rgba(245,158,11,0.4);color:var(--gold);}
+
+    .sesion-info{flex:1;min-width:0;}
+    .sesion-tag{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:2px;}
+    .sesion-nombre{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .sesion-hora{font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px;}
+
+    /* Banners */
     .completo-banner{
       background:linear-gradient(135deg,rgba(0,207,255,0.12),rgba(122,0,255,0.1),rgba(255,0,200,0.08));
       border:1px solid rgba(0,207,255,0.2);border-radius:16px;padding:20px;
@@ -93,25 +113,14 @@
     .completo-banner h3{font-size:16px;font-weight:800;margin-bottom:4px;}
     .completo-banner p{font-size:12px;color:rgba(255,255,255,0.45);}
 
-    /* Spinner */
-    .spinner{
-      width:40px;height:40px;border:3px solid rgba(255,255,255,0.08);
-      border-top-color:var(--cyan);border-radius:50%;
-      animation:spin .8s linear infinite;margin:60px auto;
-    }
+    /* Spinner / error */
+    .spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,0.08);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite;margin:60px auto;}
     @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* Error / no reg */
     .center-msg{text-align:center;padding:48px 0;}
     .center-msg .icon{font-size:40px;margin-bottom:16px;}
     .center-msg h2{font-size:18px;font-weight:800;margin-bottom:8px;}
     .center-msg p{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px;}
-    .btn{
-      display:inline-block;padding:14px 28px;
-      background:linear-gradient(135deg,var(--cyan),var(--purple));
-      border:none;border-radius:12px;color:#fff;font-family:'Outfit',sans-serif;
-      font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;
-    }
+    .btn{display:inline-block;padding:14px 28px;background:linear-gradient(135deg,var(--cyan),var(--purple));border:none;border-radius:12px;color:#fff;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;}
   </style>
 </head>
 <body>
@@ -126,10 +135,8 @@
       <button class="salir-btn" onclick="cerrarSesion()">Salir</button>
     </div>
 
-    <!-- Spinner de carga -->
     <div id="loading"><div class="spinner"></div></div>
 
-    <!-- No registrado -->
     <div id="no-reg" style="display:none;">
       <div class="center-msg">
         <div class="icon">👤</div>
@@ -139,7 +146,6 @@
       </div>
     </div>
 
-    <!-- Panel principal -->
     <div id="panel" style="display:none;">
 
       <div class="nombre-card">
@@ -152,56 +158,74 @@
         <h3>🎉 ¡Asistencia completa!</h3>
         <p>Estuviste en las 3 ponencias del summit. ¡Excelente!</p>
       </div>
-
       <div class="completo-banner" id="banner-bonus" style="border-color:rgba(245,158,11,0.3);background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(255,0,200,0.06));">
-        <h3>🏆 ¡Todo + Bonus!</h3>
-        <p>Completaste el summit completo incluyendo el bonus/challenge.</p>
+        <h3>🏆 ¡Summit completo!</h3>
+        <p>Completaste las 3 ponencias y el bonus/challenge. ¡Increíble!</p>
       </div>
 
+      <!-- Progress -->
       <div class="progress-card">
         <div class="progress-label">Progreso del evento</div>
-        <div class="progress-bar-wrap">
-          <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+        <div class="progress-row">
+          <div class="progress-seg" id="seg-p1"></div>
+          <div class="progress-seg" id="seg-p2"></div>
+          <div class="progress-seg" id="seg-p3"></div>
+          <div class="progress-seg" id="seg-bonus"></div>
         </div>
-        <div class="progress-txt"><span class="progress-num" id="progress-n">0</span> de 3 ponencias completadas</div>
+        <div class="progress-detail">
+          <span class="progress-txt"><span class="progress-num" id="progress-n">0</span>/3 ponencias</span>
+          <span class="bonus-txt bonus-pending" id="bonus-chip">Bonus pendiente</span>
+        </div>
       </div>
 
-      <div class="sesiones-titulo">Sesiones del evento</div>
+      <div class="sesiones-titulo">Ponencias</div>
 
+      <!-- Ponencia 1 — Daniela Camberos -->
       <div class="sesion-card" id="card-p1">
-        <div class="check-box" id="box-p1">○</div>
+        <img src="../daniela-camberos.jpg" class="speaker-avatar" alt="Daniela Camberos" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="avatar-placeholder" style="display:none;">🎤</div>
         <div class="sesion-info">
-          <div class="sesion-nombre">Ponencia 1</div>
+          <div class="sesion-tag">Ponencia 1</div>
+          <div class="sesion-nombre">Daniela Camberos</div>
           <div class="sesion-hora" id="hora-p1">Pendiente</div>
         </div>
-        <span class="sesion-badge badge-pendiente" id="badge-p1">—</span>
+        <div class="check-box" id="box-p1">○</div>
       </div>
 
+      <!-- Ponencia 2 — Sergio Gutiérrez -->
       <div class="sesion-card" id="card-p2">
-        <div class="check-box" id="box-p2">○</div>
+        <img src="../sergio-gutierrez.jpg" class="speaker-avatar" alt="Sergio Gutiérrez" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="avatar-placeholder" style="display:none;">🎤</div>
         <div class="sesion-info">
-          <div class="sesion-nombre">Ponencia 2</div>
+          <div class="sesion-tag">Ponencia 2</div>
+          <div class="sesion-nombre">Sergio Gutiérrez</div>
           <div class="sesion-hora" id="hora-p2">Pendiente</div>
         </div>
-        <span class="sesion-badge badge-pendiente" id="badge-p2">—</span>
+        <div class="check-box" id="box-p2">○</div>
       </div>
 
+      <!-- Ponencia 3 — Diego Halffter -->
       <div class="sesion-card" id="card-p3">
-        <div class="check-box" id="box-p3">○</div>
+        <img src="../diego-halffter.jpg" class="speaker-avatar" alt="Diego Halffter" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="avatar-placeholder" style="display:none;">🎤</div>
         <div class="sesion-info">
-          <div class="sesion-nombre">Ponencia 3</div>
+          <div class="sesion-tag">Ponencia 3</div>
+          <div class="sesion-nombre">Diego Halffter</div>
           <div class="sesion-hora" id="hora-p3">Pendiente</div>
         </div>
-        <span class="sesion-badge badge-pendiente" id="badge-p3">—</span>
+        <div class="check-box" id="box-p3">○</div>
       </div>
 
-      <div class="sesion-card" id="card-bonus" style="margin-top:16px;">
-        <div class="check-box" id="box-bonus">⚡</div>
+      <!-- Bonus / Challenge -->
+      <div class="sesiones-titulo" style="margin-top:20px;">Bonus</div>
+      <div class="sesion-card" id="card-bonus">
+        <div class="avatar-placeholder">⚡</div>
         <div class="sesion-info">
+          <div class="sesion-tag">Actividad especial</div>
           <div class="sesion-nombre">Bonus / Challenge</div>
           <div class="sesion-hora" id="hora-bonus">Pendiente</div>
         </div>
-        <span class="sesion-badge badge-pendiente" id="badge-bonus">—</span>
+        <div class="check-box" id="box-bonus">○</div>
       </div>
 
     </div>
@@ -222,25 +246,13 @@
       const box   = document.getElementById(`box-${key}`);
       const card  = document.getElementById(`card-${key}`);
       const horaEl= document.getElementById(`hora-${key}`);
-      const badge = document.getElementById(`badge-${key}`);
-
       if (hora) {
         box.textContent = '✓';
-        if (isBonus) {
-          box.className  = 'check-box bonus-done';
-          card.className = 'sesion-card bonus-ok';
-          badge.className= 'sesion-badge badge-bonus-ok';
-          badge.textContent = 'OK';
-        } else {
-          box.className  = 'check-box done';
-          card.className = 'sesion-card ok';
-          badge.className= 'sesion-badge badge-ok';
-          badge.textContent = 'OK';
-        }
+        box.className   = isBonus ? 'check-box bonus-done' : 'check-box done';
+        card.className  = isBonus ? 'sesion-card bonus-ok' : 'sesion-card ok';
         horaEl.textContent = hora;
       } else {
         horaEl.textContent = 'Pendiente';
-        badge.textContent  = '—';
       }
     }
 
@@ -269,7 +281,7 @@
         document.getElementById('loading').style.display = 'none';
         document.getElementById('panel').style.display   = 'block';
 
-        document.getElementById('p-nombre').textContent = data.nombre || nombre;
+        document.getElementById('p-nombre').textContent = nombre;
         document.getElementById('p-email').textContent  = email;
 
         marcarSesion('p1',    data.p1,    false);
@@ -277,9 +289,21 @@
         marcarSesion('p3',    data.p3,    false);
         marcarSesion('bonus', data.bonus, true);
 
-        const completadas = [data.p1, data.p2, data.p3].filter(Boolean).length;
-        document.getElementById('progress-n').textContent    = completadas;
-        document.getElementById('progress-fill').style.width = `${Math.round(completadas / 3 * 100)}%`;
+        // Barras de progreso individuales
+        const segs = ['p1','p2','p3'];
+        const completadas = segs.filter(k => data[k]).length;
+        segs.forEach(k => {
+          if (data[k]) document.getElementById(`seg-${k}`).classList.add('p-ok');
+        });
+        if (data.bonus) document.getElementById('seg-bonus').classList.add('b-ok');
+
+        document.getElementById('progress-n').textContent = completadas;
+
+        const bonusChip = document.getElementById('bonus-chip');
+        if (data.bonus) {
+          bonusChip.textContent = 'Bonus ✓';
+          bonusChip.className   = 'bonus-txt bonus-done';
+        }
 
         if (completadas === 3) {
           document.getElementById('banner-todo').classList.add('show');

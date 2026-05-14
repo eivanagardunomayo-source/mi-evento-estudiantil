@@ -51,7 +51,8 @@
 
     /* Stats */
     .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px;}
-    @media(min-width:600px){.stats-grid{grid-template-columns:repeat(4,1fr);}}
+    @media(min-width:600px){.stats-grid{grid-template-columns:repeat(3,1fr);}}
+    @media(min-width:900px){.stats-grid{grid-template-columns:repeat(6,1fr);}}
     .stat-card{
       background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
       border-radius:14px;padding:16px;text-align:center;
@@ -131,10 +132,12 @@
 
       <div id="contenido" style="display:none;">
         <div class="stats-grid">
-          <div class="stat-card"><div class="stat-n cyan" id="s-total">0</div><div class="stat-label">Total registrados</div></div>
-          <div class="stat-card"><div class="stat-n green" id="s-todas">0</div><div class="stat-label">Todas las ponencias</div></div>
-          <div class="stat-card"><div class="stat-n gold" id="s-bonus">0</div><div class="stat-label">Todo + Bonus</div></div>
-          <div class="stat-card"><div class="stat-n magenta" id="s-solo-bonus">0</div><div class="stat-label">Solo bonus</div></div>
+          <div class="stat-card"><div class="stat-n cyan"    id="s-p1">0</div><div class="stat-label">Ponencia 1</div></div>
+          <div class="stat-card"><div class="stat-n magenta" id="s-p2">0</div><div class="stat-label">Ponencia 2</div></div>
+          <div class="stat-card"><div class="stat-n" style="color:#B57BFF;" id="s-p3">0</div><div class="stat-label">Ponencia 3</div></div>
+          <div class="stat-card"><div class="stat-n gold"    id="s-solo-bonus">0</div><div class="stat-label">Bonus / Challenge</div></div>
+          <div class="stat-card"><div class="stat-n green"   id="s-todas">0</div><div class="stat-label">Todas las ponencias</div></div>
+          <div class="stat-card"><div class="stat-n" style="color:#F472B6;" id="s-bonus">0</div><div class="stat-label">Ponencias + Bonus</div></div>
         </div>
 
         <div class="filter-bar">
@@ -210,10 +213,12 @@
     }
 
     function renderStats() {
-      document.getElementById('s-total').textContent     = datos.length;
+      document.getElementById('s-p1').textContent        = datos.filter(d => d.p1).length;
+      document.getElementById('s-p2').textContent        = datos.filter(d => d.p2).length;
+      document.getElementById('s-p3').textContent        = datos.filter(d => d.p3).length;
+      document.getElementById('s-solo-bonus').textContent= datos.filter(d => d.bonus).length;
       document.getElementById('s-todas').textContent     = datos.filter(d => d.completoTodo).length;
       document.getElementById('s-bonus').textContent     = datos.filter(d => d.completoTodoMasBonus).length;
-      document.getElementById('s-solo-bonus').textContent= datos.filter(d => d.bonus).length;
     }
 
     function filtrar(tipo, btn) {
