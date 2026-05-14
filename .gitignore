@@ -1,4 +1,17 @@
 .vercel
 .env
+.env.local
+.env.production
+.env.*.local
+.env*.local
+*.env
 node_modules/
 scripts/
+create_poster.py
+poster-w2tf-2026.png
+.DS_Store
+.claude/
+boletos-w2tf.zip
+pdfs-boletos/
+pdfs-boletos 2/
+pdfs-boletos 3/

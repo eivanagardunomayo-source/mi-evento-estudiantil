@@ -5,6 +5,7 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const key = req.query.key;
@@ -12,21 +13,41 @@ module.exports = async function handler(req, res) {
     return res.status(401).json({ error: 'No autorizado' });
   }
 
-  const estado = req.query.estado;
+  // Validar estado permitido
+  const ESTADOS_VALIDOS = ['todos', 'Pendiente', 'Confirmado'];
+  const estado = req.query.estado || 'todos';
+  if (!ESTADOS_VALIDOS.includes(estado)) {
+    return res.status(400).json({ error: 'Estado inválido' });
+  }
 
   try {
+    // Filtrar en Notion: solo registros (EsBoleto=false) — más eficiente que traer todo
+    const baseFilter = { property: 'EsBoleto', checkbox: { equals: false } };
     const queryParams = {
       database_id: process.env.NOTION_DB_ID,
       sorts: [{ property: 'Fecha', direction: 'descending' }],
-      page_size: 100
+      page_size: 100,
+      filter: baseFilter
     };
-    if (estado && estado !== 'todos') {
-      queryParams.filter = { property: 'Estado', select: { equals: estado } };
+
+    if (estado !== 'todos') {
+      queryParams.filter = {
+        and: [baseFilter, { property: 'Estado', select: { equals: estado } }]
+      };
     }
 
-    const query = await notion.databases.query(queryParams);
+    // Paginar para traer todos los registros
+    let allResults = [];
+    let cursor;
+    do {
+      if (cursor) queryParams.start_cursor = cursor;
+      else delete queryParams.start_cursor;
+      const query = await notion.databases.query(queryParams);
+      allResults.push(...query.results);
+      cursor = query.has_more ? query.next_cursor : null;
+    } while (cursor);
 
-    const results = query.results.map(page => {
+    const results = allResults.map(page => {
       const p = page.properties;
       return {
         id:           page.id,
@@ -46,7 +67,11 @@ module.exports = async function handler(req, res) {
       };
     });
 
-    return res.status(200).json({ results, total: results.length });
+    return res.status(200).json({
+      results,
+      total: results.length,
+      debug: { registros: results.length }
+    });
 
   } catch (err) {
     console.error('Error en admin API:', err?.message);

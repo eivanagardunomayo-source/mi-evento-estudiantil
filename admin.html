@@ -86,9 +86,11 @@
     </div>
     <button class="btn-sm" onclick="loadData()">↺ Actualizar</button>
   </div>
+  <div id="notion-debug" style="font-size:11px;color:#475569;margin-bottom:10px;"></div>
 
   <div class="stats">
-    <div class="stat"><div class="stat-num" id="s-total">—</div><div class="stat-label">Total</div></div>
+    <div class="stat"><div class="stat-num" id="s-total">—</div><div class="stat-label">Registros</div></div>
+    <div class="stat"><div class="stat-num" id="s-boletos">—</div><div class="stat-label">Boletos</div></div>
     <div class="stat"><div class="stat-num" id="s-pendientes">—</div><div class="stat-label">Pendientes</div></div>
     <div class="stat"><div class="stat-num" id="s-confirmados">—</div><div class="stat-label">Confirmados</div></div>
     <div class="stat"><div class="stat-num" id="s-ingresados">—</div><div class="stat-label">Ingresaron</div></div>
@@ -140,21 +142,20 @@
     if (!k) return;
     adminKey = k;
     // Verify by loading data
-    fetch('/api/admin?key=' + encodeURIComponent(k) + '&estado=todos')
+    fetch('/api/admin?key=' + encodeURIComponent(k) + '&estado=todos&_t=' + Date.now(), { cache: 'no-store' })
       .then(r => {
         if (r.status === 401) throw new Error('401');
-        return r.json();
+        return r.json().then(data => ({ status: r.status, data }));
       })
-      .then(data => {
+      .then(({ status, data }) => {
         if (data.error) throw new Error(data.error);
         document.getElementById('login').style.display = 'none';
         document.getElementById('app').style.display = 'block';
         processData(data);
       })
       .catch(e => {
-        if (e.message === '401') {
-          document.getElementById('login-err').style.display = 'block';
-        }
+        document.getElementById('login-err').textContent = e.message === '401' ? 'Clave incorrecta' : 'Error al conectar: ' + e.message;
+        document.getElementById('login-err').style.display = 'block';
       });
   }
 
@@ -163,7 +164,7 @@
   });
 
   function loadData() {
-    fetch('/api/admin?key=' + encodeURIComponent(adminKey) + '&estado=todos')
+    fetch('/api/admin?key=' + encodeURIComponent(adminKey) + '&estado=todos&_t=' + Date.now(), { cache: 'no-store' })
       .then(r => r.json())
       .then(data => processData(data))
       .catch(() => {});
@@ -172,17 +173,24 @@
   function processData(data) {
     allData = data.results || [];
     document.getElementById('last-update').textContent = 'Actualizado: ' + new Date().toLocaleTimeString('es-MX');
+    // Debug: mostrar conteo crudo de Notion
+    if (data.debug) {
+      const dbg = document.getElementById('notion-debug');
+      if (dbg) dbg.textContent = `Notion total: ${data.debug.totalNotion} entradas · ${data.debug.registros} registros`;
+    }
     updateStats();
     renderTable();
   }
 
   function updateStats() {
     const total = allData.length;
+    const boletos = allData.reduce((s, r) => s + (r.boletos || 0), 0);
     const pendientes = allData.filter(r => r.estado === 'Pendiente').length;
     const confirmados = allData.filter(r => r.estado === 'Confirmado').length;
     const ingresados = allData.filter(r => r.ingresado).length;
     const monto = allData.filter(r => r.estado === 'Confirmado').reduce((s, r) => s + (r.monto || 0), 0);
     document.getElementById('s-total').textContent = total;
+    document.getElementById('s-boletos').textContent = boletos;
     document.getElementById('s-pendientes').textContent = pendientes;
     document.getElementById('s-confirmados').textContent = confirmados;
     document.getElementById('s-ingresados').textContent = ingresados;
@@ -194,6 +202,10 @@
     el.classList.add('active');
     currentTab = el.dataset.estado;
     renderTable();
+  }
+
+  function escHtml(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
 
   function renderTable() {
@@ -212,19 +224,19 @@
       const badgeClass = r.estado === 'Pendiente' ? 'badge-pending' : (r.ingresado ? 'badge-ingresado' : 'badge-confirmed');
       const badgeText = r.ingresado ? 'Ingresó' : r.estado;
       const accion = r.estado === 'Pendiente'
-        ? `<button class="btn-sm" id="btn-${r.referencia}" onclick="confirmar('${r.referencia}', '${r.id}')">Confirmar y enviar boleto</button><div class="error-msg" id="err-${r.referencia}" style="display:none;"></div>`
+        ? `<button class="btn-sm" id="btn-${escHtml(r.referencia)}" data-ref="${escHtml(r.referencia)}" data-id="${escHtml(r.id)}" onclick="confirmar(this.dataset.ref, this.dataset.id)">Confirmar y enviar boleto</button><div class="error-msg" id="err-${escHtml(r.referencia)}" style="display:none;"></div>`
         : r.ingresado
           ? `<span style="color:#A78BFA;font-size:12px;">✅ Ingresó ${r.horaIngreso ? new Date(r.horaIngreso).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}) : ''}</span>`
           : `<span style="color:#34D399;font-size:12px;">Boleto enviado</span>`;
 
       return `<tr>
-        <td><div class="nome">${r.nombre}</div><div class="email">${r.email}</div></td>
-        <td><div style="color:#cbd5e1">${r.institucion || '—'}</div><div class="email">${r.carrera || ''}</div></td>
-        <td><span style="color:#94A3B8">${r.tipo}</span></td>
-        <td style="color:#fff;font-weight:600;">${r.boletos}</td>
+        <td><div class="nome">${escHtml(r.nombre)}</div><div class="email">${escHtml(r.email)}</div></td>
+        <td><div style="color:#cbd5e1">${escHtml(r.institucion || '—')}</div><div class="email">${escHtml(r.carrera || '')}</div></td>
+        <td><span style="color:#94A3B8">${escHtml(r.tipo)}</span></td>
+        <td style="color:#fff;font-weight:600;">${Number(r.boletos)||0}</td>
         <td style="color:#10B981;font-weight:600;">$${(r.monto||0).toLocaleString()}</td>
-        <td><span class="badge ${badgeClass}">${badgeText}</span></td>
-        <td class="mono">${r.referencia}</td>
+        <td><span class="badge ${badgeClass}">${escHtml(badgeText)}</span></td>
+        <td class="mono">${escHtml(r.referencia)}</td>
         <td>${accion}</td>
       </tr>`;
     }).join('');

@@ -6,14 +6,18 @@ const generateTicketPDF = require('./_ticket-pdf');
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const base = process.env.BASE_URL || 'https://welcome2thefuture2026.vercel.app';
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const token = req.query.t || req.body?.token;
-  if (!token) return res.status(400).json({ error: 'Token requerido' });
+  if (!token || !UUID_RE.test(token)) return res.status(400).json({ error: 'Token inválido' });
 
   async function getBoleto(token) {
     const query = await notion.databases.query({
@@ -51,15 +55,19 @@ module.exports = async function handler(req, res) {
       if (b.ingresado) return res.status(400).json({ error: 'Este boleto ya fue utilizado para ingresar al evento y no puede transferirse' });
       return res.status(200).json({ nombre: b.nombre, ref: b.ref, tipo: b.tipo, numBoleto: b.numBoleto, totalBoletos: b.totalBoletos, monto: b.monto });
     } catch (err) {
-      return res.status(500).json({ error: err.message });
+      console.error('Error GET transferir:', err?.message);
+      return res.status(500).json({ error: 'Error al obtener el boleto' });
     }
   }
 
   // POST — ejecutar transferencia
   if (req.method === 'POST') {
     const { nuevoNombre, nuevoEmail } = req.body || {};
-    if (!nuevoNombre?.trim() || !nuevoEmail?.trim()) {
-      return res.status(400).json({ error: 'Nombre y email son requeridos' });
+    if (!nuevoNombre?.trim() || nuevoNombre.trim().length < 2 || nuevoNombre.length > 120) {
+      return res.status(400).json({ error: 'Nombre inválido' });
+    }
+    if (!nuevoEmail?.trim() || !EMAIL_RE.test(nuevoEmail) || nuevoEmail.length > 200) {
+      return res.status(400).json({ error: 'Email inválido' });
     }
 
     try {
@@ -128,7 +136,8 @@ module.exports = async function handler(req, res) {
 
       return res.status(200).json({ success: true });
     } catch (err) {
-      return res.status(500).json({ error: err.message });
+      console.error('Error POST transferir:', err?.message);
+      return res.status(500).json({ error: 'Error al procesar la transferencia' });
     }
   }
 
@@ -186,7 +195,7 @@ function buildTransferEmail({ nuevoNombre, ref, tipo, numBoleto, totalBoletos, m
                 <tr><td style="color:#64748B;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">Tipo de acceso</td><td style="color:#00CFFF;font-weight:700;text-align:right;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">${tipo}</td></tr>
                 <tr><td style="color:#64748B;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">Referencia</td><td style="color:#A78BFA;font-weight:700;text-align:right;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">${ref}</td></tr>
                 <tr><td style="color:#64748B;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">Fecha</td><td style="color:#ffffff;text-align:right;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">15 de mayo, 2026</td></tr>
-                <tr><td style="color:#64748B;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">Hora</td><td style="color:#ffffff;text-align:right;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">3:30 PM</td></tr>
+                <tr><td style="color:#64748B;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">Hora</td><td style="color:#ffffff;text-align:right;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">4:00 PM</td></tr>
                 <tr><td style="color:#64748B;padding:5px 0;">Lugar</td><td style="color:#ffffff;text-align:right;padding:5px 0;">Tec de Monterrey CCM</td></tr>
               </table>
             </td>

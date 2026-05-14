@@ -5,7 +5,8 @@
   "dependencies": {
     "@notionhq/client": "^2.2.15",
     "@vercel/blob": "^2.3.3",
-    "nodemailer": "^6.9.13",
+    "dotenv": "^17.4.2",
+    "nodemailer": "^8.0.7",
     "pdfkit": "^0.18.0",
     "qrcode": "^1.5.4"
   }

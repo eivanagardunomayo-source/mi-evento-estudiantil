@@ -4,17 +4,59 @@ const transporter = require('./_mailer');
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const DB_ID  = (process.env.NOTION_CHALLENGE_DB_ID || '').trim();
 
+// Rate limiting: máx 3 aplicaciones por IP en 10 minutos
+const rateLimitMap = new Map();
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const windowMs = 10 * 60 * 1000;
+  const maxRequests = 3;
+  const entry = rateLimitMap.get(ip) || { count: 0, start: now };
+  if (now - entry.start > windowMs) {
+    rateLimitMap.set(ip, { count: 1, start: now });
+    return true;
+  }
+  if (entry.count >= maxRequests) return false;
+  entry.count++;
+  rateLimitMap.set(ip, entry);
+  return true;
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
+  if (!checkRateLimit(ip)) {
+    return res.status(429).json({ error: 'Demasiadas solicitudes. Intenta en 10 minutos.' });
+  }
 
   const d = req.body;
   if (!d || !d.nombreProyecto || !d.email) {
     return res.status(400).json({ error: 'Datos incompletos' });
   }
+
+  // Validaciones básicas de seguridad
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const URL_RE   = /^https?:\/\/.{1,500}$/;
+  if (typeof d.email !== 'string' || !EMAIL_RE.test(d.email) || d.email.length > 200) {
+    return res.status(400).json({ error: 'Email inválido' });
+  }
+  if (d.linkedin && (typeof d.linkedin !== 'string' || !URL_RE.test(d.linkedin))) {
+    d.linkedin = null;
+  }
+  if (d.deckUrl && (typeof d.deckUrl !== 'string' || !URL_RE.test(d.deckUrl))) {
+    d.deckUrl = null;
+  }
+  // Truncar campos de texto largo para evitar abuso
+  const MAX = 2000;
+  ['p1','p2','p3','p4','p5','p6','p7','p8','p9'].forEach(k => {
+    if (typeof d[k] === 'string') d[k] = d[k].slice(0, MAX);
+  });
+  if (typeof d.nombreProyecto === 'string') d.nombreProyecto = d.nombreProyecto.slice(0, 200);
 
   // Formatear integrantes
   const integrantesText = Array.isArray(d.members)
@@ -108,7 +150,7 @@ function buildConfirmEmail(d) {
     <tr><td style="padding:22px 24px;">
       <div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#00CFFF;margin-bottom:14px;">Fechas clave</div>
       <table width="100%" cellpadding="0" cellspacing="0" style="font-size:13px;">
-        <tr><td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);">📅 Cierre de aplicaciones</td><td style="color:#fff;font-weight:700;text-align:right;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">5 de mayo</td></tr>
+        <tr><td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);">📅 Cierre de aplicaciones</td><td style="color:#fff;font-weight:700;text-align:right;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">8 de mayo</td></tr>
         <tr><td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);">📅 Anuncio de finalistas</td><td style="color:#fff;font-weight:700;text-align:right;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">8 de mayo</td></tr>
         <tr><td style="padding:8px 0;color:rgba(255,255,255,0.6);">📅 Final presencial</td><td style="color:#00CFFF;font-weight:700;text-align:right;padding:8px 0;">15 de mayo · Tec CCM</td></tr>
       </table>
