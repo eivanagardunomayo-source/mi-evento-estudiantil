@@ -4,12 +4,15 @@ const generateTicketPDF = require('./_ticket-pdf');
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const base = process.env.BASE_URL || 'https://welcome2thefuture2026.vercel.app';
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const token = req.query.t;
-  if (!token) return res.status(400).send('Token requerido');
+  if (!token || !UUID_RE.test(token)) return res.status(400).send('Token inválido');
 
   try {
     const query = await notion.databases.query({
@@ -44,6 +47,7 @@ module.exports = async function handler(req, res) {
     return res.status(200).send(pdfBuf);
 
   } catch (err) {
-    return res.status(500).send(err.message);
+    console.error('Error boleto-pdf:', err?.message);
+    return res.status(500).send('Error al generar el PDF');
   }
 };

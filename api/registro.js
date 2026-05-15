@@ -3,6 +3,23 @@ const transporter = require('./_mailer');
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
+// Rate limiting: máx 5 registros por IP en 10 minutos
+const rateLimitMap = new Map();
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const windowMs = 10 * 60 * 1000;
+  const maxRequests = 8;
+  const entry = rateLimitMap.get(ip) || { count: 0, start: now };
+  if (now - entry.start > windowMs) {
+    rateLimitMap.set(ip, { count: 1, start: now });
+    return true;
+  }
+  if (entry.count >= maxRequests) return false;
+  entry.count++;
+  rateLimitMap.set(ip, entry);
+  return true;
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -10,11 +27,35 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
+  // Rate limiting por IP
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
+  if (!checkRateLimit(ip)) {
+    return res.status(429).json({ error: 'Demasiadas solicitudes. Intenta en unos minutos.' });
+  }
+
   try {
     const { nombre, email, celular, institucion, carrera, tipo, boletos, referencia, comprobante, monto: montoRaw, codigoDescuento, tipoDescuento } = req.body;
 
+    // ─── Validación de inputs ────────────────────────────────────────────
+    if (!nombre || typeof nombre !== 'string' || nombre.trim().length < 2 || nombre.length > 120) {
+      return res.status(400).json({ error: 'Nombre inválido.' });
+    }
+    if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 200) {
+      return res.status(400).json({ error: 'Email inválido.' });
+    }
+    if (!tipo || !['tec', 'externo'].includes(tipo)) {
+      return res.status(400).json({ error: 'Tipo de asistente inválido.' });
+    }
+    const qty = parseInt(boletos);
+    if (isNaN(qty) || qty < 1 || qty > 10) {
+      return res.status(400).json({ error: 'Cantidad de boletos inválida (1–10).' });
+    }
+    if (!referencia || typeof referencia !== 'string' || referencia.trim().length < 2 || referencia.length > 100) {
+      return res.status(400).json({ error: 'Referencia inválida.' });
+    }
+
     // ─── Precios y códigos de descuento ─────────────────────────────────
-    // Tipos: 'regular' (Tec $100 / Ext $250) | 'gratis' ($0) | 'dosxuno' (2×1) | 'mitad' (50% off)
+    // Tipos: 'regular' (Tec $100 / Ext $200) | 'gratis' ($0) | 'dosxuno' (2×1) | 'mitad' (50% off) | 'dosxunomitad' (2×1 a precio 50% off)
     const DISCOUNT_CODES_VALID = {
       'VICENTEW2TF':        { type: 'regular' },
       'RAMIROW2TF':         { type: 'regular' },
@@ -35,9 +76,45 @@ module.exports = async function handler(req, res) {
       'INGENIERIAW2TF':     { type: 'regular' },
       'SANTAFEW2TF':        { type: 'regular' },
       'LAETW2TF':           { type: 'regular' },
+      'LOMBAW2TF':          { type: 'regular' },
+      'DIANAW2TF':          { type: 'regular' },
+      'BALMOW2TF':          { type: 'regular' },
+      'DEYAW2TF':           { type: 'regular' },
+      'PRISSW2TF':          { type: 'regular' },
+      'ERIKAW2TF':          { type: 'regular' },
+      'MARCELAW2TF':        { type: 'regular' },
+      'DULCEW2TF':          { type: 'regular' },
+      'SIRIW2TF':           { type: 'regular' },
+      'MARIANAW2TF':        { type: 'regular' },
+      'YANNIKW2TF':         { type: 'regular' },
+      'ALEW2TF':            { type: 'regular' },
+      'DIEGOW2TF':          { type: 'regular' },
+      'DEBBIEW2TF':         { type: 'regular' },
+      'EMILIOW2TF':         { type: 'regular' },
+      'MARIELAW2TF':        { type: 'regular' },
+      'IVANW2TF':           { type: 'regular' },
+      'JIMEW2TF':           { type: 'regular' },
+      'LESSLIEW2TF':        { type: 'regular' },
+      'MARW2TF':            { type: 'regular' },
+      'NATW2TF':            { type: 'regular' },
+      'GRECIAW2TF':         { type: 'regular' },
+      'YAMIW2TF':           { type: 'regular' },
+      'IKERW2TF':           { type: 'regular' },
+      'ZOEW2TF':            { type: 'regular' },
+      'ANNIEW2TF':          { type: 'regular' },
+      'ANUARW2TF':          { type: 'regular' },
+      'BRUNOW2TF':          { type: 'regular' },
+      'CAMILAW2TF':         { type: 'regular' },
+      'FERW2TF':            { type: 'regular' },
+      'UVASW2TF':           { type: 'regular' },
+      'FINALISTAW2TF':      { type: 'gratis'  },
+      'FINALISTASW2TF':     { type: 'gratis'  },
       'PROFESW2TF':         { type: 'gratis'  },
-      '2X1W2TF':            { type: 'dosxuno' },
-      '50W2TF':             { type: 'mitad'   },
+      'REFERIDOSW2TF':      { type: 'gratis'       },
+      '2X1Y50W2TF':         { type: 'dosxunomitad' },
+      '2X1W2TF':            { type: 'dosxuno'      },
+      '50W2TF':             { type: 'mitad', maxQty: 1 },
+      'ALUMNOSW2TF':        { type: 'fijo50' },
     };
     const TEC_GROUP_PRICING = [
       { min: 1, max: 1, price: 150 },
@@ -49,13 +126,13 @@ module.exports = async function handler(req, res) {
       { min: 7, max: Infinity, price: 90 },
     ];
 
-    const qty = parseInt(boletos) || 1;
+    // qty ya fue validado arriba (parseInt + rango 1-10)
     const codigoNorm   = String(codigoDescuento || '').trim().toUpperCase();
     const codigoData   = codigoNorm ? DISCOUNT_CODES_VALID[codigoNorm] : null;
     const codigoValido = !!codigoData;
     const codeType     = codigoData ? codigoData.type : null;
 
-    const PRECIO_BASE = tipo === 'externo' ? 300 : 150;
+    const PRECIO_BASE = tipo === 'externo' ? 250 : 150;
 
     let monto;
     let discountType;
@@ -68,17 +145,27 @@ module.exports = async function handler(req, res) {
         const pagados = Math.ceil(qty / 2);
         monto = pagados * PRECIO_BASE;
         discountType = 'dosxuno';
+      } else if (codeType === 'dosxunomitad') {
+        const unitDesc = Math.round(PRECIO_BASE / 2);
+        monto = qty <= 2 ? unitDesc : unitDesc + PRECIO_BASE * (qty - 2);
+        discountType = 'dosxunomitad';
       } else if (codeType === 'mitad') {
-        monto = Math.round(PRECIO_BASE / 2) * qty;
+        const maxQty  = codigoData.maxQty || Infinity;
+        const discQty = Math.min(qty, maxQty);
+        const fullQty = qty - discQty;
+        monto = Math.round(PRECIO_BASE / 2) * discQty + PRECIO_BASE * fullQty;
         discountType = 'mitad';
+      } else if (codeType === 'fijo50') {
+        monto = 50 * qty;
+        discountType = 'codigo';
       } else {
         // regular
-        const precioUnitario = tipo === 'externo' ? 250 : 100;
+        const precioUnitario = tipo === 'externo' ? 200 : 100;
         monto = precioUnitario * qty;
         discountType = 'codigo';
       }
     } else if (tipo === 'externo') {
-      monto = 300 * qty;
+      monto = 250 * qty;
       discountType = 'ninguno';
     } else {
       // Tec: descuento grupal
@@ -118,41 +205,49 @@ module.exports = async function handler(req, res) {
       }
     });
 
-    // 2. Email de confirmación al comprador (lugar apartado, en revisión)
-    await transporter.sendMail({
-      from,
-      to: email,
-      subject: `Tu lugar en W2TF 2026 está apartado — ${referencia}`,
-      html: buildEmailComprador({ nombre, boletos, monto, referencia })
-    });
-
-    // 3. Email de notificación al admin con comprobante adjunto
-    const adminAttachments = [];
-    if (comprobante && comprobante.startsWith('data:')) {
-      const matches = comprobante.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
-      if (matches) {
-        const ext = matches[1].split('/')[1] || 'jpg';
-        adminAttachments.push({
-          filename: `comprobante-${referencia}.${ext}`,
-          content:  Buffer.from(matches[2], 'base64'),
-          contentType: matches[1]
-        });
-      }
+    // 2. Email de confirmación al comprador (no crítico — si falla, igual devolvemos éxito)
+    try {
+      await transporter.sendMail({
+        from,
+        to: email,
+        subject: `Tu lugar en W2TF 2026 está apartado — ${referencia}`,
+        html: buildEmailComprador({ nombre, boletos, monto, referencia })
+      });
+    } catch (emailErr) {
+      console.error('Error email comprador:', emailErr?.message);
     }
 
-    await transporter.sendMail({
-      from,
-      to: process.env.ADMIN_EMAIL,
-      subject: `Nuevo pago pendiente — ${referencia} — ${nombre}`,
-      html: buildEmailAdmin({ nombre, email, celular, institucion, carrera, tipo, boletos, monto, referencia, tieneComprobante: adminAttachments.length > 0, codigoDescuento: codigoValido ? codigoNorm : '', discountType }),
-      attachments: adminAttachments
-    });
+    // 3. Email de notificación al admin con comprobante adjunto (no crítico)
+    try {
+      const adminAttachments = [];
+      if (comprobante && comprobante.startsWith('data:')) {
+        const matches = comprobante.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+        if (matches) {
+          const ext = matches[1].split('/')[1] || 'jpg';
+          adminAttachments.push({
+            filename: `comprobante-${referencia}.${ext}`,
+            content:  Buffer.from(matches[2], 'base64'),
+            contentType: matches[1]
+          });
+        }
+      }
+
+      await transporter.sendMail({
+        from,
+        to: process.env.ADMIN_EMAIL,
+        subject: `Nuevo pago pendiente — ${referencia} — ${nombre}`,
+        html: buildEmailAdmin({ nombre, email, celular, institucion, carrera, tipo, boletos, monto, referencia, tieneComprobante: adminAttachments.length > 0, codigoDescuento: codigoValido ? codigoNorm : '', discountType }),
+        attachments: adminAttachments
+      });
+    } catch (adminEmailErr) {
+      console.error('Error email admin:', adminEmailErr?.message);
+    }
 
     return res.status(200).json({ success: true, referencia });
 
   } catch (err) {
     console.error('Error en /api/registro:', err?.message, err?.body);
-    return res.status(500).json({ error: err?.message || 'Error interno' });
+    return res.status(500).json({ error: 'Error al guardar tu registro. Intenta de nuevo.' });
   }
 };
 
@@ -200,7 +295,7 @@ function buildEmailComprador({ nombre, boletos, monto, referencia }) {
     </div>
 
     <div style="text-align:center;">
-      <div style="color:#64748B;font-size:12px;margin-bottom:4px;">15 de mayo de 2026 · 3:30 PM</div>
+      <div style="color:#64748B;font-size:12px;margin-bottom:4px;">15 de mayo de 2026 · 4:00 PM</div>
       <div style="color:#64748B;font-size:12px;">Tec de Monterrey CDMX</div>
     </div>
   </div>

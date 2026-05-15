@@ -23,7 +23,12 @@ module.exports = async function handler(req, res) {
   try {
     const query = await notion.databases.query({
       database_id: process.env.NOTION_DB_ID,
-      filter: { property: 'Referencia', rich_text: { equals: ref } }
+      filter: {
+        and: [
+          { property: 'Referencia', rich_text: { equals: ref } },
+          { property: 'EsBoleto',   checkbox:   { equals: false } }
+        ]
+      }
     });
 
     if (!query.results.length) {
@@ -166,7 +171,7 @@ function buildTicketBlock({ nombre, ref, tipo, montoPorBoleto, numBoleto, totalB
               </tr>
               <tr>
                 <td style="color:#64748B;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">Hora</td>
-                <td style="color:#ffffff;text-align:right;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">3:30 PM</td>
+                <td style="color:#ffffff;text-align:right;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);">4:00 PM</td>
               </tr>
               <tr>
                 <td style="color:#64748B;padding:5px 0;">Lugar</td>
@@ -257,7 +262,7 @@ function buildEmail({ nombre, boletos, ticketBlocks }) {
         <div style="color:#00CFFF;font-size:10px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;font-family:Arial,sans-serif;">Regalo para ti</div>
         <div style="color:#ffffff;font-size:17px;font-weight:800;font-family:Arial,sans-serif;line-height:1.3;">¿Tienes amigos que quieran venir?</div>
       </div>
-      <p style="color:#94A3B8;font-size:13px;text-align:center;margin:0 0 16px;line-height:1.6;font-family:Arial,sans-serif;">Por haber comprado tu boleto, tienes un código exclusivo para compartir. Tus amigos del Tec lo usan para pagar <strong style="color:#fff;">$100 MXN</strong>, y si son externos, <strong style="color:#fff;">$250 MXN</strong>.</p>
+      <p style="color:#94A3B8;font-size:13px;text-align:center;margin:0 0 16px;line-height:1.6;font-family:Arial,sans-serif;">Por haber comprado tu boleto, tienes un código exclusivo para compartir. Tus amigos del Tec lo usan para pagar <strong style="color:#fff;">$100 MXN</strong>, y si son externos, <strong style="color:#fff;">$200 MXN</strong>.</p>
       <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(0,207,255,0.35);border-radius:10px;padding:14px;text-align:center;">
         <div style="color:#64748B;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;font-family:Arial,sans-serif;margin-bottom:6px;">Tu código de descuento</div>
         <div style="color:#00CFFF;font-size:22px;font-weight:900;letter-spacing:0.12em;font-family:'Courier New',monospace;">AMIGOSW2TF</div>

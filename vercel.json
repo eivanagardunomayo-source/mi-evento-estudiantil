@@ -2,17 +2,46 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "functions": {
-    "api/registro.js":  { "maxDuration": 30 },
-    "api/confirmar.js": { "maxDuration": 30 },
-    "api/validar.js":     { "maxDuration": 10 },
-    "api/admin.js":       { "maxDuration": 15 },
-    "api/staff-auth.js":  { "maxDuration": 5  },
-    "api/transferir.js":  { "maxDuration": 30 },
+    "api/registro.js":         { "maxDuration": 30 },
+    "api/confirmar.js":        { "maxDuration": 30 },
+    "api/validar.js":          { "maxDuration": 10 },
+    "api/admin.js":            { "maxDuration": 15 },
+    "api/staff-auth.js":       { "maxDuration": 5  },
+    "api/transferir.js":       { "maxDuration": 30 },
     "api/boleto-pdf.js":       { "maxDuration": 30 },
     "api/challenge-apply.js":       { "maxDuration": 30 },
     "api/registrar-asistencia.js":  { "maxDuration": 15 },
     "api/marcar-asistencia.js":     { "maxDuration": 15 },
     "api/estado-asistencia.js":     { "maxDuration": 10 },
     "api/admin-asistencia.js":      { "maxDuration": 15 }
-  }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Strict-Transport-Security",   "value": "max-age=31536000; includeSubDomains; preload" },
+        { "key": "X-Content-Type-Options",      "value": "nosniff" },
+        { "key": "X-Frame-Options",             "value": "DENY" },
+        { "key": "Referrer-Policy",             "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy",          "value": "camera=(), microphone=(), geolocation=(), payment=()" },
+        { "key": "X-DNS-Prefetch-Control",      "value": "off" }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate" },
+        { "key": "Pragma",        "value": "no-cache" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data: blob: api.qrserver.com; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+        }
+      ]
+    }
+  ]
 }
