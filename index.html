@@ -3292,7 +3292,7 @@ async function enviarRegistro(){
     btn.disabled = false;
     const errEl2 = document.getElementById('reg-error');
     if (errEl2) {
-      errEl2.textContent = 'Hubo un problema al enviar tu registro. Intenta de nuevo o escríbenos a belaeccm.tec@gmail.com';
+      errEl2.textContent = (err.message && err.message !== 'Error al enviar' && err.message !== 'Failed to fetch') ? err.message : 'Hubo un problema al enviar tu registro. Intenta de nuevo o escríbenos a belaeccm.tec@gmail.com';
       errEl2.style.display = 'block';
       errEl2.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }

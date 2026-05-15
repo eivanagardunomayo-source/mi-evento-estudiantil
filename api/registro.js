@@ -8,7 +8,7 @@ const rateLimitMap = new Map();
 function checkRateLimit(ip) {
   const now = Date.now();
   const windowMs = 10 * 60 * 1000;
-  const maxRequests = 8;
+  const maxRequests = 50;
   const entry = rateLimitMap.get(ip) || { count: 0, start: now };
   if (now - entry.start > windowMs) {
     rateLimitMap.set(ip, { count: 1, start: now });
