@@ -89,7 +89,7 @@
 
   <div class="stats">
     <div class="stat"><div class="stat-num" id="s-total">—</div><div class="stat-label">Registros</div></div>
-    <div class="stat"><div class="stat-num" id="s-boletos">—</div><div class="stat-label">Boletos</div></div>
+    <div class="stat"><div class="stat-num" id="s-boletos">—</div><div class="stat-label">Boletos QR</div></div>
     <div class="stat"><div class="stat-num" id="s-pendientes">—</div><div class="stat-label">Pendientes</div></div>
     <div class="stat"><div class="stat-num" id="s-confirmados">—</div><div class="stat-label">Confirmados</div></div>
     <div class="stat"><div class="stat-num" id="s-ingresados">—</div><div class="stat-label">Ingresaron</div></div>
@@ -178,7 +178,7 @@
 
   function updateStats() {
     const total = allData.length;
-    const boletos = allData.reduce((s, r) => s + (r.boletos || 0), 0);
+    const boletos = allData.filter(r => r.estado === 'Confirmado').reduce((s, r) => s + (r.boletos || 0), 0);
     const pendientes = allData.filter(r => r.estado === 'Pendiente').length;
     const confirmados = allData.filter(r => r.estado === 'Confirmado').length;
     const ingresados = allData.filter(r => r.ingresado).length;
