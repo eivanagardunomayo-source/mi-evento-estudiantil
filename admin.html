@@ -88,7 +88,8 @@
   </div>
 
   <div class="stats">
-    <div class="stat"><div class="stat-num" id="s-total">—</div><div class="stat-label">Total</div></div>
+    <div class="stat"><div class="stat-num" id="s-total">—</div><div class="stat-label">Registros</div></div>
+    <div class="stat"><div class="stat-num" id="s-boletos">—</div><div class="stat-label">Boletos</div></div>
     <div class="stat"><div class="stat-num" id="s-pendientes">—</div><div class="stat-label">Pendientes</div></div>
     <div class="stat"><div class="stat-num" id="s-confirmados">—</div><div class="stat-label">Confirmados</div></div>
     <div class="stat"><div class="stat-num" id="s-ingresados">—</div><div class="stat-label">Ingresaron</div></div>
@@ -140,21 +141,20 @@
     if (!k) return;
     adminKey = k;
     // Verify by loading data
-    fetch('/api/admin?key=' + encodeURIComponent(k) + '&estado=todos')
+    fetch('/api/admin?key=' + encodeURIComponent(k) + '&estado=todos&_t=' + Date.now(), { cache: 'no-store' })
       .then(r => {
         if (r.status === 401) throw new Error('401');
-        return r.json();
+        return r.json().then(data => ({ status: r.status, data }));
       })
-      .then(data => {
+      .then(({ status, data }) => {
         if (data.error) throw new Error(data.error);
         document.getElementById('login').style.display = 'none';
         document.getElementById('app').style.display = 'block';
         processData(data);
       })
       .catch(e => {
-        if (e.message === '401') {
-          document.getElementById('login-err').style.display = 'block';
-        }
+        document.getElementById('login-err').textContent = e.message === '401' ? 'Clave incorrecta' : 'Error al conectar: ' + e.message;
+        document.getElementById('login-err').style.display = 'block';
       });
   }
 
@@ -163,7 +163,7 @@
   });
 
   function loadData() {
-    fetch('/api/admin?key=' + encodeURIComponent(adminKey) + '&estado=todos')
+    fetch('/api/admin?key=' + encodeURIComponent(adminKey) + '&estado=todos&_t=' + Date.now(), { cache: 'no-store' })
       .then(r => r.json())
       .then(data => processData(data))
       .catch(() => {});
@@ -177,12 +177,14 @@
   }
 
   function updateStats() {
-    const total = allData.reduce((s, r) => s + (r.boletos || 0), 0);
-    const pendientes = allData.filter(r => r.estado === 'Pendiente').reduce((s, r) => s + (r.boletos || 0), 0);
-    const confirmados = allData.filter(r => r.estado === 'Confirmado').reduce((s, r) => s + (r.boletos || 0), 0);
-    const ingresados = allData.filter(r => r.ingresado).reduce((s, r) => s + (r.boletos || 0), 0);
+    const total = allData.length;
+    const boletos = allData.reduce((s, r) => s + (r.boletos || 0), 0);
+    const pendientes = allData.filter(r => r.estado === 'Pendiente').length;
+    const confirmados = allData.filter(r => r.estado === 'Confirmado').length;
+    const ingresados = allData.filter(r => r.ingresado).length;
     const monto = allData.filter(r => r.estado === 'Confirmado').reduce((s, r) => s + (r.monto || 0), 0);
     document.getElementById('s-total').textContent = total;
+    document.getElementById('s-boletos').textContent = boletos;
     document.getElementById('s-pendientes').textContent = pendientes;
     document.getElementById('s-confirmados').textContent = confirmados;
     document.getElementById('s-ingresados').textContent = ingresados;
